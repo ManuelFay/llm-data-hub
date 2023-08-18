@@ -1,0 +1,12 @@
+__pycache__/
+checkpoint**
+*ckpt
+wandb
+test_data.json
+todo.txt
+*/logs.json
+.idea/
+*.egg-info/
+models/
+data/
+lm_cache/
