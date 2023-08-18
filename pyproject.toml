@@ -59,7 +59,7 @@ zip-safe  = false
 platforms = ['any']
 
 [tool.setuptools.packages.find]
-include = ['tasks', 'tasks.*', 'scripts', 'scripts.*', 'utils', 'utils.*', 'evaluation', 'evaluation.*']
+include = ['dataset_preprocessing', 'dataset_preprocessing.*', 'utils', 'utils.*', 'evaluation', 'evaluation.*']
 
 [tool.mypy]
 check_untyped_defs    = true

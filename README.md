@@ -34,18 +34,36 @@ having a smaller dummy dataset for debugging purposes is acceptable.
 
 A usage example should be included in the folder.
 
+### Warnings
+
+Larger datasets such as OSCAR or Wikipedia can be used in streaming mode.
+In streaming mode, modifications to the [dataset].py file will not be reflected in the dataset, as the dataset is downloaded from the HuggingFace Hub at each run.
+
+To run locally, the dataset should be downloaded and stored locally, and the `streaming` flag should be set to `False` in load_dataset() function.
+A beam runner should be specified (Spark, Dataflow, etc.), or the "direct" runner should be used for smaller datasets.
+
+Note that operations can still be done on a streamed dataset https://huggingface.co/docs/datasets/stream in order 
+to format data to be coherent with the rest of the datasets.
+
 ## Data Processing
 
 Data processing is done through the `Dataset` class, which is a wrapper around a HuggingFace dataset.
 Custom functions are implemented to perform the following tasks:
-- Tokenization
-- Data splitting
-- Quality Filtering (OCR)
-- Language Tagging
-- Dealing with parallel data (across languages)
-- Deduplication
+- [ ] Tokenization
+- [ ] Quality Filtering (OCR)
+- [ ] Language Tagging
+- [ ] Dealing with parallel data (across languages)
+- [ ] Deduplication
+- [ ] Dataset Aggregation
+- [ ] Splitting into train, validation, and test sets
 
 ## Data Analysis
 
 Detailed statistics about the data can be computed through the data analysis module.
 This stores the data in a `pandas` dataframe, and allows for easy plotting and analysis.
+
+## Tests
+
+```bash
+make test
+```

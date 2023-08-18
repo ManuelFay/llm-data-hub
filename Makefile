@@ -38,3 +38,7 @@ type:
 reformat:
 	black .
 	ruff --fix .
+
+# Run tests
+test:
+	python -m pytest tests
