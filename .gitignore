@@ -10,3 +10,5 @@ todo.txt
 models/
 data/
 lm_cache/
+.pytest_cache/
+

@@ -16,7 +16,7 @@ For the moment, data is stored either on the HuggingFace Hub as a public dataset
 or as a Git LFS file (uploaded to a private HuggingFace dataset repository). Storage is subject to change,
 given the storage solutions available through the project partners.
 
-New datasets should be added by creating a new folder in the `datasets` folder, and adding a `dataset.py` file responsible for downloading the data and processing it into a `Dataset` object.
+New datasets should be added by creating a new folder in the `datasets` folder, and adding a `[folder_name].py` file responsible for downloading the data and processing it into a `Dataset` object.
 This follows HuggingFace conventions for datasets, and allows for easy integration with the HuggingFace ecosystem.
 The data format, post loading, should be standard across all datasets. 
 
@@ -29,6 +29,10 @@ Metadata should include:
 - The dataset size
 - The dataset languages
 
+Ideally, the dataset should be streamable for easy processing and debugging, but this is not a requirement and 
+having a smaller dummy dataset for debugging purposes is acceptable.
+
+A usage example should be included in the folder.
 
 ## Data Processing
 
