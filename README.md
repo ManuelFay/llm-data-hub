@@ -51,6 +51,7 @@ Data processing is done through the `Dataset` class, which is a wrapper around a
 Custom functions are implemented to perform the following tasks:
 - [ ] Tokenization
 - [ ] Quality Filtering (OCR)
+- [ ] Content Filtering (e.g. removing HTML tags, PII, etc.)
 - [ ] Language Tagging
 - [ ] Dealing with parallel data (across languages)
 - [ ] Deduplication

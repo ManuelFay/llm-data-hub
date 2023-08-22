@@ -10,14 +10,15 @@ class GutenbergExtractor:
         self.files = []
         for root, dirs, files in os.walk(self.root_dir):
             for file in files:
-                if file.endswith('.zip'):
+                if file.endswith('-8.zip'):
                     self.files.append(os.path.join(root, file))
 
     def extract(self):
         for file in self.files:
-            print(f'Extracting {file}')
-            with ZipFile(file, 'r') as zipObj:
-                zipObj.extractall(self.save_dir)
+            if file.endswith('-8.zip'):
+                print(f'Extracting {file}')
+                with ZipFile(file, 'r') as zipObj:
+                    zipObj.extractall(self.save_dir)
 
 
 if __name__ == '__main__':
