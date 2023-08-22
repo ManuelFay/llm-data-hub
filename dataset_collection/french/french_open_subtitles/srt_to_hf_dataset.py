@@ -11,7 +11,8 @@ class DatasetConverter:
     @staticmethod
     def text_parser(text):
         # Remove the first line
-        a = re.findall(r'\d{2}:\d{2}:\d{2},\d{3} --> \d{2}:\d{2}:\d{2},\d{3}\n(.*\n)?', text)
+        a = re.findall(r'\d{2}:\d{2}:\d{2},\d{3} --> \d{2}:\d{2}:\d{2},\d{3}\n((.*\n){1,4})\n\d+\n', text)
+        a = [x[0] for x in a]
         return "\n".join(a)
 
     def convert(self):
