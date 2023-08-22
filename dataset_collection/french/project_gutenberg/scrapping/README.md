@@ -32,3 +32,7 @@ To create a dataset, run the following command:
 ```bash
 python convert_extracted_to_hf_dataset.py --data_dir data/unzipped/ --save_dir data/formatted/
 ```
+
+## Stats
+
+We obtain 2547 books in French, for a total of ~1.1Gb of text and 172.1 million words.

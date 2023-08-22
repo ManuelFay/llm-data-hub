@@ -17,7 +17,7 @@ class DatasetConverter:
                 with open(os.path.join(self.data_dir, file), 'r', encoding='latin-1') as f:
                     text = f.read()
                 # Add the text to the dataset
-                yield {'text': text}
+                yield {'id': file[:-4], 'text': text}
         ds = datasets.Dataset.from_generator(gen)
         return ds
 
