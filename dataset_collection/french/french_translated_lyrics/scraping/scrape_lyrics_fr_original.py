@@ -69,13 +69,15 @@ def scrape_artist(args, artist_info):
 
     # When scrapping is detected, change proxy and try again as long as the proxy is not working
     proxy = FreeProxy(rand=True).get()
-    try:
-        artist_html = requests.get(urljoin(args.url, artist_url), proxies={"http": proxy, 'https': proxy}, timeout=5, verify=False).content
-        artist_soup = BeautifulSoup(artist_html, 'html.parser')
+    while True:
+        try:
+            artist_html = requests.get(urljoin(args.url, artist_url), proxies={"http": proxy, 'https': proxy}, timeout=5, verify=False).content
+            artist_soup = BeautifulSoup(artist_html, 'html.parser')
 
-        album_sections = artist_soup.find_all('h6')
-    except:
-        proxy = FreeProxy(rand=True).get()
+            album_sections = artist_soup.find_all('h6')
+            break
+        except:
+            proxy = FreeProxy(rand=True).get()
 
     # Scrapping songs from albums
     with ThreadPoolExecutor(max_workers=args.max_albums_workers) as album_executor:
@@ -120,21 +122,28 @@ def main():
             next(csv_reader) # Skip header
             lyrics_data.extend(list(csv_reader))
 
+    proxy = FreeProxy(rand=True).get()
     while url:
         # When scrapping is detected, change proxy and try again as long as the proxy is not working
-        proxy = FreeProxy(rand=True).get()
-        try:
-            html = requests.get(url, proxies={"http": proxy, 'https': proxy}, timeout=5, verify=False).content
-            soup = BeautifulSoup(html, 'html.parser')
+        while True:
+            try:
+                html = requests.get(url, proxies={"http": proxy, 'https': proxy}, timeout=5, verify=False).content
+                soup = BeautifulSoup(html, 'html.parser')
 
-            artists = []
-            artist_url_pattern = re.compile(r'^\/[0-9]+.*\.html')
-            for a_tag in soup.find_all('a', href=artist_url_pattern):
-                if 'title' in a_tag.attrs and a_tag['href'] not in artist_urls_seen:
-                    artists.append((a_tag['title'], a_tag['href']))
+                artists = []
+                artist_url_pattern = re.compile(r'^\/[0-9]+.*\.html')
+                artist_links = soup.find_all('a', href=artist_url_pattern)
 
-        except:
-            proxy = FreeProxy(rand=True).get()
+                # If there is no artist, this means that scraping is detected.
+                if not artist_links: raise
+
+                for a_tag in artist_links:
+                    href = a_tag.get('href', '')
+                    if 'title' in a_tag.attrs and href not in artist_urls_seen:
+                        artists.append((a_tag['title'], href))
+                break
+            except:
+                proxy = FreeProxy(rand=True).get()
 
         if artists != []:
             with ThreadPoolExecutor(max_workers=args.max_artist_workers) as artist_executor:
