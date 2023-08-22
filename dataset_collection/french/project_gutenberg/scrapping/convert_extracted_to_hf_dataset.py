@@ -32,9 +32,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Convert raw files from Project Gutenberg to HF dataset')
     parser.add_argument('--data_dir', type=str, help='Directory where the raw files are stored')
     parser.add_argument('--save_dir', type=str, help='Directory where the converted dataset will be saved')
+    parser.add_argument('--hub_id', type=str, default=None, help='HF hub id to push the dataset to')
     args = parser.parse_args()
     converter = DatasetConverter(args.data_dir, args.save_dir)
     dataset = converter.convert()
     print(dataset)
     print("Copying the dataset to the save directory")
     converter.save(dataset, args.save_dir)
+    if args.hub_id is not None:
+        print("Pushing the dataset to the HF hub")
+        dataset.push_to_hub(args.hub_id, private=True)

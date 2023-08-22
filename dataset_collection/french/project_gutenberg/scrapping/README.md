@@ -30,7 +30,7 @@ python extract_raw_files.py --root_dir data/zipped/ --save_dir data/unzipped/
 To create a dataset, run the following command:
 
 ```bash
-python convert_extracted_to_hf_dataset.py --data_dir data/unzipped/ --save_dir data/formatted/
+python convert_extracted_to_hf_dataset.py --data_dir data/unzipped/ --save_dir data/formatted/ --hub_id manu/ProjectGutenberg_fr
 ```
 
 ## Stats
