@@ -21,6 +21,10 @@ They should at least contain the following fields:
     - Command: `load_dataset('manu/ProjectGutenberg_fr', split='train', streaming=True)`
 - [x] Illuin Layout Dataset (Text Only)
     - Command: `load_dataset('manu/illuin_layout_dataset_text_only', split='train', streaming=True)`
+- [x] Illuin Youtube Subtitles (Text Only)
+    - Command: `load_dataset('manu/illuin_youtube_subtitles_text_only', split='train', streaming=True)`
+- [ ] French Translated Lyrics
+    - Command: `load_dataset('manu/french_translated_lyrics', split='train', streaming=True)`
 - [ ] ...
 
 
