@@ -84,16 +84,8 @@ def scrape_artist(args, artist_info):
         album_tasks = [album_executor.submit(scrape_album, args, album, artist_name) for album in album_sections]
         wait(album_tasks)
 
-    # When an artist is scrapped update log and save dataset
+    # When an artist is scrapped update log
     artist_urls_seen.append(artist_url)
-    with open("saved_urls.pkl", "wb") as f:
-        pickle.dump({
-            'artist_urls_seen': artist_urls_seen,
-            'url': url
-        }, f)
-    lyrics_dataframe = pd.DataFrame(lyrics_data, columns=['artist_name', 'album_name', 'year', 'title', 'number', 'en', 'fr'])
-    lyrics_dataframe = lyrics_dataframe.drop_duplicates()
-    lyrics_dataframe.to_csv("lyrics_dataframe.csv", index=False)
 
 def main():
     parser = argparse.ArgumentParser(description="Scrape lyrics data from a website.")
@@ -145,11 +137,23 @@ def main():
             except:
                 proxy = FreeProxy(rand=True).get()
 
+        # Scrap artists' lyrics
         if artists != []:
             with ThreadPoolExecutor(max_workers=args.max_artist_workers) as artist_executor:
                 artist_tasks = [artist_executor.submit(scrape_artist, args, artist) for artist in artists]
                 wait(artist_tasks)
 
+        # When all artists of the page are scrapped, saved them.
+        with open("saved_urls.pkl", "wb") as f:
+            pickle.dump({
+                'artist_urls_seen': artist_urls_seen,
+                'url': url
+            }, f)
+        lyrics_dataframe = pd.DataFrame(lyrics_data, columns=['artist_name', 'album_name', 'year', 'title', 'number', 'en', 'fr'])
+        lyrics_dataframe = lyrics_dataframe.drop_duplicates()
+        lyrics_dataframe.to_csv("lyrics_dataframe.csv", index=False)
+
+        # Go to the next page
         next_page = soup.find("a", text=">")
         url = urljoin(url, next_page["href"]) if next_page else ""
 
