@@ -6,10 +6,8 @@ import pandas as pd
 import requests
 import argparse
 import urllib3
-import pickle
 import random
 import time
-import csv
 import re
 import os
 
@@ -32,7 +30,8 @@ def scrape_album(args, album, artist_name):
         song_link = urljoin(args.url, song_row.find(class_='track-title').find('a')['href'])
 
         # When scrapping is detected, change proxy and try again as long as the proxy is not working
-        while True:
+        errors = 0
+        while errors < 100:
             try:
                 song_html = requests.get(song_link, proxies={"http": proxy, 'https': proxy}, timeout=5, verify=False).content
                 song_soup = BeautifulSoup(song_html, 'html.parser')
@@ -61,6 +60,7 @@ def scrape_album(args, album, artist_name):
                 time.sleep(random.uniform(0.25, 1))
                 break
             except:
+                errors+=1
                 proxy = FreeProxy(rand=True).get()
 
 # Function to scrape albums for an artist
@@ -69,14 +69,17 @@ def scrape_artist(args, artist_info):
 
     # When scrapping is detected, change proxy and try again as long as the proxy is not working
     proxy = FreeProxy(rand=True).get()
-    while True:
+    errors = 0
+    while errors < 100:
         try:
             artist_html = requests.get(urljoin(args.url, artist_url), proxies={"http": proxy, 'https': proxy}, timeout=5, verify=False).content
             artist_soup = BeautifulSoup(artist_html, 'html.parser')
-
+            # If there is no album(s), this means that scraping is detected.
             album_sections = artist_soup.find_all('h6')
+            if not album_sections: raise
             break
         except:
+            errors+=1
             proxy = FreeProxy(rand=True).get()
 
     # Scrapping songs from albums
@@ -84,8 +87,7 @@ def scrape_artist(args, artist_info):
         album_tasks = [album_executor.submit(scrape_album, args, album, artist_name) for album in album_sections]
         wait(album_tasks)
 
-    # When an artist is scrapped update log
-    artist_urls_seen.append(artist_url)
+    artist_seen.append(artist_name)
 
 def main():
     parser = argparse.ArgumentParser(description="Scrape lyrics data from a website.")
@@ -96,23 +98,16 @@ def main():
 
     global lyrics_data
     global url
-    global artist_urls_seen
+    global artist_seen
     lyrics_data = []
     url = args.url
-    artist_urls_seen = []
+    artist_seen = []
 
-    # Load previously saved data if available
-    if os.path.exists("saved_urls.pkl") and os.path.exists("lyrics_dataframe.csv"):
+    if os.path.exists("lyrics_dataframe.csv"):
         print("Loading logs...")
-        with open("saved_urls.pkl", "rb") as f:
-            saved_data = pickle.load(f)
-            artist_urls_seen = saved_data.get('artist_urls_seen', [])
-            url = saved_data.get('url', url)
-
-        with open("lyrics_dataframe.csv", "r") as csv_file:
-            csv_reader = csv.reader(csv_file)
-            next(csv_reader) # Skip header
-            lyrics_data.extend(list(csv_reader))
+        df = pd.read_csv("lyrics_dataframe.csv")
+        artist_seen = df['artist_name'].unique()
+        lyrics_data = df.values.tolist()
 
     proxy = FreeProxy(rand=True).get()
     while url:
@@ -131,7 +126,7 @@ def main():
 
                 for a_tag in artist_links:
                     href = a_tag.get('href', '')
-                    if 'title' in a_tag.attrs and href not in artist_urls_seen:
+                    if 'title' in a_tag.attrs and a_tag['title'] not in artist_seen:
                         artists.append((a_tag['title'], href))
                 break
             except:
@@ -144,11 +139,6 @@ def main():
                 wait(artist_tasks)
 
         # When all artists of the page are scrapped, saved them.
-        with open("saved_urls.pkl", "wb") as f:
-            pickle.dump({
-                'artist_urls_seen': artist_urls_seen,
-                'url': url
-            }, f)
         lyrics_dataframe = pd.DataFrame(lyrics_data, columns=['artist_name', 'album_name', 'year', 'title', 'number', 'en', 'fr'])
         lyrics_dataframe = lyrics_dataframe.drop_duplicates()
         lyrics_dataframe.to_csv("lyrics_dataframe.csv", index=False)
