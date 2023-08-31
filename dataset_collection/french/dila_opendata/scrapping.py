@@ -120,10 +120,14 @@ if __name__ == "__main__":
     if args.hub_id:
         from datasets import load_dataset
         dataset = load_dataset("json", data_files=save_path)
-        dataset = dataset.remove_columns(["path"])
-        dataset = dataset.rename_column("headers", "title")
+        # dataset = dataset.rename_column("headers", "title")
+        dataset = dataset.rename_column("path", "id")
         dataset = dataset.rename_column("body", "text")
-        dataset.push_to_hub(args.hub_id)
+        try:
+            dataset.push_to_hub(args.hub_id)
+        except Exception as e:
+            print("Failed to push to hub: ", e)
+            dataset.save_to_disk(os.path.join(args.save_dir, f"{args.prefix}_opendata"))
 
     # logging.info(f"Converting {save_path} to csv")
     # jsonl_to_pandas(save_path).to_csv(os.path.join(args.save_dir, f"{args.prefix}_opendata.csv"))
