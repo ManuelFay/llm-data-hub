@@ -1,9 +1,14 @@
 from dataset_preprocessing.perplexity.model import KenlmModel
 
 
+def get_perplexity_single(sentence, model):
+    return model.get_perplexity(sentence)
+
+
 class PerplexityTagger:
-    def __init__(self, kenlm_model: KenlmModel):
+    def __init__(self, kenlm_model: KenlmModel, perplexity_bounds=(10, 1000)):
         self.kenlm_model = kenlm_model
+        self.perplexity_bounds = perplexity_bounds
 
     def get_perplexity_single(self, sentence):
         return self.kenlm_model.get_perplexity(sentence)
@@ -13,35 +18,15 @@ class PerplexityTagger:
         # map over dataset
         dataset = dataset.map(
             lambda example: {
-                "perplexity": self.get_perplexity_single(example["text"]),
+                "perplexity": get_perplexity_single(example["text"], self.kenlm_model),
                 "text": example["text"],
             },
-            batched=True,
+            batched=False,
             num_proc=4,
-            batch_size=1,
         )
         return dataset
 
+    def filter_by_perplexity(self, dataset):
+        return dataset.filter(
+            lambda example: self.perplexity_bounds[0] <= example["perplexity"] <= self.perplexity_bounds[1])
 
-if __name__ == "__main__":
-    # trained on french wikipedia
-    tagger = PerplexityTagger(KenlmModel.from_pretrained(model_dataset="wikipedia", language="fr"))
-    print(tagger.get_perplexity_single("Ceci est un test"))
-    print(tagger.get_perplexity_single("zer tt ihg oejr"))
-
-    from datasets import load_dataset
-    dataset = load_dataset('manu/illuin_youtube_subtitles_text_only', split='train', streaming=False)
-
-    # time it
-    import time
-    start = time.time()
-    dataset = tagger.tag_hf_dataset(dataset)
-    end = time.time()
-
-    # print first values
-    for sample in dataset[:10]:
-        print(sample["perplexity"])
-        print(sample["text"])
-        print("------------")
-
-    print(f"Tagged {len(dataset)} samples in {end-start} seconds")
