@@ -13,14 +13,13 @@ logging.basicConfig(level=logging.WARNING)
 
 
 def extract_text_from_node(x):
-    text = ""
     if x.text:
         if x.text.strip() != "":
-            text += x.text + "\n"
+            return x.text + "\n"
     if x.tail:
         if x.tail.strip() != "":
-            text += x.tail
-    return text
+            return x.tail + "\n"
+    return ""
 
 
 def extract_all_text_from_node(node, whitelist=None):
