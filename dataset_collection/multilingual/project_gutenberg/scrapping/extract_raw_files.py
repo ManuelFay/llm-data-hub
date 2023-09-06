@@ -32,7 +32,6 @@ class GutenbergExtractor:
                     os.remove(os.path.join(self.root_dir, file.replace(".zip", ".txt")))
                     # Add the text to the dataset
 
-
         ds = datasets.Dataset.from_generator(gen)
         return ds
 
@@ -48,4 +47,15 @@ if __name__ == '__main__':
     extractor = GutenbergExtractor(args.root_dir)
     for dir in extractor.dirs:
         ds = extractor.extract(os.path.join(args.root_dir, dir))
-        ds.push_to_hub(args.hub_id, split=dir)
+        tries = 0
+
+        while(tries < 5):
+            try:
+                ds.push_to_hub(args.hub_id, split=dir)
+                break
+            except Exception as e:
+                tries += 1
+                if tries < 5:
+                    print(f"Push to hub failed, retrying for the {tries} time")
+                else:
+                    raise e

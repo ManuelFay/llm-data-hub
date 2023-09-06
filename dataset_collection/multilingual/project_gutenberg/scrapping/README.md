@@ -35,7 +35,12 @@ python convert_extracted_to_hf_dataset.py --data_dir data/unzipped/ --save_dir d
 
 ```bash
 sbatch --job-name=cpu --nodes=1 --time=1:00:00 -p cpu_short --cpus-per-task 16 --error=log.err --output=log.out --wrap="python scrap_website.py --save_dir data/"
+# per language
 sbatch --job-name=cpu_wget --nodes=1 --time=1:00:00 -p cpu_short --cpus-per-task 8 --error=wget.err --output=wget.out --wrap="wget -i data/links_de.txt -P data/de/"
+
+# upload
+sbatch --job-name=cpu --nodes=1 --time=4:00:00 -p cpu_med --cpus-per-task 16 --error=log.err --output=log.out --wrap=" python extract_raw_files.py --root_dir data/ --hub_id manu/gutenberg_multi"
+
 ```
 ## Stats
 
