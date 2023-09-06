@@ -21,4 +21,3 @@ if __name__ == '__main__':
     args = parser.parse_args()
     final_ds = datasets.Dataset.from_generator(gen)
     final_ds.push_to_hub(args.hub_id)
-
