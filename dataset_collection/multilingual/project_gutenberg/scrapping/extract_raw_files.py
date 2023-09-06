@@ -16,16 +16,21 @@ class GutenbergExtractor:
     def extract(self):
         def gen():
             for filepath, file in self.files:
-                if file.endswith('-8.zip'):
+                if file.endswith('.zip'):
                     print(f'Extracting {file}')
                     with ZipFile(filepath, 'r') as zipObj:
                         # to temp directory
                         zipObj.extractall(self.root_dir)
 
                     # Convert from latin-1 to utf-8
-                    with open(os.path.join(self.root_dir, file.replace(".zip", ".txt")), 'r', encoding='latin-1') as f:
-                        text = f.read()
-                        print(file[:-4])
+                    if file.endswith('-8.zip'):
+                        with open(os.path.join(self.root_dir, file.replace(".zip", ".txt")), 'r', encoding='iso-8859-1') as f:
+                            text = f.read()
+                    elif file.endswith('-0.zip'):
+                        with open(os.path.join(self.root_dir, file.replace(".zip", ".txt")), 'r', encoding='utf-8') as f:
+                            text = f.read()
+                    else:
+                        continue
                     # Add the text to the dataset
                     yield {'id': file[:-4], 'text': text}
 
