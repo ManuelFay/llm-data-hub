@@ -45,5 +45,5 @@ python scrapping.py --base_path data/echanges.dila.gouv.fr/OPENDATA/CNIL --save_
 ## SLURM
 
 ```bash
-sbatch --job-name=cpu --nodes=1 --time=4:00:00 -p cpu_med --cpus-per-task 16 --error=log.err --output=log.out --wrap="python scrapping.py --base_path data/echanges.dila.gouv.fr/OPENDATA/LEGI --save_dir data/ --prefix LEGI --hub_id manu/legifrance"
+sbatch --job-name=cpu --nodes=1 --time=4:00:00 -p cpu_med --cpus-per-task 16 --error=log.err --output=log.out --wrap="`python scrapping.py --base_path data/echanges.dila.gouv.fr/OPENDATA/LEGI --save_dir data/ --prefix LEGI --hub_id manu/legifrance"
 ```

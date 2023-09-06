@@ -28,7 +28,7 @@ def get_links_from_page(url, lang="fr", max_tries=5):
     links = []
     for link in soup.find_all("a"):
         href = link.get("href")
-        if href is not None and href.endswith("-8.zip"):
+        if href is not None and (href.endswith("-8.zip") or href.endswith("-0.zip")):
             links.append(href)
 
     print(f"Found {len(links)} links on {url}")
