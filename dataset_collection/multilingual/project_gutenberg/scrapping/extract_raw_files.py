@@ -7,18 +7,16 @@ class GutenbergExtractor:
     def __init__(self, root_dir):
         self.root_dir = root_dir
         # List all files in nested directories
-        self.files = []
-        for root, dirs, files in os.walk(self.root_dir):
-            for file in files:
-                if file.endswith('-8.zip'):
-                    self.files.append((os.path.join(root, file), file))
+        self.dirs = [dir for dir in os.listdir(root_dir) if os.path.isdir(os.path.join(root_dir, dir))]
 
-    def extract(self):
+    def extract(self, basedir):
+        files = [file for file in os.listdir(basedir) if os.path.isfile(os.path.join(basedir, file)) and file.endswith('.zip')]
+
         def gen():
-            for filepath, file in self.files:
+            for file in files:
                 if file.endswith('.zip'):
                     print(f'Extracting {file}')
-                    with ZipFile(filepath, 'r') as zipObj:
+                    with ZipFile(os.path.join(basedir, file), 'r') as zipObj:
                         # to temp directory
                         zipObj.extractall(self.root_dir)
 
@@ -26,13 +24,14 @@ class GutenbergExtractor:
                     if file.endswith('-8.zip'):
                         with open(os.path.join(self.root_dir, file.replace(".zip", ".txt")), 'r', encoding='iso-8859-1') as f:
                             text = f.read()
+                        yield {'id': file[:-4], 'text': text}
                     elif file.endswith('-0.zip'):
                         with open(os.path.join(self.root_dir, file.replace(".zip", ".txt")), 'r', encoding='utf-8') as f:
                             text = f.read()
-                    else:
-                        continue
+                        yield {'id': file[:-4], 'text': text}
+                    os.remove(os.path.join(self.root_dir, file.replace(".zip", ".txt")))
                     # Add the text to the dataset
-                    yield {'id': file[:-4], 'text': text}
+
 
         ds = datasets.Dataset.from_generator(gen)
         return ds
@@ -47,7 +46,6 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     extractor = GutenbergExtractor(args.root_dir)
-    ds = extractor.extract()
-    if args.hub_id is not None:
-        print("Pushing the dataset to the HF hub")
-        ds.push_to_hub(args.hub_id, private=False)
+    for dir in extractor.dirs:
+        ds = extractor.extract(os.path.join(args.root_dir, dir))
+        ds.push_to_hub(args.hub_id, split=dir)
