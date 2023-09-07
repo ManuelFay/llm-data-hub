@@ -1,6 +1,7 @@
 import os
 from zipfile import ZipFile
 import datasets
+import re
 
 
 class GutenbergExtractor:
@@ -33,9 +34,17 @@ class GutenbergExtractor:
                             with open(os.path.join(self.root_dir, file.replace(".zip", ".txt")), 'r',
                                       encoding='utf-8') as f:
                                 text = f.read()
-                            yield {'id': file[:-4], 'text': text}
+                        else:
+                            raise ValueError("Unknown encoding")
+
+                        start_idx = re.search(r'\*\*\* START OF THIS PROJECT GUTENBERG EBOOK .* \*\*\*\n{1,6}(Produced by .*\n)(.*?\n)+?\n{3,8}', text)
+                        end_idx = re.search(r'\n{3,8}(End of (the)? Project Gutenberg | \*\*\* END OF THIS PROJECT GUTENBERG EBOOK .* \*\*\*\n)', text)
+                        # keep only book text
+                        text = text[start_idx.end() if start_idx else None: end_idx.start() if end_idx else None]
                         os.remove(os.path.join(self.root_dir, file.replace(".zip", ".txt")))
                         processed_files.add(file[:-6])
+                        yield {'id': file[:-4], 'text': text}
+
                         # Add the text to the dataset
                 except UnicodeDecodeError as exception:
                     print(exception)
