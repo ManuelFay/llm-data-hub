@@ -49,6 +49,9 @@ class GutenbergExtractor:
                 except UnicodeDecodeError as exception:
                     print(exception)
 
+                except FileNotFoundError as exception:
+                    print(exception)
+
         ds = datasets.Dataset.from_generator(gen)
         return ds
 
