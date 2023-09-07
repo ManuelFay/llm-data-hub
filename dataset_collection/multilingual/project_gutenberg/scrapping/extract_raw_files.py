@@ -37,8 +37,8 @@ class GutenbergExtractor:
                         else:
                             raise ValueError("Unknown encoding")
 
-                        start_idx = re.search(r'\*\*\* START OF THIS PROJECT GUTENBERG EBOOK .* \*\*\*\n{1,6}(Produced by .*\n)(.*?\n)+?\n{3,8}', text)
-                        end_idx = re.search(r'\n{3,8}(End of (the)? Project Gutenberg | \*\*\* END OF THIS PROJECT GUTENBERG EBOOK .* \*\*\*\n)', text)
+                        start_idx = re.search(r'\*\*\*( )?START OF (THE|THIS) PROJECT GUTENBERG EBOOK.*\*\*\*\n{1,6}(Produced by .*\n)(.*?\n)+?\n{3,8}', text)
+                        end_idx = re.search(r'\n{3,8}(End of (the)? Project Gutenberg |\*\*\*( )?END OF THIS PROJECT GUTENBERG EBOOK.*\*\*\*\n)', text)
                         # keep only book text
                         text = text[start_idx.end() if start_idx else None: end_idx.start() if end_idx else None]
                         os.remove(os.path.join(self.root_dir, file.replace(".zip", ".txt")))
