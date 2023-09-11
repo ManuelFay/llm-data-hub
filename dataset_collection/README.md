@@ -32,10 +32,29 @@ Sizes are given in the HuggingFace Datasets format, which is the size of the com
 - [x] OpenSubtitles (french)
     - Command: `load_dataset('manu/french_open_subtitles', split='train', streaming=True)`
     - 130Mb (28M words)
+- [x] French Legal Texts (DILA LEGIFRANCE)
+    - Command: `load_dataset('manu/dila_legifrance', split='train', streaming=True)`
+    - 1.3Gb (200M words)
+- [x] French Questions Reponses (DILA)
+    - 1 Gb
+- [x] French KALI/ CNIL etc  (DILA)
+    - 1 - 10Gb depending on what we include
+- [x] French BnF (Gallica)
+    - Command: `load_dataset('manu/bnf_gallica', split='train', streaming=True)`
+    - 1.7 Gb
+- [x] French Wikisource
+    - Command: `load_dataset('manu/wikisource_fr', split='train', streaming=True)`
+    - 11 Gb
 - [ ] French Translated Lyrics
     - Command: `load_dataset('manu/french_translated_lyrics', split='train', streaming=True)`
 - [ ] ...
 
+
+### Multi-Lingual
+
+- [x] Project Gutenberg
+    - Command: `load_dataset('manu/project_gutenberg', split='<lang_tag>', streaming=True)`
+    - 14.6 Gb
 
 To be continued ...
 
