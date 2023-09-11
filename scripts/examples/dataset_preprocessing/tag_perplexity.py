@@ -12,7 +12,8 @@ if __name__ == "__main__":
 
     # dataset = load_dataset('manu/illuin_youtube_subtitles_text_only', split='train', streaming=False)
     # dataset = load_dataset('manu/illuin_layout_dataset_text_only', split='train', streaming=False)
-    dataset = load_dataset('manu/dila_legifrance', split='train', streaming=False)
+    # dataset = load_dataset('manu/dila_legifrance', split='train', streaming=False)
+    dataset = load_dataset('manu/bnf_gallica', split='train', streaming=False)
 
     # time
     import time

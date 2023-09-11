@@ -1,3 +1,5 @@
+import datasets
+
 from dataset_preprocessing.perplexity.model import KenlmModel
 
 
@@ -19,11 +21,13 @@ class PerplexityTagger:
     # in-place tagging of the "text" column, to a "perplexity" column
     def tag_hf_dataset(self, dataset):
         # map over dataset
+
+        kwargs = {"num_proc": 4} if not isinstance(dataset, datasets.IterableDataset) else {}
         dataset = dataset.map(
             get_perplexity_single,
             batched=False,
-            num_proc=4,
-            fn_kwargs={"model": self.kenlm_model}
+            fn_kwargs={"model": self.kenlm_model},
+            **kwargs,
         )
         return dataset
 
