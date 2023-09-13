@@ -45,8 +45,9 @@ Sizes are given in the HuggingFace Datasets format, which is the size of the com
 - [x] French Wikisource
     - Command: `load_dataset('manu/wikisource_fr', split='train', streaming=True)`
     - 11 Gb
-- [ ] French Translated Lyrics
-    - Command: `load_dataset('manu/french_translated_lyrics', split='train', streaming=True)`
+- [x] French Translated Lyrics
+    - Command: `load_dataset('Nicolas-BZRD/original_songs_lyrics_with_french_translation', split='train', streaming=True)`
+    - 122 Mb
 - [ ] ...
 
 
