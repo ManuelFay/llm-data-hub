@@ -44,6 +44,10 @@ evaluation = [
     "rouge-score"
 ]
 
+audio = [
+    "openai-whisper",
+]
+
 perplexity = [
     "git+https://github.com/kpu/kenlm/archive/master.zip",
     "sentencepiece"
