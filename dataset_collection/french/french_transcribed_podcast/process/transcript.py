@@ -27,6 +27,7 @@ if __name__ == "__main__":
     parser.add_argument("--input_file", type=str, default="french_podcast.csv")
     parser.add_argument("--output_file", type=str, default="data/french_podcast_transcribed.csv")
     parser.add_argument("--model_size", type=str, default="large")
+    parser.add_argument("--hub_id", type=str, default=None)
     args = parser.parse_args()
 
     df = pd.read_csv(args.input_file)
@@ -49,3 +50,8 @@ if __name__ == "__main__":
             df.to_csv(args.output_file, index=False)
 
     df.to_csv(args.output_file, index=False)
+
+    if args.hub_id:
+        from datasets import load_dataset
+        dataset = load_dataset("csv", data_files=args.output_file)
+        dataset.push_to_hub(args.hub_id)
