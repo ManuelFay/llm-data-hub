@@ -1,45 +1,57 @@
 import pandas as pd
 import requests
 import whisper
-import pickle
+import numpy as np
 import os
+from tqdm import tqdm
 
-df = pd.read_csv('french_podcast.csv')
 
-def download_mp3(url):
+def download_mp3(url, download_path="data/audio.mp3"):
     try:
         with requests.get(url) as response:
             response.raise_for_status()
             content_type = response.headers.get('content-type')
             if content_type == 'audio/mpeg':
-                with open("audio.mp3", 'wb') as file:
+                with open(download_path, 'wb') as file:
                     file.write(response.content)
-                return 1
+                return True
     except:
-        pass
-    return -1
+        print("Failed to download audio", url)
+    return False
 
-number_idx = len(df.index)
-model = whisper.load_model("small")
 
-if os.path.exists("index.pickle"):
-    with open("index.pickle", "rb") as index_file:
-        idx = pickle.load(index_file)
-else:
-    idx = 0
+if __name__ == "__main__":
+    import argparse
 
-while idx < number_idx:
-    audio = download_mp3(df.loc[idx]['audio_podcast_link'])
-    if audio != -1:
-        try: df.loc[idx]["transcript"] = model.transcribe("audio.mp3")["text"]
-        except:
-            pass
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input_file", type=str, default="french_podcast.csv")
+    parser.add_argument("--output_file", type=str, default="data/french_podcast_transcribed.csv")
+    parser.add_argument("--model_size", type=str, default="large")
+    parser.add_argument("--hub_id", type=str, default=None)
+    args = parser.parse_args()
 
-    idx += 1
+    df = pd.read_csv(args.input_file)
+    model = whisper.load_model(args.model_size)
+    # decoding_options = whisper.DecodingOptions(language="fr")
 
-    if idx % 10 == 0:
-        df.to_csv("french_podcast.csv", escapechar="§", index=False)
-        with open("index.pickle", "wb") as index_file:
-            pickle.dump(idx, index_file)
+    for index, row in tqdm(df.iterrows()):
+        if not np.isnan(row["transcript"]):
+            continue
 
-df.to_csv("french_podcast.csv", escapechar="§", index=False)
+        if download_mp3(row['audio_podcast_link'], download_path="data/audio.mp3"):
+            try:
+                df.loc[index, "transcript"] = model.transcribe("data/audio.mp3")["text"]
+            except Exception as e:
+                print("Failed to transcribe", row['audio_podcast_link'], e)
+                df.loc[index, "transcript"] = "FAILED"
+            os.remove("data/audio.mp3")
+
+        if index % 10 == 0:
+            df.to_csv(args.output_file, index=False)
+
+    df.to_csv(args.output_file, index=False)
+
+    if args.hub_id:
+        from datasets import load_dataset
+        dataset = load_dataset("csv", data_files=args.output_file)
+        dataset.push_to_hub(args.hub_id)
