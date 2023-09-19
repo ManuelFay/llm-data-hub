@@ -34,7 +34,7 @@ if __name__ == "__main__":
     model = whisper.load_model(args.model_size)
     # decoding_options = whisper.DecodingOptions(language="fr")
 
-    for index, row in tqdm(df.iterrows()):
+    for index, row in tqdm(df.iterrows(), total=len(df)):
         if not np.isnan(row["transcript"]):
             continue
 

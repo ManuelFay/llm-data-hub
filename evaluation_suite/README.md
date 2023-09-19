@@ -25,11 +25,12 @@ We will leverage several libraries  and existing benchmarks to achieve so:
 
 Data decontamination will have to be run before training extensively, and verified at evaluation time (13-gram matching).
 
-### Ressources
+### Resources
 
 - https://github.com/FastEval/FastEval
 - https://github.com/evalplus/evalplus
 - https://github.com/EleutherAI/lm-evaluation-harness
+- https://github.com/declare-lab/instruct-eval
 
 
 ### Todo
