@@ -320,6 +320,7 @@ def main():
     # download the dataset.
     if data_args.dataset_name is not None:
         # Downloading and loading a dataset from the hub.
+        # Hacky updates
         if not data_args.streaming:
             raw_datasets = load_dataset(
                 data_args.dataset_name,
@@ -328,6 +329,8 @@ def main():
                 token=model_args.token,
                 streaming=data_args.streaming,
             )
+        else:
+            raw_datasets = datasets.DatasetDict()
         if "validation" not in raw_datasets.keys():
             # raw_datasets["validation"] = load_dataset(
             #     data_args.dataset_name,
