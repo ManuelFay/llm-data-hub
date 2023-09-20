@@ -641,7 +641,7 @@ def main():
             )
             metrics["train_samples"] = min(max_train_samples, len(train_dataset))
         except:
-            max_train_samples = trainer.args.train_batch_size * trainer.args.world_size * trainer.args.gradient_accumulation_steps
+            max_train_samples = trainer.args.train_batch_size * trainer.args.world_size * trainer.args.gradient_accumulation_steps * trainer.args.max_steps
             metrics["train_samples"] = max_train_samples
 
 
