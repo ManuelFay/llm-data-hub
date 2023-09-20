@@ -1,0 +1,6 @@
+[submodule "evaluation_suite/instruct-eval"]
+	path = evaluation_suite/instruct-eval
+	url = https://github.com/declare-lab/instruct-eval
+[submodule "evaluation_suite/lm-evaluation-harness"]
+	path = evaluation_suite/lm-evaluation-harness
+	url = https://github.com/EleutherAI/lm-evaluation-harness
