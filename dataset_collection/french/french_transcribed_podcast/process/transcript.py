@@ -35,7 +35,7 @@ if __name__ == "__main__":
     # decoding_options = whisper.DecodingOptions(language="fr")
 
     for index, row in tqdm(df.iterrows(), total=len(df)):
-        if isinstance(row["transcript"], float) and np.isnan(row["transcript"]):
+        if isinstance(row["transcript"], str) and len(row["transcript"]) > 0:
             continue
 
         if download_mp3(row['audio_podcast_link'], download_path="data/audio.mp3"):
