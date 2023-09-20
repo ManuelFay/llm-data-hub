@@ -17,6 +17,9 @@ Sizes are given in the HuggingFace Datasets format, which is the size of the com
 - [x] Oscar (french split)
     - Command: `load_dataset('oscar', "unshuffled_deduplicated_fr", split='train', streaming=True)`
     - 430.5 Gb (62.2B words)
+- [x] CulturaX (french split - Oscar + mC4)
+    - Command: `load_dataset('uonlp/CulturaX', 'fr', split='train', streaming=True)`
+    - ~2 Tb  (319B tokens)
 - [x] French Wikipedia
     - Command: `load_dataset('wikipedia', '20220301.fr', split='train', streaming=True)`
     - 5.8 Gb (1.1B words)
@@ -41,21 +44,27 @@ Sizes are given in the HuggingFace Datasets format, which is the size of the com
     - 1 - 10Gb depending on what we include
 - [x] French BnF (Gallica)
     - Command: `load_dataset('manu/bnf_gallica', split='train', streaming=True)`
-    - 1.7 Gb
+    - 1.7 Gb (WIP)
 - [x] French Wikisource
     - Command: `load_dataset('manu/wikisource_fr', split='train', streaming=True)`
     - 11 Gb
 - [x] French Translated Lyrics
     - Command: `load_dataset('Nicolas-BZRD/original_songs_lyrics_with_french_translation', split='train', streaming=True)`
     - 122 Mb
+- [x] French Transcribed Podcasts
+  - Command: `load_dataset('manu/french_transcribed_podcasts', split='train', streaming=True)`
 - [ ] ...
 
 
-### Multi-Lingual
+### Multi-Lingual / Aligned
 
 - [x] Project Gutenberg
     - Command: `load_dataset('manu/project_gutenberg', split='<lang_tag>', streaming=True)`
     - 14.6 Gb
+- [x] Europarl
+- [x] OpenSubtitles
+- [x] Opus
+- [x] WMT
 
 To be continued ...
 
