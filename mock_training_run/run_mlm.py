@@ -344,7 +344,7 @@ def main():
                 data_args.dataset_name,
                 data_args.dataset_config_name,
                 # split=f"train[{data_args.validation_split_percentage}%:]",
-                split=f"train",
+                split="train",
                 cache_dir=model_args.cache_dir,
                 token=model_args.token,
                 streaming=data_args.streaming,
