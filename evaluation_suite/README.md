@@ -49,7 +49,7 @@ python lm-evaluation-harness/main.py \
     --model_args pretrained=gpt2 \
     --tasks hellaswag,openbookqa,winogrande,arc_easy,arc_challenge,boolq,piqa \
     --device cuda:0 --batch_size 4 \
-    --output_path data/results/gpt2   --limit 100 
+    --output_path data/results/gpt2_en   --limit 100 
     
 python instruct-eval/main.py mmlu --model_name llama --model_path chavinlo/alpaca-native
 python instruct-eval/main.py bbh --model_name llama --model_path PY007/TinyLlama-1.1B-Chat-v0.1
@@ -83,7 +83,7 @@ python lm-evaluation-harness/main.py \
     --model_args pretrained=gpt2 \
     --tasks pile_arxiv,pile_europarl,pile_gutenberg \
     --device cuda:0 --batch_size 4 \
-    --output_path data/results/gpt2_fr   --limit 100 
+    --output_path data/results/gpt2_per   --limit 100 
 ```
 
 
