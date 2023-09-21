@@ -11,4 +11,4 @@ models/
 data/
 lm_cache/
 .pytest_cache/
-
+.DS_Store
