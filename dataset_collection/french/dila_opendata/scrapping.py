@@ -90,15 +90,13 @@ def explore_node(path, write_path: str, mode=None):
 
 
 def dataset_specific_parser(child, mode):
-    if mode == "KALI":
+    if mode == "KALI" or mode == "CNIL" or mode == "CAPP" or mode == "CASS" or mode == "CONSTIT":
         return extract_all_text_from_node(child, whitelist=["CONTENU"])
-    if mode == "QR":
+    elif mode == "QR":
         return extract_all_text_from_node(child, whitelist=["TEXTE_QUESTION", "TEXTE_REPONSE", "Texte_Reponse", "Texte_Question"])
-    if mode == "LEGI":
+    elif mode == "LEGI":
         headers = extract_all_text_from_node(child, whitelist=["CONTEXTE"])
         return extract_all_text_from_node(child, whitelist=["BLOC_TEXTUEL"])
-    if mode == "CNIL":
-        return extract_all_text_from_node(child, whitelist=["CONTENU"])
     return extract_all_text_from_node(child)
 
 
