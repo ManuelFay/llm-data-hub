@@ -91,3 +91,10 @@ data_mix:
       build_test_set_from_train: true
       num_train_examples:  1000
       num_test_examples: 100
+# Internet dumps
+    - (): dataset_construction.DatasetConfig
+      dataset_path: 'oscar-corpus/OSCAR-2301'
+      dataset_name: fr
+      build_test_set_from_train: true
+      num_train_examples:  1000
+      num_test_examples: 100
