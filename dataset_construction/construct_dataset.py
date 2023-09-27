@@ -12,6 +12,9 @@ import pandas as pd
 from datasets import Dataset, DatasetDict, load_dataset, concatenate_datasets
 from huggingface_hub import HfApi
 
+from dataset_construction.utils import test_set_conformity
+
+
 @dataclass
 class DatasetConfig:
     """All datasets should be on HF Datasets Hub, with at least a 'text' field.
@@ -26,6 +29,7 @@ class DatasetConfig:
     num_train_tokens: Optional[int] = None
     num_test_tokens: Optional[int] = None
     filtering_function: Optional[Callable] = None
+    preprocessing_function: Optional[Callable] = None
     tags: Optional[List[str]] = None
     # load_in_streaming_mode: Optional[bool] = False # Not implemented yet
 
@@ -41,11 +45,15 @@ class DataMix:
     ngram_path_for_extra_deduplication: Optional[str] = None    # TODO: Not implemented yet
 
 
-def filter_and_truncate(dataset: Dataset,
-                        num_tokens: Optional[int],
-                        filtering_function: Optional[Callable]
-                        ) -> Dataset:
+def process_single_dataset(dataset: Dataset,
+                           num_tokens: Optional[int],
+                           filtering_function: Optional[Callable],
+                           preprocessing_function: Optional[Callable] = None,
+                           ) -> Dataset:
     """Filter and truncate a dataset, if needed."""
+
+    if preprocessing_function is not None:
+        dataset = dataset.map(preprocessing_function, num_proc=os.cpu_count())
 
     if filtering_function is not None:
         dataset = dataset.filter(filtering_function, num_proc=os.cpu_count())
@@ -60,24 +68,24 @@ def filter_and_truncate(dataset: Dataset,
     return dataset
 
 
-def test_set_conformity(dataset: Dataset, num_test_samples) -> int:
-    """Make sure the test set is not too big."""
-    return min(num_test_samples, len(dataset)//10)
-def load_and_filter_single_dataset(dataset_config: DatasetConfig) -> DatasetDict:
+def build_single_dataset_dict(dataset_config: DatasetConfig) -> DatasetDict:
     """Load a single dataset from HF Datasets Hub, and apply the filtering function if provided."""
     dataset_train = load_dataset(dataset_config.dataset_path, name=dataset_config.dataset_name, split=dataset_config.train_split)
     assert isinstance(dataset_train, Dataset)
 
     if dataset_config.build_test_set_from_train:
         print(f"Building test set from train set for {dataset_config.dataset_path} with len {len(dataset_train)}")
-        assert dataset_config.num_test_examples + dataset_config.num_train_examples <= len(dataset_train)
         num_test_set = test_set_conformity(dataset_train, dataset_config.num_test_examples)
         dataset_train_test = dataset_train.train_test_split(test_size=num_test_set)
-        dataset_train = dataset_train_test["train"].select(range(dataset_config.num_train_examples))
+        if dataset_config.num_train_examples:
+            dataset_train = dataset_train_test["train"].select(range(dataset_config.num_train_examples))
+        else:
+            dataset_train = dataset_train_test["train"]
         dataset_test = dataset_train_test["test"]
     elif dataset_config.test_split is not None:
         print(f"Loading test set for {dataset_config.dataset_path} with len {dataset_config.num_test_examples}")
-        dataset_train = dataset_train.select(range(dataset_config.num_train_examples))
+        if dataset_config.num_train_examples:
+            dataset_train = dataset_train.select(range(dataset_config.num_train_examples))
         dataset_test = load_dataset(dataset_config.dataset_path, name=dataset_config.dataset_name, split=dataset_config.test_split)
         dataset_test = dataset_test.select(range(min(dataset_config.num_test_examples, len(dataset_test))))
     else:
@@ -85,8 +93,8 @@ def load_and_filter_single_dataset(dataset_config: DatasetConfig) -> DatasetDict
     assert isinstance(dataset_test, Dataset)
     assert isinstance(dataset_train, Dataset)
 
-    dataset_train = filter_and_truncate(dataset_train, dataset_config.num_train_tokens, dataset_config.filtering_function)
-    dataset_test = filter_and_truncate(dataset_test,  dataset_config.num_test_tokens, dataset_config.filtering_function)
+    dataset_train = process_single_dataset(dataset_train, dataset_config.num_train_tokens, dataset_config.filtering_function, dataset_config.preprocessing_function)
+    dataset_test = process_single_dataset(dataset_test, dataset_config.num_test_tokens, dataset_config.filtering_function, dataset_config.preprocessing_function)
     dataset = DatasetDict({"train": dataset_train, "test": dataset_test})
     # only keep the text field and the id field
     dataset = dataset.map(
@@ -110,7 +118,7 @@ def build_concatenated_dataset(mix: DataMix) -> Tuple[DatasetDict, DatasetDict]:
     dataset_list = []
     for dataset_config in tqdm.tqdm(mix.datasets, desc="Loading datasets"):
         print(f"Loading and filtering dataset {dataset_config.dataset_path}")
-        ds: DatasetDict = load_and_filter_single_dataset(dataset_config)
+        ds: DatasetDict = build_single_dataset_dict(dataset_config)
         dataset_list.append(ds)
 
     final_dataset = DatasetDict({
@@ -133,7 +141,7 @@ def build_concatenated_dataset(mix: DataMix) -> Tuple[DatasetDict, DatasetDict]:
     return final_dataset, separate_dataset
 
 
-def compute_stats(dataset: DatasetDict) -> DatasetDict:
+def compute_stats(dataset: DatasetDict) -> Dict:
     dataset_stats = {}
     for split in tqdm.tqdm(dataset.keys(), desc="Computing dataset stats"):
         dataset_stats[split] = compute_dataset_stats(dataset[split])

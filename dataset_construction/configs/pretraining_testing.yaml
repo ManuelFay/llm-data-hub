@@ -18,5 +18,13 @@ data_mix:
       dataset_path: manu/french_librispeech_text_only
       train_split: "train"
       build_test_set_from_train: true
-      num_train_examples: 1000
       num_test_examples: 1000
+    - (): dataset_construction.DatasetConfig
+      dataset_path: manu/french_podcasts
+      train_split: "train"
+      build_test_set_from_train: true
+      num_test_examples: 1000
+      filtering_function:
+        (): dataset_collection.french.french_transcribed_podcast.Filter
+      preprocessing_function:
+        (): dataset_collection.french.french_transcribed_podcast.Mapper
