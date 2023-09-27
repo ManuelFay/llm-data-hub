@@ -1,11 +1,12 @@
 from dataclasses import dataclass
-from typing import List, Dict, Any, Union, Optional, Callable, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 
 @dataclass
 class DatasetConfig:
     """All datasets should be on HF Datasets Hub, with at least a 'text' field.
     This class is used to load them from there."""
+
     dataset_path: str
     dataset_name: Optional[str] = None
     train_split: Optional[str] = "train"
@@ -29,4 +30,4 @@ class DataMix:
     compute_dataset_stats: bool = True
     keep_separated_datasets_in_dataset_dict: bool = False
     deduplicate_test_set: bool = False  # TODO: Not implemented yet
-    ngram_path_for_extra_deduplication: Optional[str] = None    # TODO: Not implemented yet
+    ngram_path_for_extra_deduplication: Optional[str] = None  # TODO: Not implemented yet

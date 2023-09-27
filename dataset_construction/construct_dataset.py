@@ -2,29 +2,29 @@
 
 import argparse
 import os
-import tqdm
-import configue
-from typing import Dict, Any, Optional, Callable, Tuple
-import pandas as pd
+from typing import Any, Callable, Dict, Optional, Tuple
 
-from datasets import Dataset, DatasetDict, load_dataset, concatenate_datasets
+import configue
+import pandas as pd
+import tqdm
+from datasets import Dataset, DatasetDict, concatenate_datasets, load_dataset
 from huggingface_hub import HfApi
 
-from dataset_construction.dataset_config import DatasetConfig, DataMix
+from dataset_construction.dataset_config import DataMix, DatasetConfig
 from dataset_construction.utils import test_set_conformity
-
 
 
 class DatasetConstructor:
     def __init__(self, mix):
         self.mix = mix
 
-    def process_single_dataset(self,
-                               dataset: Dataset,
-                               num_tokens: Optional[int],
-                               filtering_function: Optional[Callable],
-                               preprocessing_function: Optional[Callable] = None,
-                               ) -> Dataset:
+    def process_single_dataset(
+        self,
+        dataset: Dataset,
+        num_tokens: Optional[int],
+        filtering_function: Optional[Callable],
+        preprocessing_function: Optional[Callable] = None,
+    ) -> Dataset:
         """Filter and truncate a dataset, if needed."""
 
         if preprocessing_function is not None:
@@ -36,7 +36,10 @@ class DatasetConstructor:
         dataset = dataset.shuffle(seed=42)
         if num_tokens is not None:
             estimation_sample_size = min(1000, len(dataset))
-            num_tokens_in_dataset = (sum([len(example["text"].split()) for example in dataset.select(range(estimation_sample_size))])/estimation_sample_size) * len(dataset)
+            num_tokens_in_dataset = (
+                sum([len(example["text"].split()) for example in dataset.select(range(estimation_sample_size))])
+                / estimation_sample_size
+            ) * len(dataset)
             estimated_samples_required = int((num_tokens / num_tokens_in_dataset) * len(dataset))
             dataset = dataset.select(range(estimated_samples_required))
 
@@ -44,7 +47,9 @@ class DatasetConstructor:
 
     def build_single_dataset_dict(self, dataset_config: DatasetConfig) -> DatasetDict:
         """Load a single dataset from HF Datasets Hub, and apply the filtering function if provided."""
-        dataset_train = load_dataset(dataset_config.dataset_path, name=dataset_config.dataset_name, split=dataset_config.train_split)
+        dataset_train = load_dataset(
+            dataset_config.dataset_path, name=dataset_config.dataset_name, split=dataset_config.train_split
+        )
         assert isinstance(dataset_train, Dataset)
 
         if dataset_config.build_test_set_from_train:
@@ -60,20 +65,34 @@ class DatasetConstructor:
             print(f"Loading test set for {dataset_config.dataset_path} with len {dataset_config.num_test_examples}")
             if dataset_config.num_train_examples:
                 dataset_train = dataset_train.select(range(dataset_config.num_train_examples))
-            dataset_test = load_dataset(dataset_config.dataset_path, name=dataset_config.dataset_name, split=dataset_config.test_split)
+            dataset_test = load_dataset(
+                dataset_config.dataset_path, name=dataset_config.dataset_name, split=dataset_config.test_split
+            )
             dataset_test = dataset_test.select(range(min(dataset_config.num_test_examples, len(dataset_test))))
         else:
             raise ValueError("Either build_test_set_from_train or test_split must be set")
         assert isinstance(dataset_test, Dataset)
         assert isinstance(dataset_train, Dataset)
 
-        dataset_train = self.process_single_dataset(dataset_train, dataset_config.num_train_tokens, dataset_config.filtering_function, dataset_config.preprocessing_function)
-        dataset_test = self.process_single_dataset(dataset_test, dataset_config.num_test_tokens, dataset_config.filtering_function, dataset_config.preprocessing_function)
+        dataset_train = self.process_single_dataset(
+            dataset_train,
+            dataset_config.num_train_tokens,
+            dataset_config.filtering_function,
+            dataset_config.preprocessing_function,
+        )
+        dataset_test = self.process_single_dataset(
+            dataset_test,
+            dataset_config.num_test_tokens,
+            dataset_config.filtering_function,
+            dataset_config.preprocessing_function,
+        )
         dataset = DatasetDict({"train": dataset_train, "test": dataset_test})
         # only keep the text field and the id field
         dataset = dataset.map(
             lambda example: {"text": example["text"], "id": f"{dataset_config.dataset_path}_{example['id']}"},
-            remove_columns=dataset["train"].column_names, num_proc=os.cpu_count())
+            remove_columns=dataset["train"].column_names,
+            num_proc=os.cpu_count(),
+        )
         return dataset
 
     @staticmethod
@@ -85,9 +104,8 @@ class DatasetConstructor:
             "num_words": sum(word_counts),
             "avg_words": sum(word_counts) / len(word_counts),
             "word_distribution": word_counts,
-            "dataset_gb": round(dataset.data.nbytes / 1e9, 3)
+            "dataset_gb": round(dataset.data.nbytes / 1e9, 3),
         }
-
 
     def build_concatenated_dataset(self) -> Tuple[DatasetDict, DatasetDict]:
         dataset_list = []
@@ -96,10 +114,12 @@ class DatasetConstructor:
             ds: DatasetDict = self.build_single_dataset_dict(dataset_config)
             dataset_list.append(ds)
 
-        final_dataset = DatasetDict({
-            "train": concatenate_datasets([ds["train"] for ds in dataset_list]),
-            "test": concatenate_datasets([ds["test"] for ds in dataset_list]),
-        })
+        final_dataset = DatasetDict(
+            {
+                "train": concatenate_datasets([ds["train"] for ds in dataset_list]),
+                "test": concatenate_datasets([ds["test"] for ds in dataset_list]),
+            }
+        )
         if self.mix.shuffle:
             final_dataset = final_dataset.shuffle(seed=42)
 
@@ -155,15 +175,33 @@ if __name__ == "__main__":
     # Push to hub
     if args.hub_id is not None:
         final_ds.push_to_hub(args.hub_id, private=False)
-        api.upload_file(repo_id=args.hub_id, path_or_fileobj="dataset_stats.csv", path_in_repo="dataset_stats.csv", repo_type="dataset")
-        api.upload_file(repo_id=args.hub_id, path_or_fileobj="dataset_stats.md", path_in_repo="dataset_stats.md", repo_type="dataset")
+        api.upload_file(
+            repo_id=args.hub_id,
+            path_or_fileobj="dataset_stats.csv",
+            path_in_repo="dataset_stats.csv",
+            repo_type="dataset",
+        )
+        api.upload_file(
+            repo_id=args.hub_id,
+            path_or_fileobj="dataset_stats.md",
+            path_in_repo="dataset_stats.md",
+            repo_type="dataset",
+        )
 
         if separate_ds is not None:
             separate_ds.push_to_hub(f"{args.hub_id}_separate", private=False)
-            api.upload_file(repo_id=f"{args.hub_id}_separate", path_or_fileobj="dataset_stats.csv", path_in_repo="dataset_stats.csv",
-                            repo_type="dataset")
-            api.upload_file(repo_id=f"{args.hub_id}_separate", path_or_fileobj="dataset_stats.md", path_in_repo="dataset_stats.md",
-                            repo_type="dataset")
+            api.upload_file(
+                repo_id=f"{args.hub_id}_separate",
+                path_or_fileobj="dataset_stats.csv",
+                path_in_repo="dataset_stats.csv",
+                repo_type="dataset",
+            )
+            api.upload_file(
+                repo_id=f"{args.hub_id}_separate",
+                path_or_fileobj="dataset_stats.md",
+                path_in_repo="dataset_stats.md",
+                repo_type="dataset",
+            )
 
     # Clean up
     if ds_constructor.mix.compute_dataset_stats:

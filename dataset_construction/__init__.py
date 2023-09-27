@@ -1,1 +1,1 @@
-from construct_dataset import DatasetConfig, DataMix
+from construct_dataset import DataMix, DatasetConfig
