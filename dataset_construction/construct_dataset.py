@@ -1,48 +1,17 @@
 """This code is used to aggregate all of the datasets needed to construct a pretraining dataset from a YAML config file."""
 
 import argparse
-import json
 import os
 import tqdm
 import configue
-from dataclasses import dataclass
-from typing import List, Dict, Any, Union, Optional, Callable, Tuple
+from typing import Dict, Any, Optional, Callable, Tuple
 import pandas as pd
 
 from datasets import Dataset, DatasetDict, load_dataset, concatenate_datasets
 from huggingface_hub import HfApi
 
+from dataset_construction.dataset_config import DatasetConfig, DataMix
 from dataset_construction.utils import test_set_conformity
-
-
-@dataclass
-class DatasetConfig:
-    """All datasets should be on HF Datasets Hub, with at least a 'text' field.
-    This class is used to load them from there."""
-    dataset_path: str
-    dataset_name: Optional[str] = None
-    train_split: Optional[str] = "train"
-    test_split: Optional[str] = None
-    build_test_set_from_train: Optional[bool] = False
-    num_train_examples: Optional[int] = None
-    num_test_examples: Optional[int] = None
-    num_train_tokens: Optional[int] = None
-    num_test_tokens: Optional[int] = None
-    filtering_function: Optional[Callable] = None
-    preprocessing_function: Optional[Callable] = None
-    tags: Optional[List[str]] = None
-    # load_in_streaming_mode: Optional[bool] = False # Not implemented yet
-
-
-@dataclass
-class DataMix:
-    datasets: List[DatasetConfig]
-    name: str
-    shuffle: bool = False
-    compute_dataset_stats: bool = True
-    keep_separated_datasets_in_dataset_dict: bool = False
-    deduplicate_test_set: bool = False  # TODO: Not implemented yet
-    ngram_path_for_extra_deduplication: Optional[str] = None    # TODO: Not implemented yet
 
 
 def process_single_dataset(dataset: Dataset,
@@ -111,6 +80,7 @@ def compute_dataset_stats(dataset: Dataset) -> Dict[str, Any]:
         "num_words": sum(word_counts),
         "avg_words": sum(word_counts) / len(word_counts),
         "word_distribution": word_counts,
+        "dataset_gb": round(dataset.data.nbytes / 1e9, 3)
     }
 
 
@@ -170,12 +140,12 @@ if __name__ == "__main__":
         print(df)
 
     if args.hub_id is not None:
+        final_ds.push_to_hub(args.hub_id, private=False)
         api.upload_file(repo_id=args.hub_id, path_or_fileobj="dataset_stats.csv", path_in_repo="dataset_stats.csv", repo_type="dataset")
         api.upload_file(repo_id=args.hub_id, path_or_fileobj="dataset_stats.md", path_in_repo="dataset_stats.md", repo_type="dataset")
-        # final_ds.push_to_hub(args.hub_id, private=False)
 
         if separate_ds is not None:
-            # separate_ds.push_to_hub(f"{args.hub_id}_separate", private=False)
+            separate_ds.push_to_hub(f"{args.hub_id}_separate", private=False)
             api.upload_file(repo_id=f"{args.hub_id}_separate", path_or_fileobj="dataset_stats.csv", path_in_repo="dataset_stats.csv",
                             repo_type="dataset")
             api.upload_file(repo_id=f"{args.hub_id}_separate", path_or_fileobj="dataset_stats.md", path_in_repo="dataset_stats.md",

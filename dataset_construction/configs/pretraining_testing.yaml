@@ -7,24 +7,61 @@ data_mix:
   deduplicate_test_set: false
   ngram_path_for_extra_deduplication: null
   datasets:
+# Translation datasets
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: manu/opus100-en-fr
+#      test_split: "test"
+#      build_test_set_from_train: false
+#      num_train_examples:  1000
+#      num_test_examples: 1000
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: manu/europarl-en-fr
+#      build_test_set_from_train: true
+#      num_test_examples: 1000
     - (): dataset_construction.DatasetConfig
-      dataset_path: manu/opus100-en-fr
-      train_split: "train"
+      dataset_path: manu/wmt-en-fr
       test_split: "test"
-      build_test_set_from_train: false
       num_train_examples:  1000
-      num_test_examples: 1000
+      num_test_examples: 100
+# Speech datasets
     - (): dataset_construction.DatasetConfig
       dataset_path: manu/french_librispeech_text_only
-      train_split: "train"
       build_test_set_from_train: true
-      num_test_examples: 1000
+      num_train_examples:  1000
+      num_test_examples: 100
     - (): dataset_construction.DatasetConfig
       dataset_path: manu/french_podcasts
-      train_split: "train"
       build_test_set_from_train: true
-      num_test_examples: 1000
+      num_test_examples: 100
       filtering_function:
         (): dataset_collection.french.french_transcribed_podcast.Filter
       preprocessing_function:
         (): dataset_collection.french.french_transcribed_podcast.Mapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: manu/french_open_subtitles
+      num_train_examples:  1000
+      test_split: "test"
+      num_test_examples: 100
+# Books
+    - (): dataset_construction.DatasetConfig
+      dataset_path: manu/project_gutenberg
+      dataset_name: fr
+      num_train_examples:  1000
+      num_test_examples: 100
+      # here we should preprocess
+    - (): dataset_construction.DatasetConfig
+      dataset_path: manu/bnf_gallica
+      build_test_set_from_train: true
+      num_train_examples:  1000
+      num_test_examples: 100
+# Dila data
+    - (): dataset_construction.DatasetConfig
+      dataset_path: manu/dila_legifrance
+      build_test_set_from_train: true
+      num_train_examples:  1000
+      num_test_examples: 100
+    - (): dataset_construction.DatasetConfig
+      dataset_path: Nicolas-BZRD/BALO_opendata
+      build_test_set_from_train: true
+      num_train_examples: 1000
+      num_test_examples: 100
