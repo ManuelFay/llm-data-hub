@@ -1,1 +1,1 @@
-from .mapper import Mapper, Filter
+from .mapper_and_filter import PodcastMapper, PodcastFilter

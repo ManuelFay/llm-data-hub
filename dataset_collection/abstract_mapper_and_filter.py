@@ -1,20 +1,23 @@
+"""Templates for mappers and filters to be used in dataset_construction/construct_dataset.py"""
+
 """To be used to filter from the hf dataset which is not in the correct format"""
 from typing import Dict
+import abc
 
 
-class Mapper:
+class Mapper(abc.ABC):
     def mapper_fn(self, example) -> Dict:
         """Keep only columns programme_id and transcript and rename as id, text"""
-        return {"text": example["transcript"], "id": example['programme_id']}
+        raise NotImplementedError
 
     def __call__(self, *args, **kwargs):
         return self.mapper_fn(*args, **kwargs)
 
 
-class Filter:
+class Filter(abc.ABC):
     def filter_fn(self, example) -> bool:
         """Keep only columns programme_id and transcript and rename as id, text"""
-        return isinstance(example["text"], str) and len(example["text"]) > 100
+        raise NotImplementedError
 
     def __call__(self, *args, **kwargs):
         return self.filter_fn(*args, **kwargs)
