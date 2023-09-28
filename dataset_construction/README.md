@@ -131,7 +131,52 @@ Note however that this code is not very optimized and is better to already have 
 
 ### Next steps
 
-Most important next step is the test set deduplication (looking into it).
+- Most important next step is the test set deduplication (looking into it).
 
-Depending on large scale load tests, maybe I'll add execution checkpointing (if fails occur, not having to map and filter datasets over).
+- Depending on large scale load tests, maybe I'll add execution checkpointing (if fails occur, not having to map and filter datasets over).
 
+- Manual dataset packing if sequences are not padded together.
+
+
+
+### Scaling laws
+
+We want to test a Mistral model
+
+Specs:
+- Between 1.2 and 1.8B (is there a more efficient size for GPU use?)
+- GQA, SWA, Mistral Tokenizer
+
+Scaling laws can test either GQA ratios, or the importance of french on both Language losses. 
+I think GQA is soon to be a solved problem and french ratio makes more sense in the paper's story.
+It enables testing out if there is a saturation at some point / a sweet point to be good in both.
+
+Experiments
+
+Models:
+- 200M
+- 400M
+- 800M
+- 1.6B
+
+Trained for 50B tokens with 4 different ratios:
+- 20 % code, 20 % french, 60 % english
+- 20 % code, 40 % french, 40 % english
+- 20 % code, 60 % french, 20 % english
+- Custom tokenizer: 20 % code, 40 % french, 40 % english --> might be very interesting to show french gets fucked by ML tokenizers
+
+Checkpoints at 500M, 1B, 5B, 10B, 20B, (50B ?)
+- Cooldown procedure might be interesting to run on the checkpoints (faster linear decay for last 5% of training).
+- Otherwise it might bias results and yield non-optimal things.
+
+In total that's 6*4*4= 96 models for power loss curves + a few more at the end of main model training
+
+Budget should roughly equate to
+
+20b steps:
+- 4 configurations x (~1.75 model equivalent flops) x 1/50 (ratio of total objective steps) = 7/5O ratio of long run flops
+
+50b steps:
+- 4 configurations x (~1.75 model equivalent flops) x 1/20 (ratio of total objective steps) = 7/2O ratio of long run flops
+
+Is this what we want to sign off on ?
