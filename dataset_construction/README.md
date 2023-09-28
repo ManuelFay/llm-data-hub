@@ -139,17 +139,16 @@ Note however that this code is not very optimized and is better to already have 
 
 
 
-### Scaling laws
-
-We want to test a Mistral model
+### Scaling laws (Draft proposal - should not be written here lol)
 
 Specs:
+- Mistral architecture with SWA, GQA, etc...
 - Between 1.2 and 1.8B (is there a more efficient size for GPU use?)
 - GQA, SWA, Mistral Tokenizer
 
-Scaling laws can test either GQA ratios, or the importance of french on both Language losses. 
-I think GQA is soon to be a solved problem and french ratio makes more sense in the paper's story.
-It enables testing out if there is a saturation at some point / a sweet point to be good in both.
+Scaling laws can test either GQA ratios (like initially proposed), or the importance of french data presence on both Language losses. 
+I think GQA is soon to be a solved problem and french ratio in the datamix makes more sense in the paper's story (what happens if we put more than an anecdotal amount of non english data basically).
+It enables testing out if there is a saturation at some point / a sweet spot for themodel to balance performance in both.
 
 Experiments
 
@@ -163,7 +162,7 @@ Trained for 50B tokens with 4 different ratios:
 - 20 % code, 20 % french, 60 % english
 - 20 % code, 40 % french, 40 % english
 - 20 % code, 60 % french, 20 % english
-- Custom tokenizer: 20 % code, 40 % french, 40 % english --> might be very interesting to show french gets fucked by ML tokenizers
+- Custom tokenizer: 20 % code, 40 % french, 40 % english --> might be very interesting to show french gets fucked by ML tokenizers fitted on an english centric corpus
 
 Checkpoints at 500M, 1B, 5B, 10B, 20B, (50B ?)
 - Cooldown procedure might be interesting to run on the checkpoints (faster linear decay for last 5% of training).
@@ -174,9 +173,9 @@ In total that's 6*4*4= 96 models for power loss curves + a few more at the end o
 Budget should roughly equate to
 
 20b steps:
-- 4 configurations x (~1.75 model equivalent flops) x 1/50 (ratio of total objective steps) = 7/5O ratio of long run flops
+- 4 configurations x (~1.75 model equivalent flops) x 1/50 (ratio of total objective steps) = 7/5O ratio of long run flops for a 1T run
 
 50b steps:
-- 4 configurations x (~1.75 model equivalent flops) x 1/20 (ratio of total objective steps) = 7/2O ratio of long run flops
+- 4 configurations x (~1.75 model equivalent flops) x 1/20 (ratio of total objective steps) = 7/2O ratio of long run flops for a 1T run
 
 Is this what we want to sign off on ?
