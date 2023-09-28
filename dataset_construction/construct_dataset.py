@@ -47,6 +47,7 @@ class DatasetConstructor:
 
     def build_single_dataset_dict(self, dataset_config: DatasetConfig) -> DatasetDict:
         """Load a single dataset from HF Datasets Hub, and apply the filtering function if provided."""
+        # TODO: load partial dataset only if num_train is specified using HF datasets terminology [:n
         dataset_train = load_dataset(
             dataset_config.dataset_path, name=dataset_config.dataset_name, split=dataset_config.train_split
         )
