@@ -7,6 +7,7 @@ from typing import Any, Callable, Dict, Optional, Tuple
 import configue
 import pandas as pd
 import tqdm
+from transformers import PreTrainedTokenizer, AutoTokenizer
 from datasets import Dataset, DatasetDict, concatenate_datasets, load_dataset
 from huggingface_hub import HfApi
 
@@ -15,13 +16,13 @@ from dataset_construction.utils import test_set_conformity
 
 
 class DatasetConstructor:
-    def __init__(self, mix):
+    def __init__(self, mix, estimate_from_k: Optional[int] = None):
         self.mix = mix
+        self.estimate_from_k = estimate_from_k
 
     def process_single_dataset(
         self,
         dataset: Dataset,
-        num_tokens: Optional[int],
         filtering_function: Optional[Callable],
         preprocessing_function: Optional[Callable] = None,
     ) -> Dataset:
@@ -32,24 +33,17 @@ class DatasetConstructor:
 
         if filtering_function is not None:
             dataset = dataset.filter(filtering_function, num_proc=os.cpu_count())
-
-        dataset = dataset.shuffle(seed=42)
-        if num_tokens is not None:
-            estimation_sample_size = min(1000, len(dataset))
-            num_tokens_in_dataset = (
-                sum([len(example["text"].split()) for example in dataset.select(range(estimation_sample_size))])
-                / estimation_sample_size
-            ) * len(dataset)
-            estimated_samples_required = int((num_tokens / num_tokens_in_dataset) * len(dataset))
-            dataset = dataset.select(range(estimated_samples_required))
-
         return dataset
 
     def build_single_dataset_dict(self, dataset_config: DatasetConfig) -> DatasetDict:
         """Load a single dataset from HF Datasets Hub, and apply the filtering function if provided."""
         # TODO: load partial dataset only if num_train is specified using HF datasets terminology [:n
         dataset_train = load_dataset(
-            dataset_config.dataset_path, name=dataset_config.dataset_name, split=dataset_config.train_split
+            dataset_config.dataset_path,
+            name=dataset_config.dataset_name,
+            split=dataset_config.train_split,
+            num_proc=os.cpu_count(),
+            **dataset_config.dataset_kwargs
         )
         assert isinstance(dataset_train, Dataset)
 
@@ -67,7 +61,11 @@ class DatasetConstructor:
             if dataset_config.num_train_examples:
                 dataset_train = dataset_train.select(range(dataset_config.num_train_examples))
             dataset_test = load_dataset(
-                dataset_config.dataset_path, name=dataset_config.dataset_name, split=dataset_config.test_split
+                dataset_config.dataset_path,
+                name=dataset_config.dataset_name,
+                split=dataset_config.test_split,
+                num_proc=os.cpu_count(),
+                **dataset_config.dataset_kwargs
             )
             dataset_test = dataset_test.select(range(min(dataset_config.num_test_examples, len(dataset_test))))
         else:
@@ -77,17 +75,17 @@ class DatasetConstructor:
 
         dataset_train = self.process_single_dataset(
             dataset_train,
-            dataset_config.num_train_tokens,
             dataset_config.filtering_function,
             dataset_config.preprocessing_function,
         )
         dataset_test = self.process_single_dataset(
             dataset_test,
-            dataset_config.num_test_tokens,
             dataset_config.filtering_function,
             dataset_config.preprocessing_function,
         )
         dataset = DatasetDict({"train": dataset_train, "test": dataset_test})
+
+        # Kind of slow cause not always cached... -> TODO: remove and just drop and add a dataset name column instead of mapping
         # only keep the text field and the id field
         dataset = dataset.map(
             lambda example: {"text": example["text"], "id": f"{dataset_config.dataset_path}_{example['id']}"},
@@ -96,17 +94,40 @@ class DatasetConstructor:
         )
         return dataset
 
-    @staticmethod
-    def compute_dataset_stats(dataset: Dataset) -> Dict[str, Any]:
+    def compute_dataset_stats(self,
+                              dataset: Dataset,
+                              tokenizer: Optional[PreTrainedTokenizer] = None) -> Dict[str, Any]:
         """Compute some stats about a dataset."""
-        word_counts = [len(example["text"].split()) for example in dataset]
-        return {
-            "num_examples": len(dataset),
+
+        # Assume uniform distribution
+        if self.estimate_from_k and len(dataset) > self.estimate_from_k:
+            # idxs = random.choices(range(len(dataset)), k=100)
+            idxs = range(self.estimate_from_k)
+            ds_estimate = dataset.select(idxs)
+        else:
+            ds_estimate = dataset
+
+        word_counts = [len(example["text"].split()) for example in ds_estimate]
+        stats = {
+            "num_examples": len(ds_estimate),
             "num_words": sum(word_counts),
             "avg_words": sum(word_counts) / len(word_counts),
             "word_distribution": word_counts,
             "dataset_gb": round(dataset.data.nbytes / 1e9, 3),
         }
+
+        if tokenizer:
+            def tok_and_count(example):
+                encodings = tokenizer(example['text'],  return_tensors="np")
+                return {"input_len": encodings["input_ids"].shape[1]}
+
+            tok_counts = ds_estimate.map(tok_and_count, num_proc=os.cpu_count())["input_len"]
+            stats.update({
+                "num_tokens": len(dataset)*sum(tok_counts)/len(tok_counts),
+                "avg_tok": sum(tok_counts) / len(tok_counts),
+                "tok_distribution": tok_counts,
+            })
+        return stats
 
     def build_concatenated_dataset(self) -> Tuple[DatasetDict, DatasetDict]:
         dataset_list = []
@@ -127,8 +148,14 @@ class DatasetConstructor:
         separate_dataset = None
         if self.mix.keep_separated_datasets_in_dataset_dict:
             separate_dataset = DatasetDict()
-            for ds_name, ds in zip(self.mix.datasets, dataset_list):
-                ds_name = ds_name.dataset_path.split("/")[-1].replace("-", "_")
+            for ds_config, ds in zip(self.mix.datasets, dataset_list):
+                ds_name = ds_config.dataset_path.split("/")[-1].replace("-", "_")
+                if ds_config.dataset_name is not None:
+                    ds_name += "_" + ds_config.dataset_name.split("/")[-1].replace("-", "_")
+                if ds_config.dataset_kwargs is not None:
+                    kwargs_str = "_".join([x for x in ds_config.dataset_kwargs.values() if isinstance(x, str)])
+                    if len(kwargs_str) > 0:
+                        ds_name += "_" + kwargs_str
                 # camelcase name
                 ds_name = "".join([word.capitalize() for word in ds_name.split("_")])
                 separate_dataset[f"{ds_name}Train"] = ds["train"]
@@ -136,17 +163,21 @@ class DatasetConstructor:
 
         return final_dataset, separate_dataset
 
-    def compute_stats(self, dataset: DatasetDict) -> Dict:
+    def compute_stats(self, dataset: DatasetDict, tokenizer: Optional[PreTrainedTokenizer] = None) -> Dict:
         dataset_stats = {}
         for split in tqdm.tqdm(dataset.keys(), desc="Computing dataset stats"):
-            dataset_stats[split] = self.compute_dataset_stats(dataset[split])
+            dataset_stats[split] = self.compute_dataset_stats(dataset[split], tokenizer=tokenizer)
         # Create CSV file with stats
         return dataset_stats
 
-    def compute_mix_stats(self, final_ds, separate_ds) -> pd.DataFrame:
-        final_ds_stats = self.compute_stats(final_ds)
+    def compute_mix_stats(self,
+                          final_ds,
+                          separate_ds,
+                          tokenizer: Optional[PreTrainedTokenizer] = None,
+                          ) -> pd.DataFrame:
+        final_ds_stats = self.compute_stats(final_ds, tokenizer=tokenizer)
         if separate_ds is not None:
-            final_ds_stats.update(self.compute_stats(separate_ds))
+            final_ds_stats.update(self.compute_stats(separate_ds, tokenizer=tokenizer))
         df = pd.DataFrame.from_dict(final_ds_stats, orient="index")
         return df
 
@@ -155,19 +186,23 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=str, default="configs/pretraining_testing.yaml")
     parser.add_argument("--hub_id", type=str, default="manu/testing")
+    parser.add_argument("--estimate_from_k", type=int, default=None)
+    parser.add_argument("--tokenizer_name", type=str, default=None)
     args = parser.parse_args()
+
+    tokenizer = AutoTokenizer.from_pretrained(args.tokenizer_name) if args.tokenizer_name else None
 
     # Init
     api = HfApi()
     config = configue.load(args.config)
-    ds_constructor = DatasetConstructor(config["data_mix"])
+    ds_constructor = DatasetConstructor(config["data_mix"], estimate_from_k=args.estimate_from_k)
 
     # Build dataset
     final_ds, separate_ds = ds_constructor.build_concatenated_dataset()
 
     # Compute stats
     if ds_constructor.mix.compute_dataset_stats:
-        df = ds_constructor.compute_mix_stats(final_ds, separate_ds)
+        df = ds_constructor.compute_mix_stats(final_ds, separate_ds, tokenizer)
         df.to_csv("dataset_stats.csv")
         df.drop(columns=["word_distribution"], inplace=True)
         df.to_markdown(buf="dataset_stats.md")

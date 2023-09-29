@@ -11,15 +11,20 @@ class DatasetConfig:
     dataset_name: Optional[str] = None
     train_split: Optional[str] = "train"
     test_split: Optional[str] = None
+    dataset_kwargs: Optional[Dict] = None
     build_test_set_from_train: Optional[bool] = False
     num_train_examples: Optional[int] = None
     num_test_examples: Optional[int] = None
-    num_train_tokens: Optional[int] = None
-    num_test_tokens: Optional[int] = None
+    # num_train_tokens: Optional[int] = None
+    # num_test_tokens: Optional[int] = None
     filtering_function: Optional[Callable] = None
     preprocessing_function: Optional[Callable] = None
     tags: Optional[List[str]] = None
     # load_in_streaming_mode: Optional[bool] = False # Not implemented yet
+
+    def __post_init__(self):
+        if self.dataset_kwargs is None:
+            self.dataset_kwargs = {"data_dir": None}
 
 
 @dataclass

@@ -80,21 +80,69 @@ data_mix:
       num_train_examples:  1000
       num_test_examples: 100
 # Wiki
-    - (): dataset_construction.DatasetConfig
-      dataset_path: manu/wikisource_fr
-      build_test_set_from_train: true
-      num_train_examples:  1000
-      num_test_examples: 100
-    - (): dataset_construction.DatasetConfig
-      dataset_path: wikipedia
-      dataset_name: "20220301.fr"
-      build_test_set_from_train: true
-      num_train_examples:  1000
-      num_test_examples: 100
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: manu/wikisource_fr
+#      build_test_set_from_train: true
+#      num_train_examples:  1000
+#      num_test_examples: 100
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: wikipedia
+#      dataset_name: "20220301.fr"
+#      build_test_set_from_train: true
+#      num_train_examples:  1000
+#      num_test_examples: 100
 # Internet dumps
-    - (): dataset_construction.DatasetConfig
-      dataset_path: 'oscar-corpus/OSCAR-2301'
-      dataset_name: fr
-      build_test_set_from_train: true
-      num_train_examples:  1000
-      num_test_examples: 100
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: 'oscar-corpus/OSCAR-2301'
+#      dataset_name: fr
+#      build_test_set_from_train: true
+#      num_train_examples:  1000
+#      num_test_examples: 100
+#      filtering_function:
+#        (): dataset_collection.french.oscar.OscarFilter
+# Code
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: 'bigcode/starcoderdata'
+#      dataset_kwargs:
+#        data_dir: python
+#      build_test_set_from_train: true
+#      num_train_examples:  1000
+#      num_test_examples: 100
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: 'bigcode/starcoderdata'
+#      dataset_kwargs:
+#        data_dir: markdown
+#      build_test_set_from_train: true
+#      num_train_examples:  1000
+#      num_test_examples: 100
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: 'bigcode/starcoderdata'
+#      dataset_kwargs:
+#        data_dir: jupyter-scripts-dedup⁻filtered
+#      build_test_set_from_train: true
+#      num_train_examples:  1000
+#      num_test_examples: 100
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: 'bigcode/starcoderdata'
+#      dataset_kwargs:
+#        data_dir: jupyter-structured-clean-dedup
+#      build_test_set_from_train: true
+#      num_train_examples:  1000
+#      num_test_examples: 100
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: 'bigcode/starcoderdata'
+#      dataset_kwargs:
+#        data_dir: json
+#      build_test_set_from_train: true
+#      num_train_examples:  1000
+#      num_test_examples: 100
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: 'bigcode/starcoderdata'
+#      dataset_kwargs:
+#        data_dir: github-issues
+#      build_test_set_from_train: true
+#      num_train_examples:  1000
+#      num_test_examples: 100
+
+
+tokenizer: "mistralai/Mistral-7B-v0.1"
