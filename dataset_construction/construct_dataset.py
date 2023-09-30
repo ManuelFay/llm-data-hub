@@ -64,7 +64,7 @@ class DatasetConstructor:
                 dataset_train = dataset_train_test["train"]
             dataset_test = dataset_train_test["test"]
         elif dataset_config.test_split is not None:
-            print(f"Loading test set for {dataset_config.dataset_path} with len {dataset_config.num_test_examples}")
+            print(f"Loading test set for {dataset_config.dataset_path} with {dataset_config.num_test_examples if dataset_config.num_test_examples else 'all'} samples")
             if dataset_config.num_train_examples:
                 dataset_train = dataset_train.select(range(dataset_config.num_train_examples))
             dataset_test = load_dataset(
