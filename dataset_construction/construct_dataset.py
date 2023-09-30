@@ -263,7 +263,6 @@ if __name__ == "__main__":
         for n in range(15):
             try:
                 final_ds.push_to_hub(args.hub_id,
-                                     max_shard_size="5OOMB",
                                      private=False)
                 # Push config yaml
                 api.upload_file(
@@ -287,7 +286,6 @@ if __name__ == "__main__":
 
                 if separate_ds is not None:
                     separate_ds.push_to_hub(f"{args.hub_id}_separate",
-                                            max_shard_size="5OOMB",
                                             private=False)
                     api.upload_file(
                         repo_id=f"{args.hub_id}_separate",
