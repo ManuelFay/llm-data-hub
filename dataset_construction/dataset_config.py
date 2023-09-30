@@ -46,6 +46,8 @@ class DataMix:
     name: str
     shuffle: bool = False
     compute_dataset_stats: bool = True
+    local_save_dir: Optional[str] = None
+    load_from_local_save_dir: bool = False
     keep_separated_datasets_in_dataset_dict: bool = False
     deduplicate_test_set: bool = False  # TODO: Not implemented yet
     ngram_path_for_extra_deduplication: Optional[str] = None  # TODO: Not implemented yet

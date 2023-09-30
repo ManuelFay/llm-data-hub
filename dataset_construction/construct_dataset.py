@@ -219,7 +219,7 @@ class DatasetConstructor:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=str, default="configs/pretraining_testing.yaml")
-    parser.add_argument("--hub_id", type=str, default="manu/testing")
+    parser.add_argument("--hub_id", type=str, default=None)
     parser.add_argument("--estimate_from_k", type=int, default=1000)
     parser.add_argument("--tokenizer_name", type=str, default=None)
     args = parser.parse_args()
@@ -231,8 +231,16 @@ if __name__ == "__main__":
     config = configue.load(args.config)
     ds_constructor = DatasetConstructor(config["data_mix"], estimate_from_k=args.estimate_from_k)
 
-    # Build dataset
-    final_ds, separate_ds = ds_constructor.build_concatenated_dataset()
+    if ds_constructor.mix.load_from_local_save_dir:
+        final_ds = DatasetDict.load_from_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}")
+        if os.path.exists(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}_separate"):
+            separate_ds = DatasetDict.load_from_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}_separate")
+    else:
+        final_ds, separate_ds = ds_constructor.build_concatenated_dataset()
+        if ds_constructor.mix.local_save_dir:
+            final_ds.save_to_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}")
+            if separate_ds is not None:
+                separate_ds.save_to_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}_separate")
 
     # Compute stats
     if ds_constructor.mix.compute_dataset_stats:
@@ -245,34 +253,42 @@ if __name__ == "__main__":
 
     # Push to hub
     if args.hub_id is not None:
-        final_ds.push_to_hub(args.hub_id, private=False)
-        api.upload_file(
-            repo_id=args.hub_id,
-            path_or_fileobj="dataset_stats.csv",
-            path_in_repo="dataset_stats.csv",
-            repo_type="dataset",
-        )
-        api.upload_file(
-            repo_id=args.hub_id,
-            path_or_fileobj="dataset_stats.md",
-            path_in_repo="dataset_stats.md",
-            repo_type="dataset",
-        )
+        # retries
+        for n in range(20):
+            try:
+                final_ds.push_to_hub(args.hub_id, private=False)
+                api.upload_file(
+                    repo_id=args.hub_id,
+                    path_or_fileobj="dataset_stats.csv",
+                    path_in_repo="dataset_stats.csv",
+                    repo_type="dataset",
+                )
+                api.upload_file(
+                    repo_id=args.hub_id,
+                    path_or_fileobj="dataset_stats.md",
+                    path_in_repo="dataset_stats.md",
+                    repo_type="dataset",
+                )
 
-        if separate_ds is not None:
-            separate_ds.push_to_hub(f"{args.hub_id}_separate", private=False)
-            api.upload_file(
-                repo_id=f"{args.hub_id}_separate",
-                path_or_fileobj="dataset_stats.csv",
-                path_in_repo="dataset_stats.csv",
-                repo_type="dataset",
-            )
-            api.upload_file(
-                repo_id=f"{args.hub_id}_separate",
-                path_or_fileobj="dataset_stats.md",
-                path_in_repo="dataset_stats.md",
-                repo_type="dataset",
-            )
+                if separate_ds is not None:
+                    separate_ds.push_to_hub(f"{args.hub_id}_separate", private=False)
+                    api.upload_file(
+                        repo_id=f"{args.hub_id}_separate",
+                        path_or_fileobj="dataset_stats.csv",
+                        path_in_repo="dataset_stats.csv",
+                        repo_type="dataset",
+                    )
+                    api.upload_file(
+                        repo_id=f"{args.hub_id}_separate",
+                        path_or_fileobj="dataset_stats.md",
+                        path_in_repo="dataset_stats.md",
+                        repo_type="dataset",
+                    )
+                break
+            except Exception as e:
+                print(e)
+                print(f"Failed to push to hub, retrying #{n}")
+    print("Done!")
 
     # Clean up
     if ds_constructor.mix.compute_dataset_stats:

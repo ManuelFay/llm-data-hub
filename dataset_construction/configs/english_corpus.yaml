@@ -1,7 +1,9 @@
 data_mix:
   (): dataset_construction.DataMix
-  name: "pretraining_testing"
+  name: "english_5p"
   shuffle: false
+  local_save_dir: data/
+  load_from_local_save_dir: false
   compute_dataset_stats: true
   keep_separated_datasets_in_dataset_dict: true
   deduplicate_test_set: false
@@ -13,7 +15,5 @@ data_mix:
       train_split: "train[:5%]"
       test_split: "test"
       build_test_set_from_train: false
-      num_train_examples:  1000
-      num_test_examples: 1000
 
 tokenizer: "mistralai/Mistral-7B-v0.1"

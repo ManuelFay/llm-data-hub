@@ -1,6 +1,8 @@
 data_mix:
   (): dataset_construction.DataMix
   name: "pretraining_testing"
+  local_save_dir: data/
+  load_from_local_save_dir: true
   shuffle: false
   compute_dataset_stats: true
   keep_separated_datasets_in_dataset_dict: true
@@ -51,11 +53,11 @@ data_mix:
 #      num_train_examples:  1000
 #      num_test_examples: 100
       # here we should preprocess
-    - (): dataset_construction.DatasetConfig
-      dataset_path: manu/ProjectGutenberg_fr
-      build_test_set_from_train: true
-      num_train_examples:  1000
-      num_test_examples: 10
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: manu/ProjectGutenberg_fr
+#      build_test_set_from_train: true
+#      num_train_examples:  1000
+#      num_test_examples: 10
 #    - (): dataset_construction.DatasetConfig
 #      dataset_path: manu/bnf_gallica
 #      build_test_set_from_train: true

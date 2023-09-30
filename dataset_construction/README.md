@@ -134,6 +134,6 @@ Note however that this code is not very optimized and is better to already have 
 - [x] Partial loading 
 - [x] Colum renaming
 - [x] Preprocessing and filtering
-- [ ] Debugging cache management / saving intermediate steps
+- [x] Debugging cache management / saving intermediate steps
 - [ ] Most important next step is the test set deduplication (looking into it).
 - [ ] Manual dataset packing if sequences are not padded together.
