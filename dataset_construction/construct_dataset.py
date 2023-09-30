@@ -2,9 +2,11 @@
 
 import argparse
 import os
+import random
 from typing import Any, Callable, Dict, Optional, Tuple
 
 import configue
+import datasets
 import pandas as pd
 import tqdm
 from transformers import PreTrainedTokenizer, AutoTokenizer
@@ -23,6 +25,7 @@ class DatasetConstructor:
     def process_single_dataset(
         self,
         dataset: Dataset,
+        dataset_key: str,
         filtering_function: Optional[Callable],
         preprocessing_function: Optional[Callable] = None,
     ) -> Dataset:
@@ -33,6 +36,9 @@ class DatasetConstructor:
 
         if filtering_function is not None:
             dataset = dataset.filter(filtering_function, num_proc=os.cpu_count())
+
+        dataset = dataset.cast_column("id", datasets.Value(dtype="string", id=None))
+        dataset = dataset.add_column("dataset_id", [f"{dataset_key}"] * len(dataset))
         return dataset
 
     def build_single_dataset_dict(self, dataset_config: DatasetConfig) -> DatasetDict:
@@ -75,23 +81,20 @@ class DatasetConstructor:
 
         dataset_train = self.process_single_dataset(
             dataset_train,
+            dataset_config.dataset_key,
             dataset_config.filtering_function,
             dataset_config.preprocessing_function,
         )
         dataset_test = self.process_single_dataset(
             dataset_test,
+            dataset_config.dataset_key,
             dataset_config.filtering_function,
             dataset_config.preprocessing_function,
         )
         dataset = DatasetDict({"train": dataset_train, "test": dataset_test})
 
-        # Kind of slow cause not always cached... -> TODO: remove and just drop and add a dataset name column instead of mapping
-        # only keep the text field and the id field
-        dataset = dataset.map(
-            lambda example: {"text": example["text"], "id": f"{dataset_config.dataset_path}_{example['id']}"},
-            remove_columns=dataset["train"].column_names,
-            num_proc=os.cpu_count(),
-        )
+        dataset = dataset.remove_columns(list(set(dataset_train.column_names) - {"id", "text", "dataset_id"}))
+        assert set(dataset["train"].column_names) == {"id", "text", "dataset_id"}, "Mismatch in column names"
         return dataset
 
     def compute_dataset_stats(self,
@@ -109,9 +112,8 @@ class DatasetConstructor:
 
         word_counts = [len(example["text"].split()) for example in ds_estimate]
         stats = {
-            "num_examples": len(ds_estimate),
-            "num_words": sum(word_counts),
-            "avg_words": sum(word_counts) / len(word_counts),
+            "num_examples": len(dataset),
+            "num_words": len(dataset)*sum(word_counts)/len(word_counts),
             "word_distribution": word_counts,
             "dataset_gb": round(dataset.data.nbytes / 1e9, 3),
         }
@@ -124,8 +126,7 @@ class DatasetConstructor:
             tok_counts = ds_estimate.map(tok_and_count, num_proc=os.cpu_count())["input_len"]
             stats.update({
                 "num_tokens": len(dataset)*sum(tok_counts)/len(tok_counts),
-                "avg_tok": sum(tok_counts) / len(tok_counts),
-                "tok_distribution": tok_counts,
+                "token_distribution": tok_counts,
             })
         return stats
 
@@ -149,17 +150,8 @@ class DatasetConstructor:
         if self.mix.keep_separated_datasets_in_dataset_dict:
             separate_dataset = DatasetDict()
             for ds_config, ds in zip(self.mix.datasets, dataset_list):
-                ds_name = ds_config.dataset_path.split("/")[-1].replace("-", "_")
-                if ds_config.dataset_name is not None:
-                    ds_name += "_" + ds_config.dataset_name.split("/")[-1].replace("-", "_")
-                if ds_config.dataset_kwargs is not None:
-                    kwargs_str = "_".join([x for x in ds_config.dataset_kwargs.values() if isinstance(x, str)])
-                    if len(kwargs_str) > 0:
-                        ds_name += "_" + kwargs_str
-                # camelcase name
-                ds_name = "".join([word.capitalize() for word in ds_name.split("_")])
-                separate_dataset[f"{ds_name}Train"] = ds["train"]
-                separate_dataset[f"{ds_name}Test"] = ds["test"]
+                separate_dataset[f"{ds_config.dataset_key}Train"] = ds["train"]
+                separate_dataset[f"{ds_config.dataset_key}Test"] = ds["test"]
 
         return final_dataset, separate_dataset
 
@@ -175,10 +167,34 @@ class DatasetConstructor:
                           separate_ds,
                           tokenizer: Optional[PreTrainedTokenizer] = None,
                           ) -> pd.DataFrame:
-        final_ds_stats = self.compute_stats(final_ds, tokenizer=tokenizer)
+
         if separate_ds is not None:
-            final_ds_stats.update(self.compute_stats(separate_ds, tokenizer=tokenizer))
-        df = pd.DataFrame.from_dict(final_ds_stats, orient="index")
+            final_ds_stats = self.compute_stats(separate_ds, tokenizer=tokenizer)
+            df = pd.DataFrame.from_dict(final_ds_stats, orient="index")
+            df.loc["Train"] = df[list(df.reset_index()["index"].apply(lambda x: "Train" in x))].sum(axis=0)
+            df.loc["Test"] = df[list(df.reset_index()["index"].apply(lambda x: "Test" in x))].sum(axis=0)
+
+            def bootstrap(k1, k2, n=10000):
+                """Sample n lenghts from the distribution so as not to bias"""
+                sampled_distrib = []
+                for _ in range(n):
+                    choices = [k for k in final_ds_stats.keys() if k.endswith(k1)]
+                    weights = [final_ds_stats[k]["num_examples"] for k in choices]
+                    weights = [w/sum(weights) for w in weights]
+                    sampled_distrib.append(random.choice(final_ds_stats[random.choices(choices, weights=weights)][k2]))
+                return sampled_distrib
+
+            df.loc["Train", "word_distribution"] = bootstrap("Train", "word_distribution")
+            df.loc["Test", "word_distribution"] = bootstrap("Test", "word_distribution")
+            df.loc["Train", "token_distribution"] = bootstrap("Train", "token_distribution")
+            df.loc["Test", "token_distribution"] = bootstrap("Test", "token_distribution")
+
+        else:
+            final_ds_stats = self.compute_stats(final_ds, tokenizer=tokenizer)
+            df = pd.DataFrame.from_dict(final_ds_stats, orient="index")
+
+        df["avg_word"] = df["num_words"] / df["num_examples"]
+        df["avg_tokens"] = df["num_tokens"] / df["num_examples"]
         return df
 
 
@@ -205,6 +221,7 @@ if __name__ == "__main__":
         df = ds_constructor.compute_mix_stats(final_ds, separate_ds, tokenizer)
         df.to_csv("dataset_stats.csv")
         df.drop(columns=["word_distribution"], inplace=True)
+        df.drop(columns=["tok_distribution"], inplace=True)
         df.to_markdown(buf="dataset_stats.md")
         print(df)
 

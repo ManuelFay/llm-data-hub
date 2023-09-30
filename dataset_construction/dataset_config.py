@@ -9,6 +9,7 @@ class DatasetConfig:
 
     dataset_path: str
     dataset_name: Optional[str] = None
+    dataset_key: Optional[str] = None
     train_split: Optional[str] = "train"
     test_split: Optional[str] = None
     dataset_kwargs: Optional[Dict] = None
@@ -25,6 +26,16 @@ class DatasetConfig:
     def __post_init__(self):
         if self.dataset_kwargs is None:
             self.dataset_kwargs = {"data_dir": None}
+        if self.dataset_key is None:
+            ds_name = self.dataset_path.split("/")[-1].replace("-", "_")
+            if self.dataset_name is not None:
+                ds_name += "_" + self.dataset_name.split("/")[-1].replace("-", "_")
+            if self.dataset_kwargs is not None:
+                kwargs_str = "_".join([x for x in self.dataset_kwargs.values() if isinstance(x, str)])
+                if len(kwargs_str) > 0:
+                    ds_name += "_" + kwargs_str
+            ds_name = "".join([word.capitalize() for word in ds_name.split("_")])
+            self.dataset_key = ds_name
 
 
 @dataclass

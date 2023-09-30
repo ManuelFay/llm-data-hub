@@ -54,13 +54,13 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: manu/ProjectGutenberg_fr
       build_test_set_from_train: true
-      num_train_examples:  1000
-      num_test_examples: 100
+      num_train_examples:  20
+      num_test_examples: 10
     - (): dataset_construction.DatasetConfig
       dataset_path: manu/bnf_gallica
       build_test_set_from_train: true
-      num_train_examples:  1000
-      num_test_examples: 100
+      num_train_examples:  20
+      num_test_examples: 10
 # Dila data
     - (): dataset_construction.DatasetConfig
       dataset_path: manu/dila_legifrance
@@ -137,9 +137,16 @@ data_mix:
 #      num_train_examples:  1000
 #      num_test_examples: 100
 #    - (): dataset_construction.DatasetConfig
-#      dataset_path: 'bigcode/starcoderdata'
+#      dataset_path: 'teven/stackexchange'
 #      dataset_kwargs:
-#        data_dir: github-issues
+#        data_dir: json
+#      build_test_set_from_train: true
+#      num_train_examples:  1000
+#      num_test_examples: 100
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: 'vikp/pypi_clean'
+#      dataset_kwargs:
+#        data_dir: json
 #      build_test_set_from_train: true
 #      num_train_examples:  1000
 #      num_test_examples: 100
