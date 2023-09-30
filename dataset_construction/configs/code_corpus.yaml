@@ -11,30 +11,35 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: 'bigcode/starcoderdata'
       train_split: "train[:10%]"
+      text_column: "content"
       dataset_kwargs:
         data_dir: python
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
       dataset_path: 'bigcode/starcoderdata'
       train_split: "train[:10%]"
+      text_column: "content"
       dataset_kwargs:
         data_dir: markdown
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
       dataset_path: 'bigcode/starcoderdata'
       train_split: "train[:10%]"
+      text_column: "content"
       dataset_kwargs:
         data_dir: jupyter-scripts-dedup⁻filtered
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
       dataset_path: 'bigcode/starcoderdata'
       train_split: "train[:5%]"
+      text_column: "content"
       dataset_kwargs:
         data_dir: jupyter-structured-clean-dedup
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
       dataset_path: 'bigcode/starcoderdata'
       train_split: "train[:5%]"
+      text_column: "content"
       dataset_kwargs:
         data_dir: json
       build_test_set_from_train: true
