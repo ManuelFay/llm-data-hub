@@ -81,8 +81,10 @@ class DatasetConstructor:
 
         if dataset_config.text_column != "text":
             dataset_train.rename_column(dataset_config.text_column, "text")
+            dataset_test.rename_column(dataset_config.text_column, "text")
         if dataset_config.id_column != "id":
             dataset_train.rename_column(dataset_config.id_column, "id")
+            dataset_test.rename_column(dataset_config.id_column, "id")
 
         dataset_train = self.process_single_dataset(
             dataset_train,
