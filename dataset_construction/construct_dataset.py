@@ -38,6 +38,7 @@ class DatasetConstructor:
             dataset = dataset.filter(filtering_function, num_proc=os.cpu_count())
 
         dataset = dataset.cast_column("id", datasets.Value(dtype="string", id=None))
+        dataset = dataset.cast_column("text", datasets.Value(dtype="string", id=None))
         dataset = dataset.add_column("dataset_id", [f"{dataset_key}"] * len(dataset))
         return dataset
 
@@ -101,7 +102,7 @@ class DatasetConstructor:
         dataset = DatasetDict({"train": dataset_train, "test": dataset_test})
 
         dataset = dataset.remove_columns(list(set(dataset_train.column_names) - {"id", "text", "dataset_id"}))
-        assert set(dataset["train"].column_names) == {"id", "text", "dataset_id"}, "Mismatch in column names"
+        assert set(dataset["train"].column_names) == {"id", "text", "dataset_id"}, f"Mismatch in column names {dataset['train'].column_names}"
         return dataset
 
     def compute_dataset_stats(self,
