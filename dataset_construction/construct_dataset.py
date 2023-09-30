@@ -260,7 +260,7 @@ if __name__ == "__main__":
     # Push to hub
     if args.hub_id is not None:
         # retries
-        for n in range(15):
+        for n in range(20):
             try:
                 final_ds.push_to_hub(args.hub_id,
                                      # max_shard_size="1GB",
@@ -306,7 +306,7 @@ if __name__ == "__main__":
                 print(e)
                 print(f"Failed to push to hub, retrying #{n}")
                 # exponential wait time
-                time.sleep(pow(2, n))
+                time.sleep(min(pow(2, n), 3600))
     print("Done!")
 
     # Clean up
