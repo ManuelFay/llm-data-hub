@@ -12,4 +12,4 @@ class CodeContestMapper(Mapper):
 class CodeContestFilter(Filter):
     def filter_fn(self, example) -> bool:
         """Keep only columns programme_id and transcript and rename as id, text"""
-        return example["language"] == "python"
+        return example["language"] == "PYTHON3"

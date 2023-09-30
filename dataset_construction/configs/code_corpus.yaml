@@ -43,12 +43,12 @@ data_mix:
       dataset_kwargs:
         data_dir: json
       build_test_set_from_train: true
-#    - (): dataset_construction.DatasetConfig
-#      dataset_path: 'teven/code_contests'
-#      train_split: "train[:5%]"
-#      # build_test_set_from_train: true
-#      build_test_set_from_train: false
-#      test_split: "valid"
+    - (): dataset_construction.DatasetConfig
+      dataset_path: 'teven/code_contests'
+      train_split: "train[:5%]"
+      # build_test_set_from_train: true
+      build_test_set_from_train: false
+      test_split: "valid"
       # needs to be debugged
       filtering_function:
         (): dataset_collection.code.deepmind_code_contest.CodeContestFilter
