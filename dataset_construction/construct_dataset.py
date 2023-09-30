@@ -193,7 +193,8 @@ class DatasetConstructor:
             df = pd.DataFrame.from_dict(final_ds_stats, orient="index")
 
         df["avg_word"] = df["num_words"] / df["num_examples"]
-        df["avg_tokens"] = df["num_tokens"] / df["num_examples"]
+        if tokenizer:
+            df["avg_tokens"] = df["num_tokens"] / df["num_examples"]
         return df
 
 
