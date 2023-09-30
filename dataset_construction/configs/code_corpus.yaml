@@ -49,7 +49,7 @@ data_mix:
       build_test_set_from_train: false
       filtering_function:
         (): dataset_collection.code.deepmind_code_contest.CodeContestFilter
-      mapping_function:
+      preprocessing_function:
         (): dataset_collection.code.deepmind_code_contest.CodeContestMapper
       test_split: valid
     - (): dataset_construction.DatasetConfig
