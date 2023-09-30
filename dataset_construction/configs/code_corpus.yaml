@@ -46,12 +46,13 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: 'teven/code_contests'
       train_split: "train[:5%]"
-      build_test_set_from_train: false
+      build_test_set_from_train: true
+      # build_test_set_from_train: false
+      # test_split: "valid"
       filtering_function:
         (): dataset_collection.code.deepmind_code_contest.CodeContestFilter
       preprocessing_function:
         (): dataset_collection.code.deepmind_code_contest.CodeContestMapper
-      test_split: valid
     - (): dataset_construction.DatasetConfig
       dataset_path: 'vikp/pypi_clean'
       train_split: "train[:5%]"
