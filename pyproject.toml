@@ -29,7 +29,9 @@ dependencies = [
     'rich',
     'transformers[sentencepiece]',
     'gcsfs',
-    'configue'
+    'configue',
+    'tabulate',
+    'zstandard'
 ]
 
 [project.optional-dependencies]
