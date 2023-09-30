@@ -37,6 +37,7 @@ class DatasetConstructor:
         if filtering_function is not None:
             dataset = dataset.filter(filtering_function, num_proc=os.cpu_count())
 
+        # Do it only if needed
         dataset = dataset.cast_column("id", datasets.Value(dtype="string", id=None))
         # dataset = dataset.cast_column("text", datasets.Value(dtype="string", id=None))
         dataset = dataset.add_column("dataset_id", [f"{dataset_key}"] * len(dataset))
