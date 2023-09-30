@@ -29,7 +29,6 @@ dependencies = [
     'rich',
     'transformers[sentencepiece]',
     'gcsfs',
-    'configue',
     'tabulate',
     'zstandard'
 ]
@@ -49,6 +48,12 @@ evaluation = [
 
 audio = [
     "openai-whisper",
+]
+
+construction = [
+    "apache-beam",
+    "zstandard",
+    "configue"
 ]
 
 perplexity = [
