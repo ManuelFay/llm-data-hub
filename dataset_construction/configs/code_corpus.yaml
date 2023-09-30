@@ -27,7 +27,7 @@ data_mix:
       train_split: "train[:10%]"
       text_column: "content"
       dataset_kwargs:
-        data_dir: jupyter-scripts-dedup⁻filtered
+        data_dir: jupyter-scripts-dedup-filtered
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
       dataset_path: 'bigcode/starcoderdata'
