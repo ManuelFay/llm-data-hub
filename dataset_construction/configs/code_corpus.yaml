@@ -43,14 +43,17 @@ data_mix:
       dataset_kwargs:
         data_dir: json
       build_test_set_from_train: true
-    - (): dataset_construction.DatasetConfig
-      dataset_path: 'teven/code_contests'
-      train_split: "train[:10%]"
-      build_test_set_from_train: false
-      test_split: valid
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: 'teven/code_contests'
+#      train_split: "train[:10%]"
+#      build_test_set_from_train: false
+#      test_split: valid
+      # nice but needs preprocessing to merge description  and solution and filtering for language
     - (): dataset_construction.DatasetConfig
       dataset_path: 'vikp/pypi_clean'
       build_test_set_from_train: true
+      text_column: code
+      id_column: path
     # we could add synthetic textbook datasets or code with explanations !
 
 
