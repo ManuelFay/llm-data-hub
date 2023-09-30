@@ -12,7 +12,7 @@ data_mix:
 # Split of SlimPajama
     - (): dataset_construction.DatasetConfig
       dataset_path: cerebras/SlimPajama-627B
-      train_split: "train"
+      train_split: "train[:50%]"
       test_split: "test"
       build_test_set_from_train: false
       dataset_kwargs:
