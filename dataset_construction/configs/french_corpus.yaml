@@ -36,6 +36,8 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: manu/french_open_subtitles
       num_test_examples: 100
+      build_test_set_from_train: true
+
 # Books
 #    - (): dataset_construction.DatasetConfig
 #      dataset_path: manu/project_gutenberg
