@@ -203,7 +203,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=str, default="configs/pretraining_testing.yaml")
     parser.add_argument("--hub_id", type=str, default="manu/testing")
-    parser.add_argument("--estimate_from_k", type=int, default=None)
+    parser.add_argument("--estimate_from_k", type=int, default=1000)
     parser.add_argument("--tokenizer_name", type=str, default=None)
     args = parser.parse_args()
 

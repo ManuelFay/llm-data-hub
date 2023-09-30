@@ -14,52 +14,38 @@ data_mix:
       dataset_kwargs:
         data_dir: python
       build_test_set_from_train: true
-      num_train_examples:  1000
-      num_test_examples: 100
     - (): dataset_construction.DatasetConfig
       dataset_path: 'bigcode/starcoderdata'
       train_split: "train[:10%]"
       dataset_kwargs:
         data_dir: markdown
       build_test_set_from_train: true
-      num_train_examples:  1000
-      num_test_examples: 100
     - (): dataset_construction.DatasetConfig
       dataset_path: 'bigcode/starcoderdata'
       train_split: "train[:10%]"
       dataset_kwargs:
         data_dir: jupyter-scripts-dedup⁻filtered
       build_test_set_from_train: true
-      num_train_examples:  1000
-      num_test_examples: 100
     - (): dataset_construction.DatasetConfig
       dataset_path: 'bigcode/starcoderdata'
       train_split: "train[:5%]"
       dataset_kwargs:
         data_dir: jupyter-structured-clean-dedup
       build_test_set_from_train: true
-      num_train_examples:  1000
-      num_test_examples: 100
     - (): dataset_construction.DatasetConfig
       dataset_path: 'bigcode/starcoderdata'
       train_split: "train[:5%]"
       dataset_kwargs:
         data_dir: json
       build_test_set_from_train: true
-      num_train_examples:  1000
-      num_test_examples: 100
     - (): dataset_construction.DatasetConfig
       dataset_path: 'teven/code_contests'
       train_split: "train[:10%]"
       build_test_set_from_train: false
       test_split: valid
-      num_train_examples:  1000
-      num_test_examples: 100
     - (): dataset_construction.DatasetConfig
       dataset_path: 'vikp/pypi_clean'
       build_test_set_from_train: true
-      num_train_examples:  1000
-      num_test_examples: 100
     # we could add synthetic textbook datasets or code with explanations !
 
 
