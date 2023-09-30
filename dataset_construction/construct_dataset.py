@@ -23,11 +23,11 @@ class DatasetConstructor:
         self.estimate_from_k = estimate_from_k
 
     def process_single_dataset(
-        self,
-        dataset: Dataset,
-        dataset_key: str,
-        filtering_function: Optional[Callable],
-        preprocessing_function: Optional[Callable] = None,
+            self,
+            dataset: Dataset,
+            dataset_key: str,
+            filtering_function: Optional[Callable],
+            preprocessing_function: Optional[Callable] = None,
     ) -> Dataset:
         """Filter and truncate a dataset, if needed."""
 
@@ -65,7 +65,8 @@ class DatasetConstructor:
                 dataset_train = dataset_train_test["train"]
             dataset_test = dataset_train_test["test"]
         elif dataset_config.test_split is not None:
-            print(f"Loading test set for {dataset_config.dataset_path} with {dataset_config.num_test_examples if dataset_config.num_test_examples else 'all'} samples")
+            print(
+                f"Loading test set for {dataset_config.dataset_path} with {dataset_config.num_test_examples if dataset_config.num_test_examples else 'all'} samples")
             if dataset_config.num_train_examples:
                 dataset_train = dataset_train.select(range(dataset_config.num_train_examples))
             dataset_test = load_dataset(
@@ -106,7 +107,8 @@ class DatasetConstructor:
         # Remove columns that are not needed
         if len(list(set(dataset_train.column_names) - {"id", "text", "dataset_id"})) > 0:
             dataset = dataset.remove_columns(list(set(dataset_train.column_names) - {"id", "text", "dataset_id"}))
-        assert set(dataset["train"].column_names) == {"id", "text", "dataset_id"}, f"Mismatch in column names {dataset['train'].column_names}"
+        assert set(dataset["train"].column_names) == {"id", "text",
+                                                      "dataset_id"}, f"Mismatch in column names {dataset['train'].column_names}"
         return dataset
 
     def compute_dataset_stats(self,
@@ -122,26 +124,26 @@ class DatasetConstructor:
             while (ds_estimate.data.nbytes / 1e9 > 0.01) and k > 5:
                 k = k // 2
                 ds_estimate = dataset.select(range(k))
-            print(f"Estimating stats from {k} samples, with a dataset size of {ds_estimate.data.nbytes / 1e9} GB")
+            print(f"Estimating stats from {k} samples, with a dataset size of {ds_estimate.data.nbytes / (2 ^ 30)} GB")
         else:
             ds_estimate = dataset
 
         word_counts = [len(example["text"].split()) for example in ds_estimate]
         stats = {
             "num_examples": len(dataset),
-            "num_words": len(dataset)*sum(word_counts)/len(word_counts),
+            "num_words": len(dataset) * sum(word_counts) / len(word_counts),
             "word_distribution": word_counts,
-            "dataset_gb": round(dataset.data.nbytes / 1e9, 3),
+            "dataset_gb": round(dataset.data.nbytes / (2 ^ 30), 3),
         }
 
         if tokenizer:
             def tok_and_count(example):
-                encodings = tokenizer(example['text'],  return_tensors="np")
+                encodings = tokenizer(example['text'], return_tensors="np")
                 return {"input_len": encodings["input_ids"].shape[1]}
 
             tok_counts = ds_estimate.map(tok_and_count, num_proc=os.cpu_count())["input_len"]
             stats.update({
-                "num_tokens": len(dataset)*sum(tok_counts)/len(tok_counts),
+                "num_tokens": len(dataset) * sum(tok_counts) / len(tok_counts),
                 "token_distribution": tok_counts,
             })
         return stats
@@ -197,8 +199,9 @@ class DatasetConstructor:
                 for _ in range(n):
                     choices = [k for k in final_ds_stats.keys() if k.endswith(k1)]
                     weights = [final_ds_stats[k]["num_examples"] for k in choices]
-                    weights = [w/sum(weights) for w in weights]
-                    sampled_distrib.append(random.choice(final_ds_stats[random.choices(choices, weights=weights)[0]][k2]))
+                    weights = [w / sum(weights) for w in weights]
+                    sampled_distrib.append(
+                        random.choice(final_ds_stats[random.choices(choices, weights=weights)[0]][k2]))
                 return sampled_distrib
 
             from itertools import product
@@ -234,7 +237,8 @@ if __name__ == "__main__":
     if ds_constructor.mix.load_from_local_save_dir:
         final_ds = DatasetDict.load_from_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}")
         if os.path.exists(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}_separate"):
-            separate_ds = DatasetDict.load_from_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}_separate")
+            separate_ds = DatasetDict.load_from_disk(
+                f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}_separate")
     else:
         final_ds, separate_ds = ds_constructor.build_concatenated_dataset()
         if ds_constructor.mix.local_save_dir:
