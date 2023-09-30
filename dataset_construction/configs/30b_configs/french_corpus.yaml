@@ -71,6 +71,13 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: manu/bnf_gallica
       build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: manu/theses_fr_2013_2023
+      build_test_set_from_train: true
+      filtering_function:
+        (): dataset_collection.french.theses.ThesisFilter
+      preprocessing_function:
+        (): dataset_collection.french.theses.ThesisMapper
 # Dila data
     - (): dataset_construction.DatasetConfig
       dataset_path: Nicolas-BZRD/LEGI_opendata # manu/dila_legifrance
