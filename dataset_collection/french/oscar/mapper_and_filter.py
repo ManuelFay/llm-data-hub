@@ -12,4 +12,4 @@ class OscarMapper(Mapper):
 class OscarFilter(Filter):
     def filter_fn(self, example) -> bool:
         """Remove binary option trading samples"""
-        return "binary" in example["meta"]["warc_headers"]["warc-target-uri"]
+        return "binary" not in example["meta"]["warc_headers"]["warc-target-uri"]

@@ -124,7 +124,7 @@ class DatasetConstructor:
             while (ds_estimate.data.nbytes / 1e9 > 0.01) and k > 5:
                 k = k // 2
                 ds_estimate = dataset.select(range(k))
-            print(f"Estimating stats from {k} samples, with a dataset size of {ds_estimate.data.nbytes / (2 ^ 30)} GB")
+            print(f"Estimating stats from {k} samples, with a dataset size of {ds_estimate.data.nbytes / pow(2,30)} GB")
         else:
             ds_estimate = dataset
 
@@ -133,7 +133,7 @@ class DatasetConstructor:
             "num_examples": len(dataset),
             "num_words": len(dataset) * sum(word_counts) / len(word_counts),
             "word_distribution": word_counts,
-            "dataset_gb": round(dataset.data.nbytes / (2 ^ 30), 3),
+            "dataset_gb": round(dataset.data.nbytes / pow(2, 30), 3),
         }
 
         if tokenizer:
@@ -261,6 +261,13 @@ if __name__ == "__main__":
         for n in range(20):
             try:
                 final_ds.push_to_hub(args.hub_id, private=False)
+                # Push config yaml
+                api.upload_file(
+                    repo_id=args.hub_id,
+                    path_or_fileobj=args.config,
+                    path_in_repo="config.yaml",
+                    repo_type="dataset",
+                )
                 api.upload_file(
                     repo_id=args.hub_id,
                     path_or_fileobj="dataset_stats.csv",

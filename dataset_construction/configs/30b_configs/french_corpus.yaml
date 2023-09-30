@@ -135,7 +135,7 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: 'oscar-corpus/OSCAR-2301'
       dataset_name: fr
-      train_split: "train[:40000000]" # is there bugs in oscar ?
+      train_split: "train[:10%]"
       build_test_set_from_train: true
       num_test_examples: 10000
       filtering_function:
