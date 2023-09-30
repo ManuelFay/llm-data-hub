@@ -33,7 +33,7 @@ class DatasetConfig:
             if self.dataset_name is not None:
                 ds_name += "_" + self.dataset_name.split("/")[-1].replace("-", "_")
             if self.dataset_kwargs is not None:
-                kwargs_str = "_".join([x for x in self.dataset_kwargs.values() if isinstance(x, str)])
+                kwargs_str = "_".join([x.replace("-", "_") for x in self.dataset_kwargs.values() if isinstance(x, str)])
                 if len(kwargs_str) > 0:
                     ds_name += "_" + kwargs_str
             ds_name = "".join([word.capitalize() for word in ds_name.split("_")])
