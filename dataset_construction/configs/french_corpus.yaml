@@ -25,11 +25,12 @@ data_mix:
       test_split: "test"
     - (): dataset_construction.DatasetConfig
       dataset_path: Nicolas-BZRD/English_French_Webpages_Scraped_Translated
+      train_split: "train[:5%]"
       build_test_set_from_train: true
       filtering_function:
-        (): dataset_collection.french.french_transcribed_podcast.PodcastFilter
+        (): dataset_collection.french.web_scraped_translated.WebPageFilter
       preprocessing_function:
-        (): dataset_collection.french.french_transcribed_podcast.PodcastMapper
+        (): dataset_collection.french.web_scraped_translated.WebPageMapper
     # global voices can be added but maybe in wmt test set
 
 # Speech datasets
