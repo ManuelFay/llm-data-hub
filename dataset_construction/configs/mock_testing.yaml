@@ -51,11 +51,11 @@ data_mix:
 #      num_train_examples:  1000
 #      num_test_examples: 100
       # here we should preprocess
-#    - (): dataset_construction.DatasetConfig
-#      dataset_path: manu/ProjectGutenberg_fr
-#      build_test_set_from_train: true
-#      num_train_examples:  20
-#      num_test_examples: 10
+    - (): dataset_construction.DatasetConfig
+      dataset_path: manu/ProjectGutenberg_fr
+      build_test_set_from_train: true
+      num_train_examples:  1000
+      num_test_examples: 10
 #    - (): dataset_construction.DatasetConfig
 #      dataset_path: manu/bnf_gallica
 #      build_test_set_from_train: true

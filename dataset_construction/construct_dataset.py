@@ -9,7 +9,7 @@ import configue
 import datasets
 import pandas as pd
 import tqdm
-from transformers import PreTrainedTokenizer, AutoTokenizer
+from transformers import PreTrainedTokenizerFast, AutoTokenizer
 from datasets import Dataset, DatasetDict, concatenate_datasets, load_dataset
 from huggingface_hub import HfApi
 
@@ -38,7 +38,8 @@ class DatasetConstructor:
             dataset = dataset.filter(filtering_function, num_proc=os.cpu_count())
 
         # Do it only if needed
-        dataset = dataset.cast_column("id", datasets.Value(dtype="string", id=None))
+        if dataset.features["id"].dtype != "string":
+            dataset = dataset.cast_column("id", datasets.Value(dtype="string", id=None))
         # dataset = dataset.cast_column("text", datasets.Value(dtype="string", id=None))
         dataset = dataset.add_column("dataset_id", [f"{dataset_key}"] * len(dataset))
         return dataset
@@ -102,20 +103,26 @@ class DatasetConstructor:
         )
         dataset = DatasetDict({"train": dataset_train, "test": dataset_test})
 
-        dataset = dataset.remove_columns(list(set(dataset_train.column_names) - {"id", "text", "dataset_id"}))
+        # Remove columns that are not needed
+        if len(list(set(dataset_train.column_names) - {"id", "text", "dataset_id"})) > 0:
+            dataset = dataset.remove_columns(list(set(dataset_train.column_names) - {"id", "text", "dataset_id"}))
         assert set(dataset["train"].column_names) == {"id", "text", "dataset_id"}, f"Mismatch in column names {dataset['train'].column_names}"
         return dataset
 
     def compute_dataset_stats(self,
                               dataset: Dataset,
-                              tokenizer: Optional[PreTrainedTokenizer] = None) -> Dict[str, Any]:
+                              tokenizer: Optional[PreTrainedTokenizerFast] = None) -> Dict[str, Any]:
         """Compute some stats about a dataset."""
 
         # Assume uniform distribution
-        if self.estimate_from_k and len(dataset) > self.estimate_from_k:
+        if self.estimate_from_k:
             # idxs = random.choices(range(len(dataset)), k=100)
-            idxs = range(self.estimate_from_k)
-            ds_estimate = dataset.select(idxs)
+            k = min(self.estimate_from_k, len(dataset))
+            ds_estimate = dataset.select(range(k))
+            while (ds_estimate.data.nbytes / 1e9 > 0.01) and k > 5:
+                k = k // 2
+                ds_estimate = dataset.select(range(k))
+            print(f"Estimating stats from {k} samples, with a dataset size of {ds_estimate.data.nbytes / 1e9} GB")
         else:
             ds_estimate = dataset
 
@@ -143,6 +150,7 @@ class DatasetConstructor:
         dataset_list = []
         for dataset_config in tqdm.tqdm(self.mix.datasets, desc="Loading datasets"):
             print(f"Loading and filtering dataset {dataset_config.dataset_path}")
+            # TODO: would be nice to cache the results of this function for speed (with git commit)
             ds: DatasetDict = self.build_single_dataset_dict(dataset_config)
             dataset_list.append(ds)
 
@@ -164,7 +172,7 @@ class DatasetConstructor:
 
         return final_dataset, separate_dataset
 
-    def compute_stats(self, dataset: DatasetDict, tokenizer: Optional[PreTrainedTokenizer] = None) -> Dict:
+    def compute_stats(self, dataset: DatasetDict, tokenizer: Optional[PreTrainedTokenizerFast] = None) -> Dict:
         dataset_stats = {}
         for split in tqdm.tqdm(dataset.keys(), desc="Computing dataset stats"):
             dataset_stats[split] = self.compute_dataset_stats(dataset[split], tokenizer=tokenizer)
@@ -174,7 +182,7 @@ class DatasetConstructor:
     def compute_mix_stats(self,
                           final_ds,
                           separate_ds,
-                          tokenizer: Optional[PreTrainedTokenizer] = None,
+                          tokenizer: Optional[PreTrainedTokenizerFast] = None,
                           ) -> pd.DataFrame:
 
         if separate_ds is not None:
@@ -217,7 +225,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     tokenizer = AutoTokenizer.from_pretrained(args.tokenizer_name) if args.tokenizer_name else None
-
+    assert isinstance(tokenizer, PreTrainedTokenizerFast)
     # Init
     api = HfApi()
     config = configue.load(args.config)
