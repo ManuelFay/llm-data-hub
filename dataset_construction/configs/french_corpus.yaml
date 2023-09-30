@@ -24,7 +24,7 @@ data_mix:
       dataset_path: manu/wmt-en-fr
       test_split: "test"
     - (): dataset_construction.DatasetConfig
-      dataset_path: Nicolas-BZRD/English_French_Webpages_Scraped_Translated
+      dataset_path: Nicolas-BZRD/English_French_Webpages_Scraped_Translated # Slow cause bad format
       train_split: "train[:5%]"
       build_test_set_from_train: true
       filtering_function:
