@@ -2,6 +2,7 @@
 
 import argparse
 import os
+import time
 import random
 from typing import Any, Callable, Dict, Optional, Tuple
 
@@ -235,10 +236,11 @@ if __name__ == "__main__":
     ds_constructor = DatasetConstructor(config["data_mix"], estimate_from_k=args.estimate_from_k)
 
     if ds_constructor.mix.load_from_local_save_dir:
-        final_ds = DatasetDict.load_from_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}")
+        final_ds = datasets.load_from_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}")
         if os.path.exists(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}_separate"):
-            separate_ds = DatasetDict.load_from_disk(
+            separate_ds = datasets.load_from_disk(
                 f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}_separate")
+
     else:
         final_ds, separate_ds = ds_constructor.build_concatenated_dataset()
         if ds_constructor.mix.local_save_dir:
@@ -258,9 +260,11 @@ if __name__ == "__main__":
     # Push to hub
     if args.hub_id is not None:
         # retries
-        for n in range(20):
+        for n in range(15):
             try:
-                final_ds.push_to_hub(args.hub_id, private=False)
+                final_ds.push_to_hub(args.hub_id,
+                                     max_shard_size="5OOMB",
+                                     private=False)
                 # Push config yaml
                 api.upload_file(
                     repo_id=args.hub_id,
@@ -282,7 +286,9 @@ if __name__ == "__main__":
                 )
 
                 if separate_ds is not None:
-                    separate_ds.push_to_hub(f"{args.hub_id}_separate", private=False)
+                    separate_ds.push_to_hub(f"{args.hub_id}_separate",
+                                            max_shard_size="5OOMB",
+                                            private=False)
                     api.upload_file(
                         repo_id=f"{args.hub_id}_separate",
                         path_or_fileobj="dataset_stats.csv",
@@ -299,6 +305,8 @@ if __name__ == "__main__":
             except Exception as e:
                 print(e)
                 print(f"Failed to push to hub, retrying #{n}")
+                # exponential wait time
+                time.sleep(pow(2, n))
     print("Done!")
 
     # Clean up
