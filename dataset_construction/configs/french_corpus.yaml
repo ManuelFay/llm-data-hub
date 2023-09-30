@@ -1,6 +1,6 @@
 data_mix:
   (): dataset_construction.DataMix
-  name: "pretraining_testing"
+  name: "french_5p"
   shuffle: false
   compute_dataset_stats: true
   keep_separated_datasets_in_dataset_dict: true
@@ -36,7 +36,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: manu/french_open_subtitles
       num_test_examples: 100
-
 # Books
 #    - (): dataset_construction.DatasetConfig
 #      dataset_path: manu/project_gutenberg
@@ -67,14 +66,17 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: manu/wikisource_fr
       build_test_set_from_train: true
+      train_split: "train[:5%]"
     - (): dataset_construction.DatasetConfig
       dataset_path: wikipedia
       dataset_name: "20220301.fr"
+      train_split: "train[:5%]"
       build_test_set_from_train: true
  # Internet dumps
     - (): dataset_construction.DatasetConfig
       dataset_path: 'oscar-corpus/OSCAR-2301'
       dataset_name: fr
+      train_split: "train[:5%]"
       build_test_set_from_train: true
       num_test_examples: 10000
       filtering_function:
