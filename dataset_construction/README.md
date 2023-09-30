@@ -132,6 +132,8 @@ Note however that this code is not very optimized and is better to already have 
 ### Next steps
 
 - [x] Partial loading 
+- [x] Colum renaming
+- [x] Preprocessing and filtering
+- [ ] Debugging cache management / saving intermediate steps
 - [ ] Most important next step is the test set deduplication (looking into it).
-- [ ] Depending on large scale load tests, maybe I'll add execution checkpointing (if fails occur, not having to map and filter datasets over).
 - [ ] Manual dataset packing if sequences are not padded together.
