@@ -75,7 +75,8 @@ class DatasetConstructor:
                 num_proc=os.cpu_count(),
                 **dataset_config.dataset_kwargs
             )
-            dataset_test = dataset_test.select(range(min(dataset_config.num_test_examples, len(dataset_test))))
+            if dataset_config.num_test_examples:
+                dataset_test = dataset_test.select(range(min(dataset_config.num_test_examples, len(dataset_test))))
         else:
             raise ValueError("Either build_test_set_from_train or test_split must be set")
         assert isinstance(dataset_test, Dataset)

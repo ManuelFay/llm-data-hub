@@ -47,8 +47,8 @@ data_mix:
       dataset_path: 'teven/code_contests'
       train_split: "train[:5%]"
       # build_test_set_from_train: true
-      build_test_set_from_train: true
-      # test_split: "valid"
+      build_test_set_from_train: false
+      test_split: "valid"
       # needs to be debugged
       filtering_function:
         (): dataset_collection.code.deepmind_code_contest.CodeContestFilter
