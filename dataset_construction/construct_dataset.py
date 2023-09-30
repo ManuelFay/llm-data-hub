@@ -185,7 +185,8 @@ class DatasetConstructor:
                 return sampled_distrib
 
             from itertools import product
-            for k1, k2 in product(["Train", "Test"], ["word_distribution", "token_distribution"]):
+            k2_opts = ["word_distribution", "token_distribution"] if tokenizer else ["word_distribution"]
+            for k1, k2 in product(["Train", "Test"], k2_opts):
                 df.loc[k1, k2] = ",".join(map(str, bootstrap(k1, k2)))
 
         else:
@@ -221,7 +222,7 @@ if __name__ == "__main__":
         df = ds_constructor.compute_mix_stats(final_ds, separate_ds, tokenizer)
         df.to_csv("dataset_stats.csv")
         df.drop(columns=["word_distribution"], inplace=True)
-        df.drop(columns=["tok_distribution"], inplace=True)
+        df.drop(columns=["token_distribution"], inplace=True)
         df.to_markdown(buf="dataset_stats.md")
         print(df)
 
