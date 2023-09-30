@@ -181,13 +181,12 @@ class DatasetConstructor:
                     choices = [k for k in final_ds_stats.keys() if k.endswith(k1)]
                     weights = [final_ds_stats[k]["num_examples"] for k in choices]
                     weights = [w/sum(weights) for w in weights]
-                    sampled_distrib.append(random.choice(final_ds_stats[random.choices(choices, weights=weights)][k2]))
+                    sampled_distrib.append(random.choice(final_ds_stats[random.choices(choices, weights=weights)[0]][k2]))
                 return sampled_distrib
 
-            df.loc["Train", "word_distribution"] = bootstrap("Train", "word_distribution")
-            df.loc["Test", "word_distribution"] = bootstrap("Test", "word_distribution")
-            df.loc["Train", "token_distribution"] = bootstrap("Train", "token_distribution")
-            df.loc["Test", "token_distribution"] = bootstrap("Test", "token_distribution")
+            from itertools import product
+            for k1, k2 in product(["Train", "Test"], ["word_distribution", "token_distribution"]):
+                df.loc[k1, k2] = ",".join(map(str, bootstrap(k1, k2)))
 
         else:
             final_ds_stats = self.compute_stats(final_ds, tokenizer=tokenizer)
