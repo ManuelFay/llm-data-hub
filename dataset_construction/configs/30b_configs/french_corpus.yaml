@@ -1,6 +1,6 @@
 data_mix:
   (): dataset_construction.DataMix
-  name: "french_5p"
+  name: "french_30b"
   shuffle: false
   compute_dataset_stats: true
   local_save_dir: data/
