@@ -1,6 +1,6 @@
 data_mix:
   (): dataset_construction.DataMix
-  name: "pretraining_code"
+  name: "code_5p"
   shuffle: false
   compute_dataset_stats: true
   keep_separated_datasets_in_dataset_dict: true
@@ -10,21 +10,21 @@ data_mix:
 # Code
     - (): dataset_construction.DatasetConfig
       dataset_path: 'bigcode/starcoderdata'
-      train_split: "train[:10%]"
+      train_split: "train[:5%]"
       text_column: "content"
       dataset_kwargs:
         data_dir: python
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
       dataset_path: 'bigcode/starcoderdata'
-      train_split: "train[:10%]"
+      train_split: "train[:5%]"
       text_column: "content"
       dataset_kwargs:
         data_dir: markdown
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
       dataset_path: 'bigcode/starcoderdata'
-      train_split: "train[:10%]"
+      train_split: "train[:5%]"
       text_column: "content"
       dataset_kwargs:
         data_dir: jupyter-scripts-dedup-filtered
@@ -51,6 +51,7 @@ data_mix:
       # nice but needs preprocessing to merge description  and solution and filtering for language
     - (): dataset_construction.DatasetConfig
       dataset_path: 'vikp/pypi_clean'
+      train_split: "train[:5%]"
       build_test_set_from_train: true
       text_column: code
       id_column: path
