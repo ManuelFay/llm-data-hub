@@ -289,6 +289,13 @@ if __name__ == "__main__":
                     separate_ds.push_to_hub(f"{args.hub_id}_separate",
                                             # max_shard_size="1GB",
                                             private=False)
+                    # Push config yaml
+                    api.upload_file(
+                        repo_id=f"{args.hub_id}_separate",
+                        path_or_fileobj=args.config,
+                        path_in_repo="config.yaml",
+                        repo_type="dataset",
+                    )
                     api.upload_file(
                         repo_id=f"{args.hub_id}_separate",
                         path_or_fileobj="dataset_stats.csv",
@@ -308,10 +315,3 @@ if __name__ == "__main__":
                 # exponential wait time
                 time.sleep(min(pow(2, n), 3600))
     print("Done!")
-
-    # Clean up
-    if ds_constructor.mix.compute_dataset_stats:
-        if os.path.exists("dataset_stats.csv"):
-            os.remove("dataset_stats.csv")
-        if os.path.exists("dataset_stats.md"):
-            os.remove("dataset_stats.md")

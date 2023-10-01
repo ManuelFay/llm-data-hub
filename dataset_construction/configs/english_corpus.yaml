@@ -5,14 +5,14 @@ data_mix:
   local_save_dir: data/
   load_from_local_save_dir: false
   compute_dataset_stats: true
-  keep_separated_datasets_in_dataset_dict: true
+  keep_separated_datasets_in_dataset_dict: false
   deduplicate_test_set: false
   ngram_path_for_extra_deduplication: null
   datasets:
 # Split of SlimPajama
     - (): dataset_construction.DatasetConfig
       dataset_path: cerebras/SlimPajama-627B
-      train_split: "train[:50%]"
+      train_split: "train"
       test_split: "test"
       build_test_set_from_train: false
       dataset_kwargs:
