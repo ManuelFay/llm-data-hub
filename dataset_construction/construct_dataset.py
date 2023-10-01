@@ -250,11 +250,12 @@ if __name__ == "__main__":
 
     # Compute stats
     if ds_constructor.mix.compute_dataset_stats:
+        os.makedirs(f"{ds_constructor.mix.stats_save_dir}/{ds_constructor.mix.name}", exist_ok=True)
         df = ds_constructor.compute_mix_stats(final_ds, separate_ds, tokenizer)
-        df.to_csv(f"{ds_constructor.mix.local_save_dir}/dataset_stats.csv")
+        df.to_csv(f"{ds_constructor.mix.stats_save_dir}/{ds_constructor.mix.name}/dataset_stats.csv")
         df.drop(columns=["word_distribution"], inplace=True)
         df.drop(columns=["token_distribution"], inplace=True)
-        df.to_markdown(buf=f"{ds_constructor.mix.local_save_dir}/dataset_stats.md")
+        df.to_markdown(buf=f"{ds_constructor.mix.stats_save_dir}/{ds_constructor.mix.name}/dataset_stats.md")
         print(df)
 
     # Push to hub
@@ -274,13 +275,13 @@ if __name__ == "__main__":
                 )
                 api.upload_file(
                     repo_id=args.hub_id,
-                    path_or_fileobj=f"{ds_constructor.mix.local_save_dir}/dataset_stats.csv",
+                    path_or_fileobj=f"{ds_constructor.mix.stats_save_dir}/{ds_constructor.mix.name}/dataset_stats.csv",
                     path_in_repo="dataset_stats.csv",
                     repo_type="dataset",
                 )
                 api.upload_file(
                     repo_id=args.hub_id,
-                    path_or_fileobj=f"{ds_constructor.mix.local_save_dir}/dataset_stats.md",
+                    path_or_fileobj=f"{ds_constructor.mix.stats_save_dir}/{ds_constructor.mix.name}/dataset_stats.md",
                     path_in_repo="dataset_stats.md",
                     repo_type="dataset",
                 )
@@ -298,13 +299,13 @@ if __name__ == "__main__":
                     )
                     api.upload_file(
                         repo_id=f"{args.hub_id}_separate",
-                        path_or_fileobj="dataset_stats.csv",
+                        path_or_fileobj=f"{ds_constructor.mix.stats_save_dir}/{ds_constructor.mix.name}/dataset_stats.csv",
                         path_in_repo="dataset_stats.csv",
                         repo_type="dataset",
                     )
                     api.upload_file(
                         repo_id=f"{args.hub_id}_separate",
-                        path_or_fileobj="dataset_stats.md",
+                        path_or_fileobj=f"{ds_constructor.mix.stats_save_dir}/{ds_constructor.mix.name}/dataset_stats.md",
                         path_in_repo="dataset_stats.md",
                         repo_type="dataset",
                     )

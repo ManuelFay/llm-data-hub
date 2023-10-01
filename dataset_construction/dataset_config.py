@@ -47,8 +47,13 @@ class DataMix:
     shuffle: bool = False
     compute_dataset_stats: bool = True
     local_save_dir: Optional[str] = None
+    stats_save_dir: Optional[str] = None    # defaults to local_save_dir
     load_from_local_save_dir: bool = False
     max_shard_size: Optional[Union[int, str]] = None
     keep_separated_datasets_in_dataset_dict: bool = False
     deduplicate_test_set: bool = False  # TODO: Not implemented yet
     ngram_path_for_extra_deduplication: Optional[str] = None  # TODO: Not implemented yet
+
+    def __post_init__(self):
+        if self.stats_save_dir is None:
+            self.stats_save_dir = self.local_save_dir if self.local_save_dir else "data/"
