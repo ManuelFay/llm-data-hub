@@ -263,7 +263,7 @@ if __name__ == "__main__":
         for n in range(20):
             try:
                 final_ds.push_to_hub(args.hub_id,
-                                     # max_shard_size="1GB",
+                                     max_shard_size=ds_constructor.mix.max_shard_size,
                                      private=False)
                 # Push config yaml
                 api.upload_file(
@@ -287,7 +287,7 @@ if __name__ == "__main__":
 
                 if separate_ds is not None:
                     separate_ds.push_to_hub(f"{args.hub_id}_separate",
-                                            # max_shard_size="1GB",
+                                            max_shard_size=ds_constructor.mix.max_shard_size,
                                             private=False)
                     # Push config yaml
                     api.upload_file(
