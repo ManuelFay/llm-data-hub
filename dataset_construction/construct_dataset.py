@@ -149,7 +149,7 @@ class DatasetConstructor:
             })
         return stats
 
-    def build_concatenated_dataset(self) -> Tuple[DatasetDict, DatasetDict]:
+    def build_concatenated_dataset(self) -> Tuple[DatasetDict, Optional[DatasetDict]]:
         dataset_list = []
         for dataset_config in tqdm.tqdm(self.mix.datasets, desc="Loading datasets"):
             print(f"Loading and filtering dataset {dataset_config.dataset_path}")
@@ -167,7 +167,7 @@ class DatasetConstructor:
             final_dataset = final_dataset.shuffle(seed=42)
 
         separate_dataset = None
-        if self.mix.keep_separated_datasets_in_dataset_dict:
+        if len(self.mix.datasets) > 1:
             separate_dataset = DatasetDict()
             for ds_config, ds in zip(self.mix.datasets, dataset_list):
                 separate_dataset[f"{ds_config.dataset_key}Train"] = ds["train"]
@@ -286,7 +286,7 @@ if __name__ == "__main__":
                     repo_type="dataset",
                 )
 
-                if separate_ds is not None:
+                if separate_ds is not None and ds_constructor.mix.keep_separated_datasets_in_dataset_dict:
                     separate_ds.push_to_hub(f"{args.hub_id}_separate",
                                             max_shard_size=ds_constructor.mix.max_shard_size,
                                             private=False)
