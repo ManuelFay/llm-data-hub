@@ -13,10 +13,12 @@ data_mix:
 # Split of SlimPajama
     - (): dataset_construction.DatasetConfig
       dataset_path: cerebras/SlimPajama-627B
-      train_split: "train[:5%]"
-      test_split: "test"
-      build_test_set_from_train: false
-      # dataset_kwargs:
-      #  data_dir: train/chunk1
+      train_split: "train"
+      # test_split: "test"
+      build_test_set_from_train: true # but hacky af
+      preprocessing_function:
+        (): dataset_collection.french.web_scraped_translated.WebPageMapper
+      dataset_kwargs:
+        data_dir: train/chunk1
 
 tokenizer: "mistralai/Mistral-7B-v0.1"
