@@ -17,7 +17,7 @@ data_mix:
       # test_split: "test"
       build_test_set_from_train: true # but hacky af
       preprocessing_function:
-        (): dataset_collection.french.web_scraped_translated.WebPageMapper
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
       dataset_kwargs:
         data_dir: train/chunk1
 
