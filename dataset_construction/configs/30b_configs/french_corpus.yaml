@@ -8,6 +8,7 @@ data_mix:
   keep_separated_datasets_in_dataset_dict: true
   deduplicate_test_set: false
   ngram_path_for_extra_deduplication: null
+  max_shard_size: "2GB"
   datasets:
 # Translation datasets
 #    - (): dataset_construction.DatasetConfig
