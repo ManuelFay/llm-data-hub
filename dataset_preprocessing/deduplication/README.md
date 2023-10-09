@@ -28,7 +28,7 @@ Deduplication can be done within a dataset, or across datasets.
 
 ### Internal split deduplication:
 ```bash
-python bloom_filter.py --hub_id_1="Nicolas-BZRD/DOLE_opendata" --split_1=“test” --column_name_1="text" --split_1_internal_deduplication      
+python bloom_filter.py --hub_id_1="Nicolas-BZRD/DOLE_opendata" --split_1="test" --column_name_1="text" --split_1_internal_deduplication      
 ```
 Deduplicate the train split of the "DOLE_opendata" dataset based on the text column.
 
