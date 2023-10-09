@@ -24,7 +24,7 @@ Deduplication can be done within a dataset, or across datasets.
 - `--save_locally` (boolean, optional): A flag to indicate whether to save the deduplicated dataset locally (default: False).
 
 ## Example Usage
-<b>Important:  Split 1 is the reference split; items are deleted in split two for external deduplication.</b>
+<b>Important:  Split 1 is the reference split, items are deleted in split 2 for external deduplication.</b>
 
 ### Internal split deduplication:
 ```bash
