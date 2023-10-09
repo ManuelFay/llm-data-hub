@@ -1,46 +1,45 @@
 # Deduplication
 
-Deduplication can be done within a dataset, or across datasets.
-
----
-
-# Bloom Filter Deduplication Function
+# 1 - Bloom Filter Deduplication Function
 
 This Python function uses a Bloom Filter, a probabilistic data structure, to efficiently deduplicate a dataset based on a specified column. Bloom Filters excel in scenarios where you need to reduce unnecessary comparisons, providing a high probability of correctly identifying whether an item is in the dataset. This is especially valuable when working with large datasets, as it helps improve performance. However, it's essential to note that Bloom Filters can produce false positives, mistakenly indicating the presence of an item that isn't in the dataset. You can control the false positive rate by adjusting the filter's size.
 
+Deduplication can be done within a dataset, or across datasets.
+
 ## Function Arguments
 
-- `--hugging_face_id` (str): The identifier for the Hugging Face dataset you want to deduplicate.
-- `--column_name` (str, default="text"): The name of the column used for deduplication.
-- `--expected_size` (int, default=10000): The expected size of the Bloom Filter. This affects memory usage and false-positive rate.
-- `--false_positive_rate` (float, default=0.001): The desired false-positive rate for the Bloom Filter.
-- `--deduplicate_test_split` (boolean): Whether to deduplicate the test split if it exists.
-- `--streaming_mode` (boolean): Whether to load the dataset in streaming mode.
-- `--push_to_hub` (boolean): Whether to push the deduplicated dataset to the Hugging Face Hub.
-- `--save_locally` (boolean): Whether to save the deduplicated dataset locally.
+- `--hub_id_1` (str): The identifier for the Hugging Face dataset you want to deduplicate. 
+- `--hub_id_2` (str, optional): Second identifier for another Hugging Face dataset for deduplication between two datasets.
+- `--split_1` (str): The name of the first split.
+- `--split_2` (str, optional): Second split name to performe external deduplication between two splits.
+- `--column_name_1` (str): The name of the column used for deduplication in the first dataset.
+- `--column_name_2` (str, optional): Name of the column used for deduplication in the second split.
+- `--split_1_internal_deduplication` (boolean, optional): A flag to indicate whether internal deduplication should be applied to the first split (default: False).
+- `--split_2_internal_deduplication` (boolean, optional): A flag to indicate whether internal deduplication should be applied to the second split (default: False).
+- `--push_to_hub_1` (boolean, optional): A flag to indicate whether to push the deduplicated dataset for the first dataset to the Hugging Face Hub (default: False).
+- `--push_to_hub_2` (boolean, optional): A flag to indicate whether to push the deduplicated dataset for the second dataset to the Hugging Face Hub (default: False).
+- `--expected_size` (int, optional): The expected size of the Bloom Filter (default: 1000000).
+- `--false_positive_rate` (float, optional): The desired false-positive rate for the Bloom Filter (default: 0.000001).
+- `--streaming_mode` (boolean, optional): A flag to indicate whether to load the dataset in streaming mode (default: False).
+- `--save_locally` (boolean, optional): A flag to indicate whether to save the deduplicated dataset locally (default: False).
 
 ## Example Usage
+<b>Important:  Split 1 is the reference split; items are deleted in split two for external deduplication.</b>
 
+### Internal split deduplication:
 ```bash
-python bloom_filter.py --hugging_face_id="Nicolas-BZRD/DOLE_opendata" --save_locally      
+python bloom_filter.py --hub_id_1="Nicolas-BZRD/DOLE_opendata" --split_1=“test” --split_1_internal_deduplication      
 ```
-Deduplicate the train split of the "DOLE_opendata" dataset to its text column and save it locally.
+Deduplicate the train split of the "DOLE_opendata" dataset based on the text column.
 
+### Internal + External split deduplication (same dataset)
 ```bash
-python bloom_filter.py --hugging_face_id="Nicolas-BZRD/DOLE_opendata" --streaming_mode --push_to_hub      
+python bloom_filter.py --hub_id_1="Nicolas-BZRD/DOLE_opendata" --split_1="test" --split_2="train" --split_2_internal_deduplication --push_to_hub_1
 ```
-Deduplicate the train split of the "DOLE_opendata" dataset to its text column in streaming mode (useful for big dataset) and pushe the result in the hub.
+Deletion of duplicate values in the "train" split, then deletion of elements contained in the "train" split which are also contained in the "test" split. The final dataset is then pushed onto the hugging face hub.
 
+### External split deduplication (two different datasets)
 ```bash
-python bloom_filter.py --hugging_face_id="Nicolas-BZRD/DOLE_opendata"
+python bloom_filter.py --hub_id_1="Nicolas-BZRD/DOLE_opendata" --hub_id_2="Nicolas-BZRD/CNIL_opendata"  --split_1="train" --split_2="train" 
 ```
-Deduplicate the train split and the test test split (do not do this to benchmark SOTA dataset) of the "DOLE_opendata" dataset over his text column.
-
----
-
-To deduplicate within a dataset to keep only unique texts, MinHashLSH can be used.  
-
-HF example: https://github.com/huggingface/transformers/blob/main/examples/research_projects/codeparrot/scripts/minhash_deduplication.py
-
-
-To deduplicate across datasets or at larger scale, we can use Bloom filters at a paragraph level, once URL deduplication has been done.
+Deletion of values contained in dataset "CNIL_opendata" of the "train" split that are also contained in the "train" split of dataset "DOLE_opendata". "DOLE_opendata" stay unchanged.
