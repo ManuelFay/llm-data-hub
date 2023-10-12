@@ -287,7 +287,9 @@ if __name__ == "__main__":
                 )
 
                 if separate_ds is not None and ds_constructor.mix.keep_separated_datasets_in_dataset_dict:
-                    separate_ds.push_to_hub(f"{args.hub_id}_separate",
+                    # only upload valid split
+                    new_ds = DatasetDict({k: v for k, v in separate_ds.items() if "Test" in k})
+                    new_ds.push_to_hub(f"{args.hub_id}_separate",
                                             max_shard_size=ds_constructor.mix.max_shard_size,
                                             private=False)
                     # Push config yaml

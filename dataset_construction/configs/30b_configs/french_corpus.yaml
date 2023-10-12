@@ -4,8 +4,8 @@ data_mix:
   shuffle: false
   compute_dataset_stats: true
   local_save_dir: data/
-  load_from_local_save_dir: false
-  keep_separated_datasets_in_dataset_dict: false
+  load_from_local_save_dir: true
+  keep_separated_datasets_in_dataset_dict: true
   deduplicate_test_set: false
   ngram_path_for_extra_deduplication: null
   max_shard_size: "2GB"
