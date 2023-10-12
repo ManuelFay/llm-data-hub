@@ -229,7 +229,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     tokenizer = AutoTokenizer.from_pretrained(args.tokenizer_name) if args.tokenizer_name else None
-    assert isinstance(tokenizer, PreTrainedTokenizerFast)
+    assert (tokenizer is None) or isinstance(tokenizer, PreTrainedTokenizerFast)
     # Init
     api = HfApi()
     config = configue.load(args.config)
