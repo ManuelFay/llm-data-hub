@@ -39,7 +39,7 @@ data_mix:
       dataset_path: manu/french_librispeech_text_only
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: manu/french_podcasts
+      dataset_path: manu/french_podcasts # continue scrapping
       build_test_set_from_train: true
       num_test_examples: 100
       filtering_function:
@@ -67,9 +67,9 @@ data_mix:
 #      num_test_examples: 100
       # here we should preprocess
     - (): dataset_construction.DatasetConfig
-      dataset_path: manu/ProjectGutenberg_fr
+      dataset_path: manu/ProjectGutenberg_fr # needs to be filtered - beginning and end of books
       build_test_set_from_train: true
-    - (): dataset_construction.DatasetConfig
+    - (): dataset_construction.DatasetConfig # needs to be filtered and expanded - perplexity filtering
       dataset_path: manu/bnf_gallica
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
