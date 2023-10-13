@@ -38,7 +38,8 @@ if __name__ == "__main__":
         print("English")
         print(ds_en)
 
-        ds = datasets.concatenate_datasets([ds_code, ds_fr, ds_en]).shuffle()
+        ds = datasets.concatenate_datasets([ds_code, ds_fr, ds_en])
+        #.shuffle() --> slow
 
         print(f"Size of Concatenated: {ds.data.nbytes//1e9} GB")
         print(f"Size of French: {ds_fr.data.nbytes//1e9} GB, ratio of {ds_fr.data.nbytes/ds.data.nbytes}")
