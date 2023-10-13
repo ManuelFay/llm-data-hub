@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
         # ds.save_to_disk("data/tok_all")
         if args.upload_corpus_id:
-            for i in range(5):
+            for i in range(10):
                 try:
                     ds.push_to_hub(args.upload_corpus_id, max_shard_size="2GB")
                     break
@@ -59,6 +59,7 @@ if __name__ == "__main__":
 
     # small scale tests to begin
     if args.sample_size:
+        ds = ds.shuffle()
         ds = ds.select(range(args.sample_size))
     example_sentence = "This is a test sentence. On va voir comment elle est gérée .... 123 + 56 = 2567. Let's go!"
 
