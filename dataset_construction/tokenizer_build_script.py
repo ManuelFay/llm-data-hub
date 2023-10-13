@@ -7,9 +7,10 @@ from dataset_construction.fit_tokenizer import fit_tokenizer, build_tokenizer, r
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--hub_id", type=str, default="manu/tok_custom")
+
     parser.add_argument("--build_from_scratch", action="store_true", default=False)
     parser.add_argument("--sample_size", type=int, default=None)
-    parser.add_argument("--upload_corpus", action="store_true", default=False)
+    parser.add_argument("--upload_corpus_id", type=str, default=None)
     args = parser.parse_args()
 
     # concatenate datasets loaded from disks
@@ -40,10 +41,10 @@ if __name__ == "__main__":
     print(f"Size of English: {ds_en.data.nbytes//1e9} GB, ratio of {ds_en.data.nbytes/ds.data.nbytes}")
 
     # ds.save_to_disk("data/tok_all")
-    if args.upload_corpus:
+    if args.upload_corpus_id:
         for i in range(5):
             try:
-                ds.push_to_hub("manu/data_tok_all", max_shard_size="2GB")
+                ds.push_to_hub(args.upload_corpus_id, max_shard_size="2GB")
                 break
             except:
                 print("Failed to push to hub")
