@@ -12,21 +12,30 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # concatenate datasets loaded from disks
-    ds_fr = datasets.load_from_disk("data/tok_fr")["train"].shuffle()
+    ds_fr = datasets.load_from_disk("data/tok_fr")["train"]     # .shuffle()
 
-    ds_code = datasets.load_from_disk("data/tok_code")["train"].shuffle()
+    ds_code = datasets.load_from_disk("data/tok_code")["train"]     # .shuffle()
     # ds_code = ds_code.select(range(len(ds_code)//2)) # half it
 
-    ds_en = datasets.load_from_disk("data/english_30b")["train"].shuffle()
+    ds_en = datasets.load_from_disk("data/english_30b")["train"]    # .shuffle()
+    print(len(ds_en), ds_en.data.nbytes//1e9)
     ds_en = ds_en.select(range(len(ds_fr)//10))
+    print(len(ds_en), ds_en.data.nbytes // 1e9)
 
-    ds = datasets.concatenate_datasets([ds_code,
-                                        ds_fr,
-                                        ds_en]).shuffle()
+    print("French")
+    print(ds_fr)
+
+    print("Code")
+    print(ds_code)
+
+    print("English")
+    print(ds_en)
+
+    ds = datasets.concatenate_datasets([ds_code, ds_fr, ds_en]).shuffle()
 
     print(f"Size of Concatenated: {ds.data.nbytes//1e9} GB")
-    print(f"Size of Code: {ds_code.data.nbytes//1e9} GB, ratio of {ds_code.data.nbytes/ds.data.nbytes}")
     print(f"Size of French: {ds_fr.data.nbytes//1e9} GB, ratio of {ds_fr.data.nbytes/ds.data.nbytes}")
+    print(f"Size of Code: {ds_code.data.nbytes//1e9} GB, ratio of {ds_code.data.nbytes/ds.data.nbytes}")
     print(f"Size of English: {ds_en.data.nbytes//1e9} GB, ratio of {ds_en.data.nbytes/ds.data.nbytes}")
 
     # small scale tests to begin
