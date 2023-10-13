@@ -101,7 +101,7 @@ data_mix:
         (): dataset_collection.code.deepmind_code_contest.CodeContestMapper
     - (): dataset_construction.DatasetConfig
       dataset_path: 'vikp/pypi_clean'
-      train_split: "train"
+      train_split: "train[:20%]"
       build_test_set_from_train: true
       text_column: code
       id_column: path
