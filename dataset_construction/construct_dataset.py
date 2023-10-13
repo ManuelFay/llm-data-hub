@@ -252,6 +252,7 @@ if __name__ == "__main__":
     if ds_constructor.mix.compute_dataset_stats:
         os.makedirs(f"{ds_constructor.mix.stats_save_dir}/{ds_constructor.mix.name}", exist_ok=True)
         df = ds_constructor.compute_mix_stats(final_ds, separate_ds, tokenizer)
+        df["ratio"] = round(df["dataset_gb"]/df["dataset_gb"].sum(), 5)
         df.to_csv(f"{ds_constructor.mix.stats_save_dir}/{ds_constructor.mix.name}/dataset_stats.csv")
         df.drop(columns=["word_distribution"], inplace=True)
         if tokenizer:
