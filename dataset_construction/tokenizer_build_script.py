@@ -38,6 +38,9 @@ if __name__ == "__main__":
     print(f"Size of Code: {ds_code.data.nbytes//1e9} GB, ratio of {ds_code.data.nbytes/ds.data.nbytes}")
     print(f"Size of English: {ds_en.data.nbytes//1e9} GB, ratio of {ds_en.data.nbytes/ds.data.nbytes}")
 
+    ds.save_to_disk("data/tok_all")
+    # ds.push_to_hub("manu/data_tok_all", max_shard_size="2GB")
+
     # small scale tests to begin
     if args.sample_size:
         ds = ds.select(range(args.sample_size))
