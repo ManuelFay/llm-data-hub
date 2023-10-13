@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
     # small scale tests to begin
     if args.sample_size:
-        ds = ds.shuffle()
+        ds = ds.shuffle(seed=42)
         ds = ds.select(range(args.sample_size))
     example_sentence = "This is a test sentence. On va voir comment elle est gérée .... 123 + 56 = 2567. Let's go!"
 
