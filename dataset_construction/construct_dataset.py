@@ -254,7 +254,8 @@ if __name__ == "__main__":
         df = ds_constructor.compute_mix_stats(final_ds, separate_ds, tokenizer)
         df.to_csv(f"{ds_constructor.mix.stats_save_dir}/{ds_constructor.mix.name}/dataset_stats.csv")
         df.drop(columns=["word_distribution"], inplace=True)
-        df.drop(columns=["token_distribution"], inplace=True)
+        if tokenizer:
+            df.drop(columns=["token_distribution"], inplace=True)
         df.to_markdown(buf=f"{ds_constructor.mix.stats_save_dir}/{ds_constructor.mix.name}/dataset_stats.md")
         print(df)
 
