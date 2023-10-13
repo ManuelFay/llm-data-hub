@@ -45,7 +45,7 @@ if __name__ == "__main__":
         print(f"Size of Code: {ds_code.data.nbytes//1e9} GB, ratio of {ds_code.data.nbytes/ds.data.nbytes}")
         print(f"Size of English: {ds_en.data.nbytes//1e9} GB, ratio of {ds_en.data.nbytes/ds.data.nbytes}")
 
-        ds.save_to_disk(args.local_save_path)
+        ds.save_to_disk(args.local_save_path, max_shard_size="2GB", num_proc=os.cpu_count())
 
         # ds.save_to_disk("data/tok_all")
         if args.upload_corpus_id:
