@@ -9,6 +9,7 @@ if __name__ == "__main__":
     parser.add_argument("--hub_id", type=str, default="manu/tok_custom")
     parser.add_argument("--build_from_scratch", action="store_true", default=False)
     parser.add_argument("--sample_size", type=int, default=None)
+    parser.add_argument("--upload_corpus", action="store_true", default=False)
     args = parser.parse_args()
 
     # concatenate datasets loaded from disks
@@ -19,7 +20,7 @@ if __name__ == "__main__":
 
     ds_en = datasets.load_from_disk("data/english_30b")["train"]    # .shuffle()
     print(len(ds_en), ds_en.data.nbytes//1e9)
-    ds_en = ds_en.select(range(len(ds_fr)//10))
+    ds_en = ds_en.select(range(len(ds_fr)//2))
     print(len(ds_en), ds_en.data.nbytes // 1e9)
 
     print("French")
@@ -38,8 +39,14 @@ if __name__ == "__main__":
     print(f"Size of Code: {ds_code.data.nbytes//1e9} GB, ratio of {ds_code.data.nbytes/ds.data.nbytes}")
     print(f"Size of English: {ds_en.data.nbytes//1e9} GB, ratio of {ds_en.data.nbytes/ds.data.nbytes}")
 
-    ds.save_to_disk("data/tok_all")
-    # ds.push_to_hub("manu/data_tok_all", max_shard_size="2GB")
+    # ds.save_to_disk("data/tok_all")
+    if args.upload_corpus:
+        for i in range(5):
+            try:
+                ds.push_to_hub("manu/data_tok_all", max_shard_size="2GB")
+                break
+            except:
+                print("Failed to push to hub")
 
     # small scale tests to begin
     if args.sample_size:
