@@ -21,7 +21,7 @@ def build_tokenizer(
     tokenizer.pre_tokenizer = pre_tokenizers.Sequence(
         [pre_tokenizers.Metaspace(replacement=replacement, add_prefix_space=add_prefix_space),
          pre_tokenizers.Digits(individual_digits=True),
-         pre_tokenizers.Punctuation(),
+         # pre_tokenizers.Punctuation(),
          # to deal with "......" or "-----" tokens (which might be interesting to have actually)
          ])
 
@@ -83,7 +83,7 @@ def refit_tokenizer(tokenizer: PreTrainedTokenizerFast, dataset: datasets.Datase
         [
             # pre_tokenizers.Metaspace(replacement=replacement, add_prefix_space=add_prefix_space),
             pre_tokenizers.Digits(individual_digits=True),
-            pre_tokenizers.Punctuation(),
+            # pre_tokenizers.Punctuation(),
             # to deal with "......" or "-----" tokens (which might be interesting to have actually)
         ])
     ### END OF THE SLOW PART
