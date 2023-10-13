@@ -21,13 +21,15 @@ if __name__ == "__main__":
 
     ds = datasets.concatenate_datasets([ds_code,
                                         ds_fr,
-                                        ds_en])
+                                        ds_en]).shuffle()
 
     print(f"Size of Concatenated: {ds.data.nbytes//1e9} GB")
     print(f"Size of Code: {ds_code.data.nbytes//1e9} GB, ratio of {ds_code.data.nbytes/ds.data.nbytes}")
     print(f"Size of French: {ds_fr.data.nbytes//1e9} GB, ratio of {ds_fr.data.nbytes/ds.data.nbytes}")
     print(f"Size of English: {ds_en.data.nbytes//1e9} GB, ratio of {ds_en.data.nbytes/ds.data.nbytes}")
 
+    # small scale tests to begin
+    ds = ds.select(range(100000))
     example_sentence = "This is a test sentence. On va voir comment elle est gérée .... 123 + 56 = 2567. Let's go!"
 
     build_from_scratch = args.build_from_scratch
