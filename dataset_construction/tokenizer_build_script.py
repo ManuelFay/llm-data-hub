@@ -8,6 +8,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--hub_id", type=str, default="manu/tok_custom")
     parser.add_argument("--build_from_scratch", action="store_true", default=False)
+    parser.add_argument("--sample_size", type=int, default=None)
     args = parser.parse_args()
 
     # concatenate datasets loaded from disks
@@ -17,7 +18,7 @@ if __name__ == "__main__":
     # ds_code = ds_code.select(range(len(ds_code)//2)) # half it
 
     ds_en = datasets.load_from_disk("data/english_30b")["train"].shuffle()
-    ds_en = ds_en.select(range(len(ds_fr)//2))
+    ds_en = ds_en.select(range(len(ds_fr)//10))
 
     ds = datasets.concatenate_datasets([ds_code,
                                         ds_fr,
@@ -29,7 +30,8 @@ if __name__ == "__main__":
     print(f"Size of English: {ds_en.data.nbytes//1e9} GB, ratio of {ds_en.data.nbytes/ds.data.nbytes}")
 
     # small scale tests to begin
-    ds = ds.select(range(100000))
+    if args.sample_size:
+        ds = ds.select(range(args.sample_size))
     example_sentence = "This is a test sentence. On va voir comment elle est gérée .... 123 + 56 = 2567. Let's go!"
 
     build_from_scratch = args.build_from_scratch
@@ -38,9 +40,9 @@ if __name__ == "__main__":
         # From scratch
         tok = build_tokenizer()
         tok = fit_tokenizer(tok, ds)
-        tok.save("../data/tokenizer.json")
+        tok.save("data/tokenizer.json")
         tok = PreTrainedTokenizerFast(tokenizer_file="../data/tokenizer.json")
-        tok.save_pretrained("../data/tokenizer_fast")
+        tok.save_pretrained("data/tokenizer_fast")
         tok.push_to_hub(args.hub_id + "_scratch")
 
         encoded = tok.encode(example_sentence)
@@ -53,7 +55,7 @@ if __name__ == "__main__":
         # Refit from pretrained
         tok2 = AutoTokenizer.from_pretrained("mistralai/Mistral-7B-v0.1")
         tok2 = refit_tokenizer(tok2, ds)
-        tok2.save_pretrained("../data/tokenizer2_fast")
+        tok2.save_pretrained("data/tokenizer2_fast")
         tok2.push_to_hub(args.hub_id + "_refitted")
 
         encoded = tok2.encode(example_sentence)
