@@ -39,7 +39,8 @@ if __name__ == "__main__":
         print(ds_en)
 
         ds = datasets.concatenate_datasets([ds_code, ds_fr, ds_en])
-        #.shuffle() --> slow
+        print("Shuffling")
+        ds = ds.shuffle(seed=42) # slow
 
         print(f"Size of Concatenated: {ds.data.nbytes//1e9} GB")
         print(f"Size of French: {ds_fr.data.nbytes//1e9} GB, ratio of {ds_fr.data.nbytes/ds.data.nbytes}")
@@ -59,7 +60,7 @@ if __name__ == "__main__":
 
     # small scale tests to begin
     if args.sample_size:
-        ds = ds.shuffle(seed=42)
+        # ds = ds.shuffle(seed=42)
         ds = ds.select(range(args.sample_size))
     example_sentence = "This is a test sentence. On va voir comment elle est gérée .... 123 + 56 = 2567. Let's go!"
 
