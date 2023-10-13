@@ -4,7 +4,7 @@ data_mix:
   shuffle: false
   compute_dataset_stats: true
   local_save_dir: data/
-  load_from_local_save_dir: true
+  load_from_local_save_dir: false
   keep_separated_datasets_in_dataset_dict: true
   deduplicate_test_set: false
   ngram_path_for_extra_deduplication: null
@@ -36,10 +36,11 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: Nicolas-BZRD/LEGI_opendata # manu/dila_legifrance
       build_test_set_from_train: true
-      train_split: "train[:10%]"
+      train_split: "train[:20%]"
     - (): dataset_construction.DatasetConfig
       dataset_path: Nicolas-BZRD/BALO_opendata
       build_test_set_from_train: true
+      train_split: "train[:10%]"
     - (): dataset_construction.DatasetConfig
       dataset_path: Nicolas-BZRD/JADE_opendata
       build_test_set_from_train: true
@@ -92,6 +93,7 @@ data_mix:
  # Wiki
     - (): dataset_construction.DatasetConfig
       dataset_path: manu/wikisource_fr
+      train_split: "train[:10%]"
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
       dataset_path: wikipedia
@@ -101,7 +103,7 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: 'oscar-corpus/OSCAR-2301'
       dataset_name: fr
-      train_split: "train[:20%]"
+      train_split: "train[:10%]"
       build_test_set_from_train: true
       num_test_examples: 10000
       filtering_function:
