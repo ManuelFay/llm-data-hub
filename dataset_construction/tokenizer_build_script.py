@@ -61,7 +61,7 @@ if __name__ == "__main__":
         tok = build_tokenizer()
         tok = fit_tokenizer(tok, ds)
         tok.save("data/tokenizer.json")
-        tok = PreTrainedTokenizerFast(tokenizer_file="../data/tokenizer.json")
+        tok = PreTrainedTokenizerFast(tokenizer_file="data/tokenizer.json")
         tok.save_pretrained("data/tokenizer_fast")
         tok.push_to_hub(args.hub_id + "_scratch")
 
