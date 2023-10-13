@@ -41,7 +41,7 @@ def fit_tokenizer(tokenizer, dataset: datasets.Dataset):
     :return: The fitted tokenizer.
     """
 
-    def batch_iterator(batch_size=100):
+    def batch_iterator(batch_size=1000):
         for i in range(0, len(dataset), batch_size):
             yield dataset[i: i + batch_size]["text"]
 
@@ -69,7 +69,7 @@ def refit_tokenizer(tokenizer: PreTrainedTokenizerFast, dataset: datasets.Datase
     :return: The fitted tokenizer.
     """
 
-    def batch_iterator(batch_size=10):
+    def batch_iterator(batch_size=1000):
         for i in range(0, len(dataset), batch_size):
             yield dataset[i: i + batch_size]["text"]
 
