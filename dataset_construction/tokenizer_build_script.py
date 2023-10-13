@@ -19,14 +19,14 @@ if __name__ == "__main__":
     ds_en = datasets.load_from_disk("data/english_30b")["train"].shuffle()
     ds_en = ds_en.select(range(len(ds_fr)//2))
 
-    print(ds_code)
-    print(ds_fr)
-    print(ds_en)
-
     ds = datasets.concatenate_datasets([ds_code,
                                         ds_fr,
                                         ds_en])
-    print(ds)
+
+    print(f"Size of Concatenated: {ds.data.nbytes//1e9} GB")
+    print(f"Size of Code: {ds_code.data.nbytes//1e9} GB, ratio of {ds_code.data.nbytes/ds.data.nbytes}")
+    print(f"Size of French: {ds_fr.data.nbytes//1e9} GB, ratio of {ds_fr.data.nbytes/ds.data.nbytes}")
+    print(f"Size of English: {ds_en.data.nbytes//1e9} GB, ratio of {ds_en.data.nbytes/ds.data.nbytes}")
 
     example_sentence = "This is a test sentence. On va voir comment elle est gérée .... 123 + 56 = 2567. Let's go!"
 
