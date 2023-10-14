@@ -67,6 +67,7 @@ if __name__ == "__main__":
     example_sentence = "This is a test sentence. On va voir comment elle est gérée .... 123 + 56 = 2567. Let's go! Imagine I have code    4 spaces.\n and a      backslash!! Eléonore est un prénom français. __name__ isInstance"
 
     build_from_scratch = args.build_from_scratch
+    hub_id_suffix = "-scratch" if build_from_scratch else "-refitted"
     if build_from_scratch:
         print("Building from scratch")
         # From scratch
@@ -80,7 +81,7 @@ if __name__ == "__main__":
         tok = LlamaTokenizerFast(tokenizer_file="data/tokenizer.json")
 
         tok.save_pretrained("data/tokenizer_fast")
-        tok.push_to_hub(args.hub_id + "_scratch")
+        tok.push_to_hub(args.hub_id + hub_id_suffix)
         os.remove("data/tokenizer.json")
 
         # Test
@@ -96,7 +97,7 @@ if __name__ == "__main__":
         tok2 = AutoTokenizer.from_pretrained("mistralai/Mistral-7B-v0.1")
         tok2 = refit_tokenizer(tok2, ds)
         tok2.save_pretrained("data/tokenizer2_fast")
-        tok2.push_to_hub(args.hub_id + "_refitted")
+        tok2.push_to_hub(args.hub_id + hub_id_suffix)
 
         encoded = tok2.encode(example_sentence)
         enc_sent = tok2.tokenize(example_sentence)
@@ -148,7 +149,7 @@ if __name__ == "__main__":
 
         api = HfApi()
         api.upload_file(
-            repo_id=args.hub_id,
+            repo_id=args.hub_id + hub_id_suffix,
             path_or_fileobj=f"data/tok_config.md",
             path_in_repo="dataset_stats.md",
             repo_type="dataset",
