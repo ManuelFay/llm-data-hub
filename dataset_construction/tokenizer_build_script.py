@@ -1,7 +1,7 @@
 import argparse
 import os
 import datasets
-from transformers import PreTrainedTokenizerFast, AutoTokenizer
+from transformers import PreTrainedTokenizerFast, AutoTokenizer, LlamaTokenizerFast
 from dataset_construction.fit_tokenizer import fit_tokenizer, build_tokenizer, refit_tokenizer
 
 
@@ -70,11 +70,18 @@ if __name__ == "__main__":
         # From scratch
         tok = build_tokenizer()
         tok = fit_tokenizer(tok, ds)
+
+        # Save and upload
+        if os.path.exists("data/tokenizer.json"):
+            os.remove("data/tokenizer.json")
         tok.save("data/tokenizer.json")
-        tok = PreTrainedTokenizerFast(tokenizer_file="data/tokenizer.json")
+        tok = LlamaTokenizerFast(tokenizer_file="data/tokenizer.json")
+
         tok.save_pretrained("data/tokenizer_fast")
         tok.push_to_hub(args.hub_id + "_scratch")
+        os.remove("data/tokenizer.json")
 
+        # Test
         encoded = tok.encode(example_sentence)
         print(tok.tokenize(example_sentence))
         decoded = tok.decode(encoded)
