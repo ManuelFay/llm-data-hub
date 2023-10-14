@@ -3,7 +3,7 @@ import os
 import datasets
 from transformers import PreTrainedTokenizerFast, AutoTokenizer, LlamaTokenizerFast
 from dataset_construction.fit_tokenizer import fit_tokenizer, build_tokenizer, refit_tokenizer
-
+from huggingface_hub import HfApi
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -63,7 +63,8 @@ if __name__ == "__main__":
         # ds = ds.shuffle(seed=42)
         ds = ds.select(range(args.sample_size))
         print(f"Size of Sampled: {ds.data.nbytes//1e9} GB")
-    example_sentence = "This is a test sentence. On va voir comment elle est gérée .... 123 + 56 = 2567. Let's go!"
+
+    example_sentence = "This is a test sentence. On va voir comment elle est gérée .... 123 + 56 = 2567. Let's go! Imagine I have code    4 spaces.\n and a      backslash!! Eléonore est un prénom français. __name__ isInstance"
 
     build_from_scratch = args.build_from_scratch
     if build_from_scratch:
@@ -100,3 +101,40 @@ if __name__ == "__main__":
         print(tok2.tokenize(example_sentence))
         decoded = tok2.decode(encoded)
         print(decoded)
+
+    with open("data/tok_config.md", "w") as f:
+        # intro
+        f.write(f"# Custom Tokenizer\n")
+        f.write(f"## Description\n")
+        f.write(f"This tokenizer was trained on a concatenation of the following datasets:\n")
+        # dump dataset stats
+        f.write(f"## Dataset Stats\n")
+        f.write(f"Size of Concatenated: {ds.data.nbytes//1e9} GB\n")
+        f.write(f"Size of French: {ds_fr.data.nbytes//1e9} GB, ratio of {ds_fr.data.nbytes/ds.data.nbytes}\n")
+        f.write(f"Size of Code: {ds_code.data.nbytes//1e9} GB, ratio of {ds_code.data.nbytes/ds.data.nbytes}\n")
+        f.write(f"Size of English: {ds_en.data.nbytes//1e9} GB, ratio of {ds_en.data.nbytes/ds.data.nbytes}\n")
+
+
+        if args.sample_size:
+            f.write("For speed purposes, the tokenizer was trained on a sample of the dataset. Only the first samples were selected.\n")
+            f.write(f"Sample size: {args.sample_size}\n")
+            f.write(f"Size of Sampled: {ds.data.nbytes//1e9} GB\n")
+
+        # dump tokenizer configs
+        f.write(f"## Tokenizer Configs\n")
+        f.write(f"Build from scratch: {build_from_scratch}\n")
+        if not build_from_scratch:
+            f.write(f"Pretrained tokenizer: mistralai/Mistral-7B-v0.1\n")
+        f.write(f"Tokenizer: {tok2.name_or_path}\n")
+        f.write(f"Tokenizer vocab size: {tok2.vocab_size}\n")
+        f.write(f"Tokenizer max length: {tok2.model_max_length}\n")
+
+        api = HfApi()
+        api.upload_file(
+            repo_id=args.hub_id,
+            path_or_fileobj=f"data/tok_config.md",
+            path_in_repo="dataset_stats.md",
+            repo_type="dataset",
+        )
+
+    os.remove("data/tok_config.md")
