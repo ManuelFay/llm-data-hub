@@ -144,9 +144,6 @@ if __name__ == "__main__":
             f.write(f"Pretrained tokenizer: None\n")
 
         # tokenizer stats
-        f.write(f"Tokenizer: {tok2.name_or_path}\n")
-        f.write(f"Tokenizer vocab size: {tok2.vocab_size}\n")
-        f.write(f"Tokenizer max length: {tok2.model_max_length}\n")
         f.write(f"Tokenizer is trained with digit separation, whitespaces (for code), byte fallback")
 
         api = HfApi()
