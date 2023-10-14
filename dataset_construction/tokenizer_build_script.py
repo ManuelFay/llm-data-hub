@@ -114,9 +114,9 @@ if __name__ == "__main__":
 
         # examples
         f.write(f"## Examples\n")
-        f.write(f"Example sentence: {example_sentence}\n")
-        f.write(f"Encoded sentence: {enc_sent}\n")
-        f.write(f"Decoded sentence: {decoded}\n")
+        f.write(f"Example sentence: `{example_sentence}`\n")
+        f.write(f"Encoded sentence: `{enc_sent}`\n")
+        f.write(f"Decoded sentence: `{decoded}`\n")
 
         # usage
         f.write(f"## Usage\n")
