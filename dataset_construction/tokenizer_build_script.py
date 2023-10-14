@@ -122,6 +122,7 @@ if __name__ == "__main__":
         f.write(f"from transformers import LlamaTokenizerFast\n\n")
         f.write(f"tok = LlamaTokenizerFast.from_pretrained('<tok_name>')\n\n")
         f.write(f"tok.tokenize('This is a test sentence')\n\n")
+        f.write("```\n\n")
 
         # dump dataset stats
         f.write(f"## Dataset Stats\n")
