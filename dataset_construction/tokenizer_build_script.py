@@ -62,6 +62,7 @@ if __name__ == "__main__":
     if args.sample_size:
         # ds = ds.shuffle(seed=42)
         ds = ds.select(range(args.sample_size))
+        print(f"Size of Sampled: {ds.data.nbytes//1e9} GB")
     example_sentence = "This is a test sentence. On va voir comment elle est gérée .... 123 + 56 = 2567. Let's go!"
 
     build_from_scratch = args.build_from_scratch
