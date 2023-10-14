@@ -125,12 +125,9 @@ if __name__ == "__main__":
 
         # dump dataset stats
         f.write(f"## Dataset Stats\n")
-        f.write(f"Size of Concatenated: {ds.data.nbytes//1e9} GB\n")
-        f.write(f"Size of French: {ds_fr.data.nbytes//1e9} GB, ratio of {ds_fr.data.nbytes/ds.data.nbytes}\n")
-        f.write(f"Size of Code: {ds_code.data.nbytes//1e9} GB, ratio of {ds_code.data.nbytes/ds.data.nbytes}\n")
-        f.write(f"Size of English: {ds_en.data.nbytes//1e9} GB, ratio of {ds_en.data.nbytes/ds.data.nbytes}\n")
-
-
+        f.write(f"Samples are trained on dataset `manu/tok-corpus-shuffled`\n")
+        f.write(f"The dataset consists of french, english and code samples\n")
+        f.write("More info on the dataset can be found [here](https://huggingface.co/datasets/manu/tok-corpus-shuffled)\n")
         if args.sample_size:
             f.write("For speed purposes, the tokenizer was trained on a sample of the dataset. Only the first samples were selected.\n")
             f.write(f"Sample size: {args.sample_size}\n")
