@@ -105,6 +105,8 @@ if __name__ == "__main__":
         decoded = tok2.decode(encoded)
         print(decoded)
 
+
+    # Dump Pretty readme
     with open("data/tok_config.md", "w") as f:
         # intro
         f.write(f"# Custom Tokenizer\n")
@@ -151,8 +153,8 @@ if __name__ == "__main__":
         api.upload_file(
             repo_id=args.hub_id + hub_id_suffix,
             path_or_fileobj=f"data/tok_config.md",
-            path_in_repo="dataset_stats.md",
-            repo_type="dataset",
+            path_in_repo="tok_information.md",
+            repo_type="model",
         )
 
     os.remove("data/tok_config.md")
