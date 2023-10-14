@@ -105,9 +105,8 @@ if __name__ == "__main__":
         decoded = tok2.decode(encoded)
         print(decoded)
 
-
     # Dump Pretty readme
-    with open("data/tok_config.md", "w") as f:
+    with open("data/tok_config.md", "w+") as f:
         # intro
         f.write(f"# Custom Tokenizer\n")
         f.write(f"## Description\n")
@@ -149,12 +148,12 @@ if __name__ == "__main__":
         # tokenizer stats
         f.write(f"Tokenizer is trained with digit separation, whitespaces (for code), byte fallback")
 
-        api = HfApi()
-        api.upload_file(
-            repo_id=args.hub_id + hub_id_suffix,
-            path_or_fileobj=f"data/tok_config.md",
-            path_in_repo="tok_information.md",
-            repo_type="model",
-        )
+    api = HfApi()
+    api.upload_file(
+        repo_id=args.hub_id + hub_id_suffix,
+        path_or_fileobj=f"data/tok_config.md",
+        path_in_repo="README.md",
+        repo_type="model",
+    )
 
     os.remove("data/tok_config.md")
