@@ -109,44 +109,42 @@ if __name__ == "__main__":
     with open("data/tok_config.md", "w+") as f:
         # intro
         f.write(f"# Custom Tokenizer\n")
-        f.write(f"## Description\n")
-        f.write(f"This tokenizer was trained on a concatenation of the following datasets:\n")
 
         # examples
         f.write(f"## Examples\n")
-        f.write(f"Example sentence: `{example_sentence}`\n")
-        f.write(f"Encoded sentence: `{enc_sent}`\n")
-        f.write(f"Decoded sentence: `{decoded}`\n")
+        f.write(f"Example sentence: `{example_sentence}`\n\n")
+        f.write(f"Encoded sentence: `{enc_sent}`\n\n")
+        f.write(f"Decoded sentence: `{decoded}`\n\n")
 
         # usage
         f.write(f"## Usage\n")
-        f.write(f"```python\n")
-        f.write(f"from transformers import LlamaTokenizerFast\n")
-        f.write(f"tok = LlamaTokenizerFast.from_pretrained('<tok_name>')\n")
-        f.write(f"tok.tokenize('This is a test sentence')\n")
+        f.write(f"```python\n\n")
+        f.write(f"from transformers import LlamaTokenizerFast\n\n")
+        f.write(f"tok = LlamaTokenizerFast.from_pretrained('<tok_name>')\n\n")
+        f.write(f"tok.tokenize('This is a test sentence')\n\n")
 
         # dump dataset stats
         f.write(f"## Dataset Stats\n")
-        f.write(f"Samples are trained on dataset `manu/tok-corpus-shuffled`\n")
-        f.write(f"The dataset consists of french, english and code samples\n")
+        f.write(f"Samples are trained on dataset `manu/tok-corpus-shuffled`\n\n")
+        f.write(f"The dataset consists of french, english and code samples\n\n")
         f.write(
-            "More info on the dataset can be found [here](https://huggingface.co/datasets/manu/tok-corpus-shuffled)\n")
+            "More info on the dataset can be found [here](https://huggingface.co/datasets/manu/tok-corpus-shuffled)\n\n")
         if args.sample_size:
             f.write(
-                "For speed purposes, the tokenizer was trained on a sample of the dataset. Only the first samples were selected.\n")
-            f.write(f"Sample size: {args.sample_size}\n")
-            f.write(f"Size of Sampled: {ds.data.nbytes // 1e9} GB\n")
+                "For speed purposes, the tokenizer was trained on a sample of the dataset. Only the first samples were selected.\n\n")
+            f.write(f"Sample size: {args.sample_size}\n\n")
+            f.write(f"Size of Sampled: {ds.data.nbytes // 1e9} GB\n\n")
 
         # dump tokenizer configs
         f.write(f"## Tokenizer Configs\n")
-        f.write(f"Build from scratch: {build_from_scratch}\n")
+        f.write(f"Build from scratch: {build_from_scratch}\n\n")
         if not build_from_scratch:
-            f.write(f"Pretrained tokenizer: mistralai/Mistral-7B-v0.1\n")
+            f.write(f"Pretrained tokenizer: mistralai/Mistral-7B-v0.1\n\n")
         else:
-            f.write(f"Pretrained tokenizer: None\n")
+            f.write(f"Pretrained tokenizer: None\n\n")
 
         # tokenizer stats
-        f.write(f"Tokenizer is trained with digit separation, whitespaces (for code), byte fallback")
+        f.write(f"Tokenizer is trained with digit separation, whitespaces (for code), byte fallback...\n\n")
 
     api = HfApi()
     api.upload_file(
