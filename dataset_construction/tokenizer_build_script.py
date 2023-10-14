@@ -85,7 +85,8 @@ if __name__ == "__main__":
 
         # Test
         encoded = tok.encode(example_sentence)
-        print(tok.tokenize(example_sentence))
+        enc_sent = tok.tokenize(example_sentence)
+        print(enc_sent)
         decoded = tok.decode(encoded)
         print(decoded)
 
@@ -98,7 +99,8 @@ if __name__ == "__main__":
         tok2.push_to_hub(args.hub_id + "_refitted")
 
         encoded = tok2.encode(example_sentence)
-        print(tok2.tokenize(example_sentence))
+        enc_sent = tok2.tokenize(example_sentence)
+        print(enc_sent)
         decoded = tok2.decode(encoded)
         print(decoded)
 
@@ -107,6 +109,20 @@ if __name__ == "__main__":
         f.write(f"# Custom Tokenizer\n")
         f.write(f"## Description\n")
         f.write(f"This tokenizer was trained on a concatenation of the following datasets:\n")
+
+        # examples
+        f.write(f"## Examples\n")
+        f.write(f"Example sentence: {example_sentence}\n")
+        f.write(f"Encoded sentence: {enc_sent}\n")
+        f.write(f"Decoded sentence: {decoded}\n")
+
+        # usage
+        f.write(f"## Usage\n")
+        f.write(f"```python\n")
+        f.write(f"from transformers import LlamaTokenizerFast\n")
+        f.write(f"tok = LlamaTokenizerFast.from_pretrained('<tok_name>')\n")
+        f.write(f"tok.tokenize('This is a test sentence')\n")
+
         # dump dataset stats
         f.write(f"## Dataset Stats\n")
         f.write(f"Size of Concatenated: {ds.data.nbytes//1e9} GB\n")
@@ -125,9 +141,15 @@ if __name__ == "__main__":
         f.write(f"Build from scratch: {build_from_scratch}\n")
         if not build_from_scratch:
             f.write(f"Pretrained tokenizer: mistralai/Mistral-7B-v0.1\n")
+        else:
+            f.write(f"Pretrained tokenizer: None\n")
+
+
+        # tokenizer stats
         f.write(f"Tokenizer: {tok2.name_or_path}\n")
         f.write(f"Tokenizer vocab size: {tok2.vocab_size}\n")
         f.write(f"Tokenizer max length: {tok2.model_max_length}\n")
+        f.write(f"Tokenizer is trained with digit separation, whitespaces (for code), byte fallback")
 
         api = HfApi()
         api.upload_file(
