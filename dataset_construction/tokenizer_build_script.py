@@ -19,14 +19,14 @@ if __name__ == "__main__":
         ds = datasets.load_from_disk(args.local_save_path)
     else:
         # concatenate datasets loaded from disks
-        ds_fr = datasets.load_from_disk("data/tok_fr")["train"]     # .shuffle()
+        ds_fr = datasets.load_from_disk("data/tok_fr")["train"]  # .shuffle()
 
-        ds_code = datasets.load_from_disk("data/tok_code")["train"]     # .shuffle()
+        ds_code = datasets.load_from_disk("data/tok_code")["train"]  # .shuffle()
         # ds_code = ds_code.select(range(len(ds_code)//2)) # half it
 
-        ds_en = datasets.load_from_disk("data/english_30b")["train"]    # .shuffle()
-        print(len(ds_en), ds_en.data.nbytes//1e9)
-        ds_en = ds_en.select(range(len(ds_fr)//2))
+        ds_en = datasets.load_from_disk("data/english_30b")["train"]  # .shuffle()
+        print(len(ds_en), ds_en.data.nbytes // 1e9)
+        ds_en = ds_en.select(range(len(ds_fr) // 2))
         print(len(ds_en), ds_en.data.nbytes // 1e9)
 
         print("French")
@@ -40,12 +40,12 @@ if __name__ == "__main__":
 
         ds = datasets.concatenate_datasets([ds_code, ds_fr, ds_en])
         print("Shuffling")
-        ds = ds.shuffle(seed=42) # slow
+        ds = ds.shuffle(seed=42)  # slow
 
-        print(f"Size of Concatenated: {ds.data.nbytes//1e9} GB")
-        print(f"Size of French: {ds_fr.data.nbytes//1e9} GB, ratio of {ds_fr.data.nbytes/ds.data.nbytes}")
-        print(f"Size of Code: {ds_code.data.nbytes//1e9} GB, ratio of {ds_code.data.nbytes/ds.data.nbytes}")
-        print(f"Size of English: {ds_en.data.nbytes//1e9} GB, ratio of {ds_en.data.nbytes/ds.data.nbytes}")
+        print(f"Size of Concatenated: {ds.data.nbytes // 1e9} GB")
+        print(f"Size of French: {ds_fr.data.nbytes // 1e9} GB, ratio of {ds_fr.data.nbytes / ds.data.nbytes}")
+        print(f"Size of Code: {ds_code.data.nbytes // 1e9} GB, ratio of {ds_code.data.nbytes / ds.data.nbytes}")
+        print(f"Size of English: {ds_en.data.nbytes // 1e9} GB, ratio of {ds_en.data.nbytes / ds.data.nbytes}")
 
         ds.save_to_disk(args.local_save_path, max_shard_size="2GB", num_proc=os.cpu_count())
 
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     if args.sample_size:
         # ds = ds.shuffle(seed=42)
         ds = ds.select(range(args.sample_size))
-        print(f"Size of Sampled: {ds.data.nbytes//1e9} GB")
+        print(f"Size of Sampled: {ds.data.nbytes // 1e9} GB")
 
     example_sentence = "This is a test sentence. On va voir comment elle est gérée .... 123 + 56 = 2567. Let's go! Imagine I have code    4 spaces.\n and a      backslash!! Eléonore est un prénom français. __name__ isInstance"
 
@@ -127,11 +127,13 @@ if __name__ == "__main__":
         f.write(f"## Dataset Stats\n")
         f.write(f"Samples are trained on dataset `manu/tok-corpus-shuffled`\n")
         f.write(f"The dataset consists of french, english and code samples\n")
-        f.write("More info on the dataset can be found [here](https://huggingface.co/datasets/manu/tok-corpus-shuffled)\n")
+        f.write(
+            "More info on the dataset can be found [here](https://huggingface.co/datasets/manu/tok-corpus-shuffled)\n")
         if args.sample_size:
-            f.write("For speed purposes, the tokenizer was trained on a sample of the dataset. Only the first samples were selected.\n")
+            f.write(
+                "For speed purposes, the tokenizer was trained on a sample of the dataset. Only the first samples were selected.\n")
             f.write(f"Sample size: {args.sample_size}\n")
-            f.write(f"Size of Sampled: {ds.data.nbytes//1e9} GB\n")
+            f.write(f"Size of Sampled: {ds.data.nbytes // 1e9} GB\n")
 
         # dump tokenizer configs
         f.write(f"## Tokenizer Configs\n")
@@ -140,7 +142,6 @@ if __name__ == "__main__":
             f.write(f"Pretrained tokenizer: mistralai/Mistral-7B-v0.1\n")
         else:
             f.write(f"Pretrained tokenizer: None\n")
-
 
         # tokenizer stats
         f.write(f"Tokenizer: {tok2.name_or_path}\n")
