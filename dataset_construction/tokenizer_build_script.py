@@ -12,12 +12,18 @@ if __name__ == "__main__":
     parser.add_argument("--build_from_scratch", action="store_true", default=False)
     parser.add_argument("--sample_size", type=int, default=None)
     parser.add_argument("--upload_corpus_id", type=str, default=None)
+    parser.add_argument("--download_corpus_id", type=str, default=None)
     parser.add_argument("--local_save_path", type=str, default="data/tok_all")
     args = parser.parse_args()
 
     if os.path.exists(args.local_save_path):
+        print("Loading dataset from disk")
         ds = datasets.load_from_disk(args.local_save_path)
+    elif args.download_corpus_id:
+        print("Downloading dataset")
+        ds = datasets.load_dataset(args.download_corpus_id, split="train")
     else:
+        print("Creating dataset from disk")
         # concatenate datasets loaded from disks
         ds_fr = datasets.load_from_disk("data/tok_fr")["train"]  # .shuffle()
 
