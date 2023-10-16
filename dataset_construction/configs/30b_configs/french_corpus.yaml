@@ -150,4 +150,5 @@ data_mix:
         (): dataset_collection.french.oscar.OscarFilter
 
 
-tokenizer: "mistralai/Mistral-7B-v0.1"
+# tokenizer: "mistralai/Mistral-7B-v0.1"
+tokenizer: "manu/tok-fr-en-code"

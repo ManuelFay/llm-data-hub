@@ -21,4 +21,5 @@ data_mix:
       dataset_kwargs:
         data_dir: train/chunk1
 
-tokenizer: "mistralai/Mistral-7B-v0.1"
+# tokenizer: "mistralai/Mistral-7B-v0.1"
+tokenizer: "manu/tok-fr-en-code"

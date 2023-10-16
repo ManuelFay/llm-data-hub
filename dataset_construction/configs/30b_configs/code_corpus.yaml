@@ -66,4 +66,5 @@ data_mix:
     # we could add synthetic textbook datasets or code with explanations !
 
 
-tokenizer: "mistralai/Mistral-7B-v0.1"
+# tokenizer: "mistralai/Mistral-7B-v0.1"
+tokenizer: "manu/tok-fr-en-code"
