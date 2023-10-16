@@ -132,15 +132,15 @@ Note however that this code is not very optimized and is better to already have 
 ### Configs
 
 ```bash
-python dataset_construction/construct_dataset.py --config dataset_construction/configs/30b_configs/french_corpus.yaml  --tokenizer_name mistralai/Mistral-7B-v0.1 --estimate_from_k 10000 --hub_id manu/french_30b
+python dataset_construction/construct_dataset.py --config dataset_construction/configs/30b_configs/french_corpus.yaml --estimate_from_k 10000 --hub_id manu/french_30b
 ```
 
 ```bash
-python dataset_construction/construct_dataset.py --config dataset_construction/configs/30b_configs/code_corpus.yaml  --tokenizer_name mistralai/Mistral-7B-v0.1 --estimate_from_k 10000 --hub_id manu/code_20b
+python dataset_construction/construct_dataset.py --config dataset_construction/configs/30b_configs/code_corpus.yaml   --estimate_from_k 10000 --hub_id manu/code_20b
 ```
 
 ```bash
-python dataset_construction/construct_dataset.py --config dataset_construction/configs/30b_configs/english_corpus.yaml  --tokenizer_name mistralai/Mistral-7B-v0.1 --estimate_from_k 10000 --hub_id manu/english_20b
+python dataset_construction/construct_dataset.py --config dataset_construction/configs/30b_configs/english_corpus.yaml  --estimate_from_k 10000 --hub_id manu/english_20b
 ```
 
 ### Next steps

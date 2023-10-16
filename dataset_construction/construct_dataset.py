@@ -225,14 +225,14 @@ if __name__ == "__main__":
     parser.add_argument("--config", type=str, default="configs/pretraining_testing.yaml")
     parser.add_argument("--hub_id", type=str, default=None)
     parser.add_argument("--estimate_from_k", type=int, default=1000)
-    parser.add_argument("--tokenizer_name", type=str, default=None)
     args = parser.parse_args()
 
-    tokenizer = AutoTokenizer.from_pretrained(args.tokenizer_name) if args.tokenizer_name else None
-    assert (tokenizer is None) or isinstance(tokenizer, PreTrainedTokenizerFast)
     # Init
     api = HfApi()
     config = configue.load(args.config)
+    tokenizer = AutoTokenizer.from_pretrained(config["tokenizer"]) if "tokenizer" in config.keys() else None
+    assert (tokenizer is None) or isinstance(tokenizer, PreTrainedTokenizerFast)
+
     ds_constructor = DatasetConstructor(config["data_mix"], estimate_from_k=args.estimate_from_k)
 
     if ds_constructor.mix.load_from_local_save_dir:
