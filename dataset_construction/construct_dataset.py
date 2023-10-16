@@ -237,6 +237,7 @@ if __name__ == "__main__":
 
     if ds_constructor.mix.load_from_local_save_dir:
         final_ds = datasets.load_from_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}")
+        separate_ds = None
         if os.path.exists(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}_separate"):
             separate_ds = datasets.load_from_disk(
                 f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}_separate")
