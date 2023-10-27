@@ -6,7 +6,7 @@ python mock_training_run/run_clm.py \
     --per_device_train_batch_size 1 \
     --per_device_eval_batch_size 1 \
     --do_train \
-    --do_eval \
+    --do_eval false \
     --max_steps 10000 \
     --block_size 256 \
     --warmup_steps 1000 \
@@ -25,7 +25,7 @@ python mock_training_run/run_clm.py \
         --output=data/log.out --wrap="deepspeed  mock_training_run/run_clm.py \
                                                  --config_name mock_training_run/llama_configs/config.json \
                                                  --tokenizer_name manu/tok-fr-en-code \
-                                                 --dataset_name  manu/tok-corpus-shuffled --streaming \
+                                                 --dataset_name  oscar-corpus/OSCAR-2301 --dataset_config_name fr --streaming \
                                                  --gradient_accumulation_steps 64 \
                                                  --per_device_train_batch_size 2 \
                                                  --per_device_eval_batch_size 2 \
@@ -34,7 +34,7 @@ python mock_training_run/run_clm.py \
                                                  --warmup_steps 1000 \
                                                  --block_size 2048 \
                                                  --do_train \
-                                                 --do_eval \
+                                                 --do_eval false \
                                                  --bf16 \
                                                  --output_dir ./data/test-clm \
                                                  --report_to tensorboard \
@@ -42,4 +42,5 @@ python mock_training_run/run_clm.py \
                                                  --save_total_limit 3 \
                                                  --push_to_hub \
                                                  --overwrite_output_dir \
+                                                 --torch_compile \
                                                  --push_to_hub_model_id test-clm"
