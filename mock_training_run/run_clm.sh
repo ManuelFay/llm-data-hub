@@ -1,37 +1,44 @@
 python mock_training_run/run_clm.py \
-    --config_name mock_training_run/llama_configs/config.json \
+    --config_name mock_training_run/llama_configs/config_small.json \
     --tokenizer_name "manu/tok-fr-en-code" \
-    --dataset_name open-phi/textbooks \
-    --gradient_accumulation_steps 2 \
-    --per_device_train_batch_size 2 \
-    --per_device_eval_batch_size 2 \
+    --dataset_name manu/illuin_layout_dataset_text_only \
+    --gradient_accumulation_steps 8 \
+    --per_device_train_batch_size 1 \
+    --per_device_eval_batch_size 1 \
     --do_train \
     --do_eval \
     --max_steps 10000 \
+    --block_size 256 \
     --warmup_steps 1000 \
     --output_dir ./data/test-clm \
     --report_to tensorboard \
     --logging_steps 100 \
     --save_total_limit 3 \
     --push_to_hub \
-    --push_to_hub_model_id "test-clm"
+    --push_to_hub_model_id "test-clm-small" \
+    --overwrite_output_dir \
+    --fp16 \
     # --streaming \
 
 
-#    --dataset_name wikipedia     --dataset_config_name 20220301.fr \
-# sbatch --job-name=mdeb --nodes=1 --time=24:00:00 -p gpua100 --cpus-per-task 32 --gres=gpu:4 --error=data/log.err \
-#        --output=data/log.out --wrap="deepspeed --num_gpus=4  mock_training_run/run_clm.py \
-#                                                 --config_name mock_training_run/llama_configs/config.json \
-#                                                 --tokenizer_name manu/tok-fr-en-code \
-#                                                 --dataset_name wikipedia \                                                                                                                                                                             --dataset_config_name 20220301.fr \
-#                                                 --gradient_accumulation_steps 8 \
-#                                                 --per_device_train_batch_size 16 \
-#                                                 --per_device_eval_batch_size 16 \
-#                                                 --do_train \
-#                                                 --do_eval \
-#                                                 --output_dir ./data/test-clm \
-#                                                 --report_to tensorboard \
-#                                                 --logging_steps 100 \
-#                                                 --save_total_limit 3 \
-#                                                 --push_to_hub \
-#                                                 --push_to_hub_model_id manu/test-clm"
+ sbatch --job-name=mdeb --nodes=1 --time=24:00:00 -p gpua100 --cpus-per-task 32 --gres=gpu:4 --error=data/log.err \
+        --output=data/log.out --wrap="deepspeed  mock_training_run/run_clm.py \
+                                                 --config_name mock_training_run/llama_configs/config.json \
+                                                 --tokenizer_name manu/tok-fr-en-code \
+                                                 --dataset_name  manu/tok-corpus-shuffled \
+                                                 --gradient_accumulation_steps 64 \
+                                                 --per_device_train_batch_size 2 \
+                                                 --per_device_eval_batch_size 2 \
+                                                 --max_steps 100000 \
+                                                 --warmup_steps 1000 \
+                                                 --block_size 2048 \
+                                                 --do_train \
+                                                 --do_eval \
+                                                 --bf16 \
+                                                 --output_dir ./data/test-clm \
+                                                 --report_to tensorboard \
+                                                 --logging_steps 100 \
+                                                 --save_total_limit 3 \
+                                                 --push_to_hub \
+                                                 --overwrite_output_dir \
+                                                 --push_to_hub_model_id test-clm"
