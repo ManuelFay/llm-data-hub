@@ -326,7 +326,7 @@ def main():
             streaming=data_args.streaming,
         )
         if "validation" not in raw_datasets.keys():
-            raw_datasets["validation"] = datasets.Dataset.from_dict({"text": ["dummy"]}) if not data_args.streaming else (
+            raw_datasets["validation"] = datasets.Dataset.from_dict({"text": ["dummy"]}) if data_args.streaming else (
                 load_dataset(
                     data_args.dataset_name,
                     data_args.dataset_config_name,
