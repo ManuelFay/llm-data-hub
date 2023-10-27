@@ -25,10 +25,11 @@ python mock_training_run/run_clm.py \
         --output=data/log.out --wrap="deepspeed  mock_training_run/run_clm.py \
                                                  --config_name mock_training_run/llama_configs/config.json \
                                                  --tokenizer_name manu/tok-fr-en-code \
-                                                 --dataset_name  manu/tok-corpus-shuffled \
+                                                 --dataset_name  manu/tok-corpus-shuffled --streaming \
                                                  --gradient_accumulation_steps 64 \
                                                  --per_device_train_batch_size 2 \
                                                  --per_device_eval_batch_size 2 \
+                                                 --preprocessing_num_workers 32 \
                                                  --max_steps 100000 \
                                                  --warmup_steps 1000 \
                                                  --block_size 2048 \

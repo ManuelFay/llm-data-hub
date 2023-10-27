@@ -326,17 +326,19 @@ def main():
             streaming=data_args.streaming,
         )
         if "validation" not in raw_datasets.keys():
-            raw_datasets["validation"] = load_dataset(
-                data_args.dataset_name,
-                data_args.dataset_config_name,
-                split=f"train[:{data_args.validation_split_percentage}%]",
-                cache_dir=model_args.cache_dir,
-                streaming=data_args.streaming,
+            raw_datasets["validation"] = datasets.Dataset.from_dict({"text": ["dummy"]}) if not data_args.streaming else (
+                load_dataset(
+                    data_args.dataset_name,
+                    data_args.dataset_config_name,
+                    split=f"train[:{data_args.validation_split_percentage}%]",
+                    cache_dir=model_args.cache_dir,
+                    streaming=data_args.streaming,
+                )
             )
             raw_datasets["train"] = load_dataset(
                 data_args.dataset_name,
                 data_args.dataset_config_name,
-                split=f"train[{data_args.validation_split_percentage}%:]",
+                split=f"train[{data_args.validation_split_percentage}%:]" if not data_args.streaming else "train",
                 cache_dir=model_args.cache_dir,
                 streaming=data_args.streaming,
             )
