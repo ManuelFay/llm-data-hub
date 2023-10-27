@@ -1,5 +1,5 @@
 python mock_training_run/run_clm.py \
-    --config_name llama_configs/config.json \
+    --config_name mock_training_run/llama_configs/config.json \
     --tokenizer_name "manu/tok-fr-en-code" \
     --dataset_name manu/french-30b \
     --gradient_accumulation_steps 8 \
