@@ -124,6 +124,10 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: Nicolas-BZRD/CONSTIT_opendata
       build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: manu/swiss_legislation
+      build_test_set_from_train: true
+
 
       # needs a preprocessor to have an id_column
 # PDF dataset
