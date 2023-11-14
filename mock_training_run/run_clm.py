@@ -323,24 +323,23 @@ def main():
             data_args.dataset_name,
             data_args.dataset_config_name,
             cache_dir=model_args.cache_dir,
-            token=model_args.token,
             streaming=data_args.streaming,
         )
         if "validation" not in raw_datasets.keys():
-            raw_datasets["validation"] = load_dataset(
-                data_args.dataset_name,
-                data_args.dataset_config_name,
-                split=f"train[:{data_args.validation_split_percentage}%]",
-                cache_dir=model_args.cache_dir,
-                token=model_args.token,
-                streaming=data_args.streaming,
-            )
+            if not data_args.streaming:
+                raw_datasets["validation"] = load_dataset(
+                        data_args.dataset_name,
+                        data_args.dataset_config_name,
+                        split=f"train[:{data_args.validation_split_percentage}%]",
+                        cache_dir=model_args.cache_dir,
+                        streaming=data_args.streaming,
+                    )
+
             raw_datasets["train"] = load_dataset(
                 data_args.dataset_name,
                 data_args.dataset_config_name,
-                split=f"train[{data_args.validation_split_percentage}%:]",
+                split=f"train[{data_args.validation_split_percentage}%:]" if not data_args.streaming else "train",
                 cache_dir=model_args.cache_dir,
-                token=model_args.token,
                 streaming=data_args.streaming,
             )
     else:
@@ -444,6 +443,7 @@ def main():
             trust_remote_code=model_args.trust_remote_code,
             torch_dtype=torch_dtype,
             low_cpu_mem_usage=model_args.low_cpu_mem_usage,
+            use_flash_attention_2=True
         )
     else:
         model = AutoModelForCausalLM.from_config(config, trust_remote_code=model_args.trust_remote_code)

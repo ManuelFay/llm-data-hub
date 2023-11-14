@@ -1,0 +1,158 @@
+data_mix:
+  (): dataset_construction.DataMix
+  name: "french_5p"
+  shuffle: false
+  compute_dataset_stats: true
+  local_save_dir: data/
+  load_from_local_save_dir: false
+  keep_separated_datasets_in_dataset_dict: true
+  deduplicate_test_set: false
+  ngram_path_for_extra_deduplication: null
+  datasets:
+# Translation datasets
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: manu/opus100-en-fr
+#      test_split: "test"
+#      build_test_set_from_train: false
+#      num_train_examples:  1000
+#      num_test_examples: 1000
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: manu/europarl-en-fr
+#      build_test_set_from_train: true
+#      num_test_examples: 1000
+    - (): dataset_construction.DatasetConfig
+      dataset_path: manu/wmt-en-fr
+      test_split: "test"
+    - (): dataset_construction.DatasetConfig
+      dataset_path: Nicolas-BZRD/English_French_Webpages_Scraped_Translated # Slow cause bad format
+      train_split: "train[:5%]"
+      build_test_set_from_train: true
+      filtering_function:
+        (): dataset_collection.french.web_scraped_translated.WebPageFilter
+      preprocessing_function:
+        (): dataset_collection.french.web_scraped_translated.WebPageMapper
+    # global voices can be added but maybe in wmt test set
+
+# Speech datasets
+    - (): dataset_construction.DatasetConfig
+      dataset_path: manu/french_librispeech_text_only
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: manu/french_podcasts
+      build_test_set_from_train: true
+      num_test_examples: 100
+      filtering_function:
+        (): dataset_collection.french.french_transcribed_podcast.PodcastFilter
+      preprocessing_function:
+        (): dataset_collection.french.french_transcribed_podcast.PodcastMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: manu/french_open_subtitles
+      num_test_examples: 100
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: Nicolas-BZRD/Original_Songs_Lyrics_with_French_Translation
+      build_test_set_from_train: true
+      filtering_function:
+        (): dataset_collection.french.french_translated_lyrics.LyricsFilter
+      preprocessing_function:
+        (): dataset_collection.french.french_translated_lyrics.LyricsMapper
+
+# Books
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: manu/project_gutenberg
+#      train_split: fr
+#      build_test_set_from_train: true
+#      num_train_examples:  1000
+#      num_test_examples: 100
+      # here we should preprocess
+    - (): dataset_construction.DatasetConfig
+      dataset_path: manu/ProjectGutenberg_fr
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: manu/bnf_gallica
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: manu/theses_fr_2013_2023
+      build_test_set_from_train: true
+      filtering_function:
+        (): dataset_collection.french.theses.ThesisFilter
+      preprocessing_function:
+        (): dataset_collection.french.theses.ThesisMapper
+# Dila data
+    - (): dataset_construction.DatasetConfig
+      dataset_path: Nicolas-BZRD/LEGI_opendata # manu/dila_legifrance
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: Nicolas-BZRD/BALO_opendata
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: Nicolas-BZRD/JADE_opendata
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: Nicolas-BZRD/DOLE_opendata
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: Nicolas-BZRD/SARDE_opendata
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: Nicolas-BZRD/QR_opendata
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: Nicolas-BZRD/JORF_opendata
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: Nicolas-BZRD/INCA_opendata
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: Nicolas-BZRD/ACCO_opendata
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: Nicolas-BZRD/KALI_opendata
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: Nicolas-BZRD/DEBATS_opendata
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: Nicolas-BZRD/CNIL_opendata
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: Nicolas-BZRD/CAPP_opendata
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: Nicolas-BZRD/CASS_opendata
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: Nicolas-BZRD/CONSTIT_opendata
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: manu/swiss_legislation
+      build_test_set_from_train: true
+
+
+      # needs a preprocessor to have an id_column
+# PDF dataset
+    - (): dataset_construction.DatasetConfig
+      dataset_path: manu/illuin_layout_dataset_text_only
+      build_test_set_from_train: true
+ # Wiki
+    - (): dataset_construction.DatasetConfig
+      dataset_path: manu/wikisource_fr
+      build_test_set_from_train: true
+      train_split: "train[:5%]"
+    - (): dataset_construction.DatasetConfig
+      dataset_path: wikipedia
+      dataset_name: "20220301.fr"
+      train_split: "train[:5%]"
+      build_test_set_from_train: true
+ # Internet dumps
+    - (): dataset_construction.DatasetConfig
+      dataset_path: 'oscar-corpus/OSCAR-2301'
+      dataset_name: fr
+      train_split: "train[:5%]"
+      build_test_set_from_train: true
+      num_test_examples: 10000
+      filtering_function:
+        (): dataset_collection.french.oscar.OscarFilter
+
+
+tokenizer: "mistralai/Mistral-7B-v0.1"

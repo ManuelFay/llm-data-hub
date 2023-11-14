@@ -1,0 +1,108 @@
+data_mix:
+  (): dataset_construction.DataMix
+  name: "tok_code"
+  shuffle: false
+  compute_dataset_stats: true
+  local_save_dir: data/
+  load_from_local_save_dir: false
+  keep_separated_datasets_in_dataset_dict: true
+  deduplicate_test_set: false
+  ngram_path_for_extra_deduplication: null
+  max_shard_size: "2GB"
+  datasets:
+  # Code
+    - (): dataset_construction.DatasetConfig
+      dataset_path: 'bigcode/starcoderdata'
+      train_split: "train[:5%]"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: python
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: 'bigcode/starcoderdata'
+      train_split: "train[:5%]"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: java
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: 'bigcode/starcoderdata'
+      train_split: "train[:5%]"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: javascript
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: 'bigcode/starcoderdata'
+      train_split: "train[:5%]"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: cpp
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: 'bigcode/starcoderdata'
+      train_split: "train[:5%]"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: dockerfile
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: 'bigcode/starcoderdata'
+      train_split: "train[:5%]"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: tex
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: 'bigcode/starcoderdata'
+      train_split: "train[:5%]"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: sql
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: 'bigcode/starcoderdata'
+      train_split: "train[:5%]"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: markdown
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: 'bigcode/starcoderdata'
+      train_split: "train[:5%]"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: jupyter-scripts-dedup-filtered
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: 'bigcode/starcoderdata'
+      train_split: "train[:5%]"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: jupyter-structured-clean-dedup
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: 'bigcode/starcoderdata'
+      train_split: "train[:5%]"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: json
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: 'teven/code_contests'
+      train_split: "train"
+      # build_test_set_from_train: true
+      build_test_set_from_train: false
+      test_split: "valid"
+      # needs to be debugged
+      filtering_function:
+        (): dataset_collection.code.deepmind_code_contest.CodeContestFilter
+      preprocessing_function:
+        (): dataset_collection.code.deepmind_code_contest.CodeContestMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: 'vikp/pypi_clean'
+      train_split: "train[:20%]"
+      build_test_set_from_train: true
+      text_column: code
+      id_column: path
+

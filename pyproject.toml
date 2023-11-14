@@ -9,7 +9,7 @@ maintainers = [
     { name = 'Manuel Faysse', email = 'manuel.faysse@illuin.tech' },
 ]
 readme = 'README.md'
-requires-python = '>=3.10'
+requires-python = '>=3.9'
 classifiers = [
     'Intended Audience :: Science/Research',
     'Intended Audience :: Developers',
@@ -28,7 +28,9 @@ dependencies = [
     'nltk',
     'rich',
     'transformers[sentencepiece]',
-    'gcsfs'
+    'gcsfs',
+    'tabulate',
+    'zstandard'
 ]
 
 [project.optional-dependencies]
@@ -48,8 +50,14 @@ audio = [
     "openai-whisper",
 ]
 
+construction = [
+    "apache-beam",
+    "zstandard",
+    "configue"
+]
+
 perplexity = [
-    "git+https://github.com/kpu/kenlm/archive/master.zip",
+    # "git+https://github.com/kpu/kenlm/archive/master.zip",
     "sentencepiece"
 ]
 
@@ -68,7 +76,11 @@ zip-safe  = false
 platforms = ['any']
 
 [tool.setuptools.packages.find]
-include = ['dataset_preprocessing', 'dataset_preprocessing.*', 'utils', 'utils.*', 'evaluation', 'evaluation.*']
+include = ['dataset_collection', 'dataset_collection.*',
+    'dataset_preprocessing', 'dataset_preprocessing.*',
+    'dataset_construction', 'dataset_construction.*',
+    'utils', 'utils.*',
+    'evaluation', 'evaluation.*']
 
 [tool.mypy]
 check_untyped_defs    = true
