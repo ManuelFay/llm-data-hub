@@ -3,7 +3,7 @@ data_mix:
   name: "code_30b"
   shuffle: false
   local_save_dir: data
-  load_from_local_save_dir: true
+  load_from_local_save_dir: false
   compute_dataset_stats: true
   keep_separated_datasets_in_dataset_dict: true
   deduplicate_test_set: false
