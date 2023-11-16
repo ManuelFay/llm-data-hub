@@ -3,7 +3,7 @@ data_mix:
   name: "english_30b"
   shuffle: false
   load_from_local_save_dir: true
-  local_save_dir: data/
+  local_save_dir: data
   compute_dataset_stats: true
   keep_separated_datasets_in_dataset_dict: false
   deduplicate_test_set: false

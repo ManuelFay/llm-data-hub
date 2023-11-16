@@ -151,3 +151,13 @@ python dataset_construction/construct_dataset.py --config dataset_construction/c
 - [x] Debugging cache management / saving intermediate steps
 - [ ] Most important next step is the test set deduplication (looking into it).
 - [ ] Manual dataset packing if sequences are not padded together.
+
+
+### SLURM commands
+
+First verify the download paths of the HF datasets ! Then run:
+
+```bash
+sbatch --job-name=fr_proc -p prepost -A hxz@cpu  --ntasks-per-node=1 --nodes=1 --time=20:00:00  --output=logs/fr_proc.out     --error=logs/fr_proc.err  --wrap="python dataset_construction/construct_dataset.py --config dataset_construction/configs/30b_configs/french_corpus.yaml --estimate_from_k 10000"
+sbatch --job-name=code_proc -p prepost -A hxz@cpu  --ntasks-per-node=1 --nodes=1 --time=20:00:00  --output=logs/code_proc.out     --error=logs/code_proc.err  --wrap="python dataset_construction/construct_dataset.py --config dataset_construction/configs/30b_configs/code_corpus.yaml   --estimate_from_k 10000"
+```
