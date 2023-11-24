@@ -50,7 +50,7 @@ print("A few stats on the dataset")
 print(f"Number of documents: {len(df)}")
 
 # filter columns where title is empty, or author is empty
-df = df[(df["title"] != "") & (df["author"] != "")]
+# df = df[(df["title"] != "") & (df["author"] != "")]
 print(f"Number of documents after filtering empty titles and authors: {len(df)}")
 
 print(f"Number of unique authors: {len(df['author'].unique())}")
@@ -60,10 +60,3 @@ print(f"Mean nqa: {df['mean_nqa'].mean()}")
 
 
 df.to_csv("data/gallica_clean_export.csv", index=False)
-
-# ark whitelist - all documents with NQA > 90
-ark_whitelist = set(df[df["mean_nqa"] > 90]["ark"].values)
-print(f"Number of documents with NQA > 90: {len(ark_whitelist)}")
-# export it as txt file with one ark per line
-with open("data/ark_whitelist.txt", "w") as f:
-    f.write("\n".join(ark_whitelist))

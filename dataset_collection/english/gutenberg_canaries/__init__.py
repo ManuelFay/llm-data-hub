@@ -1,1 +1,1 @@
-from .mapper_and_filter import SlimPajamaFilter, SlimPajamaMapper
+from .mapper_and_filter import GutenbergMapper, GutenbergFilter

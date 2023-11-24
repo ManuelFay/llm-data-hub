@@ -13,35 +13,35 @@ data_mix:
 # Code
     - (): dataset_construction.DatasetConfig
       dataset_path: 'bigcode/starcoderdata'
-      train_split: "train[:20%]"
+      train_split: "train"
       text_column: "content"
       dataset_kwargs:
         data_dir: python
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
       dataset_path: 'bigcode/starcoderdata'
-      train_split: "train[:20%]"
+      train_split: "train"
       text_column: "content"
       dataset_kwargs:
         data_dir: markdown
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
       dataset_path: 'bigcode/starcoderdata'
-      train_split: "train[:20%]"
+      train_split: "train"
       text_column: "content"
       dataset_kwargs:
         data_dir: jupyter-scripts-dedup-filtered
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
       dataset_path: 'bigcode/starcoderdata'
-      train_split: "train[:20%]"
+      train_split: "train"
       text_column: "content"
       dataset_kwargs:
         data_dir: jupyter-structured-clean-dedup
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
       dataset_path: 'bigcode/starcoderdata'
-      train_split: "train[:15%]"
+      train_split: "train"
       text_column: "content"
       dataset_kwargs:
         data_dir: json
