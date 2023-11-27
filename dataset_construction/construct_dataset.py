@@ -16,6 +16,7 @@ from huggingface_hub import HfApi
 
 from dataset_construction.dataset_config import DataMix, DatasetConfig
 from dataset_construction.utils import test_set_conformity
+from dataset_preprocessing.deduplication import deduplicate_dataset
 
 
 class DatasetConstructor:
@@ -103,6 +104,18 @@ class DatasetConstructor:
             dataset_config.filtering_function,
             dataset_config.preprocessing_function,
         )
+
+        if dataset_config.needs_internal_deduplication:
+            print(f"Performing internal deduplication: {dataset_config.dataset_path}")
+
+            # print out stats before deduplication
+            print(f"Before deduplication: {len(dataset_train)} train examples, {len(dataset_test)} test examples")
+            dataset_test, uniques = deduplicate_dataset(dataset_test, num_workers=os.cpu_count())
+            dataset_train, _ = deduplicate_dataset(dataset_train, num_workers=os.cpu_count(), blacklist=uniques)
+
+            print(f"After deduplication: {len(dataset_train)} train examples, {len(dataset_test)} test examples")
+            del uniques
+
         dataset = DatasetDict({"train": dataset_train, "test": dataset_test})
 
         # Remove columns that are not needed
@@ -222,7 +235,7 @@ class DatasetConstructor:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", type=str, default="configs/pretraining_testing.yaml")
+    parser.add_argument("--config", type=str, default="configs/mock_testing.yaml")
     parser.add_argument("--hub_id", type=str, default=None)
     parser.add_argument("--estimate_from_k", type=int, default=1000)
     args = parser.parse_args()

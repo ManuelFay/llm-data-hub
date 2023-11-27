@@ -53,6 +53,7 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: Nicolas-BZRD/Original_Songs_Lyrics_with_French_Translation
       build_test_set_from_train: true
+      needs_internal_deduplication: true
       filtering_function:
         (): dataset_collection.french.french_translated_lyrics.LyricsFilter
       preprocessing_function:
@@ -76,57 +77,74 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: Nicolas-BZRD/LEGI_opendata # manu/dila_legifrance
       build_test_set_from_train: true
+      needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
       dataset_path: Nicolas-BZRD/BALO_opendata
       build_test_set_from_train: true
+      needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
       dataset_path: Nicolas-BZRD/JADE_opendata
       build_test_set_from_train: true
+      needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
       dataset_path: Nicolas-BZRD/DOLE_opendata
       build_test_set_from_train: true
+      needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
       dataset_path: Nicolas-BZRD/SARDE_opendata
       build_test_set_from_train: true
+      needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
       dataset_path: Nicolas-BZRD/QR_opendata
       build_test_set_from_train: true
+      needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
       dataset_path: Nicolas-BZRD/JORF_opendata
       build_test_set_from_train: true
+      needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
       dataset_path: Nicolas-BZRD/INCA_opendata
       build_test_set_from_train: true
+      needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
       dataset_path: Nicolas-BZRD/ACCO_opendata
       build_test_set_from_train: true
+      needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
       dataset_path: Nicolas-BZRD/KALI_opendata
       build_test_set_from_train: true
+      needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
       dataset_path: Nicolas-BZRD/DEBATS_opendata
       build_test_set_from_train: true
+      needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
       dataset_path: Nicolas-BZRD/CNIL_opendata
       build_test_set_from_train: true
+      needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
       dataset_path: Nicolas-BZRD/CAPP_opendata
       build_test_set_from_train: true
+      needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
       dataset_path: Nicolas-BZRD/CASS_opendata
       build_test_set_from_train: true
+      needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
       dataset_path: Nicolas-BZRD/CONSTIT_opendata
       build_test_set_from_train: true
+      needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
       dataset_path: manu/swiss_legislation
       build_test_set_from_train: true
+      needs_internal_deduplication: true
 
       # needs a preprocessor to have an id_column
 # PDF dataset
     - (): dataset_construction.DatasetConfig
       dataset_path: manu/illuin_layout_dataset_text_only
       build_test_set_from_train: true
+      needs_internal_deduplication: true
  # Wiki
     - (): dataset_construction.DatasetConfig
       dataset_path: manu/wikisource_fr
