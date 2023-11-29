@@ -10,6 +10,7 @@ import configue
 import datasets
 import pandas as pd
 import tqdm
+import hashlib
 from transformers import PreTrainedTokenizerFast, AutoTokenizer
 from datasets import Dataset, DatasetDict, concatenate_datasets, load_dataset
 from huggingface_hub import HfApi
@@ -166,8 +167,27 @@ class DatasetConstructor:
         dataset_list = []
         for dataset_config in tqdm.tqdm(self.mix.datasets, desc="Loading datasets"):
             print(f"Loading and filtering dataset {dataset_config.dataset_path}")
-            # TODO: would be nice to cache the results of this function for speed (with git commit)
-            ds: DatasetDict = self.build_single_dataset_dict(dataset_config)
+            mapper_fn = dataset_config.preprocessing_function if hasattr(dataset_config, "preprocessing_function") else None
+            filter_fn = dataset_config.filtering_function if hasattr(dataset_config, "filtering_function") else None
+
+            # hash the bytes of the function to check if it has changed. Note: not exact because only intermediate source code is checked so changed magin numbers are not affected
+            mapper_fn_hash = dataset_config.preprocessing_function.mapper_fn.__code__.co_code if mapper_fn else None
+            filter_fn_hash = dataset_config.filtering_function.filter_fn.__code__.co_code if filter_fn else None
+            # exclude preprocessing_function and mapping_function from the hash computation
+            dataset_config_hash = hashlib.md5(str({k: v for k,v in dataset_config.__dict__.items() if "object at" not in str(v)}).encode("utf-8")).hexdigest()
+            if mapper_fn_hash:
+                dataset_config_hash += hashlib.md5(str(mapper_fn_hash).encode("utf-8")).hexdigest()
+            if filter_fn_hash:
+                dataset_config_hash += hashlib.md5(str(filter_fn_hash).encode("utf-8")).hexdigest()
+
+            if os.path.exists(os.path.join(self.mix.local_save_dir, "dataset_cache", dataset_config_hash)):
+                print(f"Loading dataset {dataset_config.dataset_path} from cache")
+                ds = datasets.load_from_disk(os.path.join(self.mix.local_save_dir, "dataset_cache", dataset_config_hash))
+            else:
+                ds: DatasetDict = self.build_single_dataset_dict(dataset_config)
+                if self.mix.local_save_dir:
+                    os.makedirs(os.path.join(self.mix.local_save_dir, "dataset_cache"), exist_ok=True)
+                    ds.save_to_disk(os.path.join(self.mix.local_save_dir, "dataset_cache", dataset_config_hash))
             dataset_list.append(ds)
 
         final_dataset = DatasetDict(
