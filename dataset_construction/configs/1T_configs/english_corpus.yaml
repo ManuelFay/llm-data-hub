@@ -22,8 +22,6 @@ data_mix:
       train_split: "train"
       build_test_set_from_train: true
       num_test_examples: 0
-      preprocessing_function:
-        (): dataset_collection.english.gutenberg_canaries.GutenbergMapper
 
 # tokenizer: "mistralai/Mistral-7B-v0.1"
 tokenizer: "/gpfsstore/rech/qts/ucg53vj/tok-fr-en-code"
