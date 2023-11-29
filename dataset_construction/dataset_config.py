@@ -24,6 +24,7 @@ class DatasetConfig:
     text_column: str = "text"
     id_column: str = "id"
     needs_internal_deduplication: bool = False
+    load_from_disk: bool = False
     # load_in_streaming_mode: Optional[bool] = False # Not implemented yet
 
     def __post_init__(self):

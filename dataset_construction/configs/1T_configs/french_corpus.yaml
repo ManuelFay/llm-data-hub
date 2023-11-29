@@ -3,12 +3,12 @@ data_mix:
   name: "french_30b"
   shuffle: false
   compute_dataset_stats: true
-  local_save_dir: data
+  local_save_dir: /gpfsscratch/rech/qts/ucg53vj/croissant_data
   load_from_local_save_dir: false
   keep_separated_datasets_in_dataset_dict: true
   deduplicate_test_set: false
   ngram_path_for_extra_deduplication: null
-  max_shard_size: "2GB"
+  max_shard_size: "5GB"
   datasets:
 # Translation datasets
 #    - (): dataset_construction.DatasetConfig
@@ -22,10 +22,10 @@ data_mix:
 #      build_test_set_from_train: true
 #      num_test_examples: 1000
     - (): dataset_construction.DatasetConfig
-      dataset_path: manu/wmt-en-fr
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/wmt-en-fr
       test_split: "test"
     - (): dataset_construction.DatasetConfig
-      dataset_path: Nicolas-BZRD/English_French_Webpages_Scraped_Translated # Slow cause bad format
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/English_French_Webpages_Scraped_Translated # Slow cause bad format
       train_split: "train"
       build_test_set_from_train: true
       filtering_function:
@@ -36,10 +36,10 @@ data_mix:
 
 # Speech datasets
     - (): dataset_construction.DatasetConfig
-      dataset_path: manu/french_librispeech_text_only
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/french_librispeech_text_only
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: manu/french_podcasts # continue scrapping
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/french_podcasts # continue scrapping
       build_test_set_from_train: true
       num_test_examples: 100
       filtering_function:
@@ -47,15 +47,15 @@ data_mix:
       preprocessing_function:
         (): dataset_collection.french.french_transcribed_podcast.PodcastMapper
     - (): dataset_construction.DatasetConfig
-      dataset_path: manu/french_open_subtitles
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/french_open_subtitles
       num_test_examples: 100
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: manu/french_poetry
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/french_poetry
       num_test_examples: 100
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: Nicolas-BZRD/Original_Songs_Lyrics_with_French_Translation
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/Original_Songs_Lyrics_with_French_Translation
       build_test_set_from_train: true
       needs_internal_deduplication: true
       filtering_function:
@@ -64,14 +64,14 @@ data_mix:
         (): dataset_collection.french.french_translated_lyrics.LyricsMapper
 
     - (): dataset_construction.DatasetConfig
-      dataset_path: manu/ProjectGutenberg_fr # needs to be filtered - beginning and end of books
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/ProjectGutenberg_fr # needs to be filtered - beginning and end of books
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig # needs to be filtered and expanded - perplexity filtering
-      dataset_path: manu/bnf_clean
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/bnf_clean
       train_split: "2023"
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: manu/theses_fr_2013_2023
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/theses_fr_2013_2023
       build_test_set_from_train: true
       filtering_function:
         (): dataset_collection.french.theses.ThesisFilter
@@ -79,83 +79,83 @@ data_mix:
         (): dataset_collection.french.theses.ThesisMapper
 # Dila data
     - (): dataset_construction.DatasetConfig
-      dataset_path: Nicolas-BZRD/LEGI_opendata # manu/dila_legifrance
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/LEGI_opendata # /gpfsscratch/rech/qts/ucg53vj/dila_legifrance
       build_test_set_from_train: true
       needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: Nicolas-BZRD/BALO_opendata
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/BALO_opendata
       build_test_set_from_train: true
       needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: Nicolas-BZRD/JADE_opendata
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/JADE_opendata
       build_test_set_from_train: true
       needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: Nicolas-BZRD/DOLE_opendata
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/DOLE_opendata
       build_test_set_from_train: true
       needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: Nicolas-BZRD/SARDE_opendata
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SARDE_opendata
       build_test_set_from_train: true
       needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: Nicolas-BZRD/QR_opendata
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/QR_opendata
       build_test_set_from_train: true
       needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: Nicolas-BZRD/JORF_opendata
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/JORF_opendata
       build_test_set_from_train: true
       needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: Nicolas-BZRD/INCA_opendata
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/INCA_opendata
       build_test_set_from_train: true
       needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: Nicolas-BZRD/ACCO_opendata
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/ACCO_opendata
       build_test_set_from_train: true
       needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: Nicolas-BZRD/KALI_opendata
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/KALI_opendata
       build_test_set_from_train: true
       needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: Nicolas-BZRD/DEBATS_opendata
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/DEBATS_opendata
       build_test_set_from_train: true
       needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: Nicolas-BZRD/CNIL_opendata
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/CNIL_opendata
       build_test_set_from_train: true
       needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: Nicolas-BZRD/CAPP_opendata
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/CAPP_opendata
       build_test_set_from_train: true
       needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: Nicolas-BZRD/CASS_opendata
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/CASS_opendata
       build_test_set_from_train: true
       needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: Nicolas-BZRD/CONSTIT_opendata
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/CONSTIT_opendata
       build_test_set_from_train: true
       needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: manu/swiss_legislation
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/swiss_legislation
       build_test_set_from_train: true
       needs_internal_deduplication: true
 
       # needs a preprocessor to have an id_column
 # PDF dataset
     - (): dataset_construction.DatasetConfig
-      dataset_path: manu/illuin_layout_dataset_text_only
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/illuin_layout_dataset_text_only
       build_test_set_from_train: true
       needs_internal_deduplication: true
  # Wiki
     - (): dataset_construction.DatasetConfig
-      dataset_path: manu/wikisource_fr
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/wikisource_fr
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: wikipedia
-      dataset_name: "20220301.fr"
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/wikipedia_fr
+      load_from_disk: true
       build_test_set_from_train: true
       num_test_examples: 1000
  # Internet dumps

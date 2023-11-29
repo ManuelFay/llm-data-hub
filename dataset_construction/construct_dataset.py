@@ -49,13 +49,18 @@ class DatasetConstructor:
 
     def build_single_dataset_dict(self, dataset_config: DatasetConfig) -> DatasetDict:
         """Load a single dataset from HF Datasets Hub, and apply the filtering function if provided."""
-        dataset_train = load_dataset(
-            dataset_config.dataset_path,
-            name=dataset_config.dataset_name,
-            split=dataset_config.train_split,
-            num_proc=os.cpu_count(),
-            **dataset_config.dataset_kwargs
-        )
+        if dataset_config.load_from_disk is True:
+            print(f"Loading dataset {dataset_config.dataset_path} from disk")
+            dataset_train = datasets.load_from_disk(dataset_config.dataset_path)["train"]
+        else:
+            print(f"Loading dataset {dataset_config.dataset_path} from HF Datasets Hub")
+            dataset_train = load_dataset(
+                dataset_config.dataset_path,
+                name=dataset_config.dataset_name,
+                split=dataset_config.train_split,
+                num_proc=os.cpu_count(),
+                **dataset_config.dataset_kwargs
+            )
         assert isinstance(dataset_train, Dataset)
 
         if dataset_config.build_test_set_from_train:
@@ -72,13 +77,18 @@ class DatasetConstructor:
                 f"Loading test set for {dataset_config.dataset_path} with {dataset_config.num_test_examples if dataset_config.num_test_examples else 'all'} samples")
             if dataset_config.num_train_examples:
                 dataset_train = dataset_train.select(range(dataset_config.num_train_examples))
-            dataset_test = load_dataset(
-                dataset_config.dataset_path,
-                name=dataset_config.dataset_name,
-                split=dataset_config.test_split,
-                num_proc=os.cpu_count(),
-                **dataset_config.dataset_kwargs
-            )
+
+            if dataset_config.load_from_disk is True:
+                print(f"Loading test set for {dataset_config.dataset_path} from disk")
+                dataset_test = datasets.load_from_disk(dataset_config.dataset_path)["test"]
+            else:
+                dataset_test = load_dataset(
+                    dataset_config.dataset_path,
+                    name=dataset_config.dataset_name,
+                    split=dataset_config.test_split,
+                    num_proc=os.cpu_count(),
+                    **dataset_config.dataset_kwargs
+                )
             if dataset_config.num_test_examples:
                 dataset_test = dataset_test.select(range(min(dataset_config.num_test_examples, len(dataset_test))))
         else:
