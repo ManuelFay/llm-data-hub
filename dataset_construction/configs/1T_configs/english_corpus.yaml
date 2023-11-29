@@ -17,8 +17,6 @@ data_mix:
       test_split: "test"
       build_test_set_from_train: false
       load_from_disk: true
-      preprocessing_function:
-        (): dataset_collection.english.gutenberg_canaries.GutenbergFilter
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/gutenberg_canaries
       train_split: "train"
