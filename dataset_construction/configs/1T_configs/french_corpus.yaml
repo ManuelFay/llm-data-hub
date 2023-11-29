@@ -170,4 +170,4 @@ data_mix:
 
 
 # tokenizer: "mistralai/Mistral-7B-v0.1"
-tokenizer: "manu/tok-fr-en-code"
+tokenizer: "/gpfsstore/rech/qts/ucg53vj/tok-fr-en-code"
