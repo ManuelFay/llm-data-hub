@@ -51,6 +51,10 @@ data_mix:
       num_test_examples: 100
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
+      dataset_path: manu/french_poetry
+      num_test_examples: 100
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
       dataset_path: Nicolas-BZRD/Original_Songs_Lyrics_with_French_Translation
       build_test_set_from_train: true
       needs_internal_deduplication: true
