@@ -18,6 +18,7 @@ from huggingface_hub import HfApi
 from dataset_construction.dataset_config import DataMix, DatasetConfig
 from dataset_construction.utils import test_set_conformity
 from dataset_preprocessing.deduplication import deduplicate_dataset
+import time
 
 
 class DatasetConstructor:
@@ -41,10 +42,15 @@ class DatasetConstructor:
             dataset = dataset.filter(filtering_function, num_proc=os.cpu_count())
 
         # Do it only if needed
+        print(f"ID type for {dataset_key} is {dataset.features['id'].dtype}")
         if dataset.features["id"].dtype != "string":
+            print(f"Converting ID type for {dataset_key} to string")
             dataset = dataset.cast_column("id", datasets.Value(dtype="string", id=None))
         # dataset = dataset.cast_column("text", datasets.Value(dtype="string", id=None))
+        print(f"Adding dataset_id column for {dataset_key}")
+        time1 = time.time()
         dataset = dataset.add_column("dataset_id", [f"{dataset_key}"] * len(dataset))
+        print(f"Time taken to add column: {time.time() - time1}")
         return dataset
 
     def build_single_dataset_dict(self, dataset_config: DatasetConfig) -> DatasetDict:
@@ -116,6 +122,7 @@ class DatasetConstructor:
             dataset_config.filtering_function,
             dataset_config.preprocessing_function,
         )
+        print(f"Processed {dataset_config.dataset_path} with {len(dataset_train)} train examples, {len(dataset_test)} test examples")
 
         if dataset_config.needs_internal_deduplication:
             print(f"Performing internal deduplication: {dataset_config.dataset_path}")
