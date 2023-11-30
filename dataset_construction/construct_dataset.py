@@ -58,7 +58,7 @@ class DatasetConstructor:
             example.update({"dataset_id": f"{dataset_key}"})
             return example
 
-        dataset = dataset.map(add_columns, num_proc=os.cpu_count())
+        dataset = dataset.map(add_columns, num_proc=os.cpu_count(), batched=True, batch_size=1000, keep_in_memory=True)
 
         print(f"Time taken to add column: {time.time() - time1}")
         return dataset
