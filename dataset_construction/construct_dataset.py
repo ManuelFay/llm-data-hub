@@ -49,7 +49,17 @@ class DatasetConstructor:
         # dataset = dataset.cast_column("text", datasets.Value(dtype="string", id=None))
         print(f"Adding dataset_id column for {dataset_key}")
         time1 = time.time()
-        dataset = dataset.add_column("dataset_id", [f"{dataset_key}"] * len(dataset))
+
+        # Extremely slow
+        # dataset = dataset.add_column("dataset_id", [f"{dataset_key}"] * len(dataset))
+
+        # Test solution
+        def add_columns(example):
+            example.update({"dataset_id": f"{dataset_key}"})
+            return example
+
+        dataset = dataset.map(add_columns, num_proc=os.cpu_count())
+
         print(f"Time taken to add column: {time.time() - time1}")
         return dataset
 
@@ -57,9 +67,11 @@ class DatasetConstructor:
         """Load a single dataset from HF Datasets Hub, and apply the filtering function if provided."""
         if dataset_config.load_from_disk is True:
             print(f"Loading dataset {dataset_config.dataset_path} from disk")
+            time1 = time.time()
             dataset_train = datasets.load_from_disk(dataset_config.dataset_path)["train"]
         else:
             print(f"Loading dataset {dataset_config.dataset_path} from HF Datasets Hub with {os.cpu_count()} workers")
+            time1 = time.time()
             dataset_train = load_dataset(
                 dataset_config.dataset_path,
                 name=dataset_config.dataset_name,
@@ -67,6 +79,7 @@ class DatasetConstructor:
                 num_proc=os.cpu_count(),
                 **dataset_config.dataset_kwargs
             )
+        print(f"Time taken to load dataset: {time.time() - time1}")
         assert isinstance(dataset_train, Dataset)
 
         if dataset_config.build_test_set_from_train:
@@ -205,7 +218,7 @@ class DatasetConstructor:
                 ds: DatasetDict = self.build_single_dataset_dict(dataset_config)
                 if self.mix.local_save_dir:
                     os.makedirs(os.path.join(self.mix.local_save_dir, "dataset_cache"), exist_ok=True)
-                    ds.save_to_disk(os.path.join(self.mix.local_save_dir, "dataset_cache", dataset_config_hash))
+                    ds.save_to_disk(os.path.join(self.mix.local_save_dir, "dataset_cache", dataset_config_hash), num_proc=os.cpu_count())
             dataset_list.append(ds)
 
         final_dataset = DatasetDict(
@@ -296,9 +309,9 @@ if __name__ == "__main__":
     else:
         final_ds, separate_ds = ds_constructor.build_concatenated_dataset()
         if ds_constructor.mix.local_save_dir:
-            final_ds.save_to_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}")
+            final_ds.save_to_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}", num_proc=os.cpu_count())
             if separate_ds is not None:
-                separate_ds.save_to_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}_separate")
+                separate_ds.save_to_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}_separate", num_proc=os.cpu_count())
 
     # Compute stats
     if ds_constructor.mix.compute_dataset_stats:
