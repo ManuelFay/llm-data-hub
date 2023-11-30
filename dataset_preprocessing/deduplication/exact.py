@@ -42,10 +42,10 @@ def deduplicate_dataset(ds: Dataset,
 
     uniques = set(ds.unique("hash"))
     # Deduplicate data and apply heuristics
-    ds_filter = ds.filter(filter, fn_kwargs={"uniques": uniques}, num_proc=num_workers)
+    ds = ds.filter(filter, fn_kwargs={"uniques": uniques}, num_proc=num_workers, desc="Removing duplicates - internal")
 
     if blacklist is not None:
         # Deduplicate hashes
-        ds_filter = ds_filter.filter(lambda x: x["hash"] not in blacklist, num_proc=num_workers)
+        ds = ds.filter(lambda x: x["hash"] not in blacklist, num_proc=num_workers)
 
-    return ds_filter, uniques
+    return ds, uniques
