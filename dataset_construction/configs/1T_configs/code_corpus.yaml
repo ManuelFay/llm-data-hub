@@ -18,13 +18,13 @@ data_mix:
       dataset_kwargs:
         data_dir: python
       build_test_set_from_train: true
-    - (): dataset_construction.DatasetConfig
-      dataset_path: '/gpfsscratch/rech/qts/ucg53vj/starcoderdata'
-      train_split: "train"
-      text_column: "content"
-      dataset_kwargs:
-        data_dir: markdown
-      build_test_set_from_train: true
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: '/gpfsscratch/rech/qts/ucg53vj/starcoderdata'
+#      train_split: "train"
+#      text_column: "content"
+#      dataset_kwargs:
+#        data_dir: markdown
+      # build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
       dataset_path: '/gpfsscratch/rech/qts/ucg53vj/starcoderdata'
       train_split: "train"
@@ -46,6 +46,48 @@ data_mix:
       dataset_kwargs:
         data_dir: json
       build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: 'bigcode/starcoderdata'
+      train_split: "train"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: java
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: 'bigcode/starcoderdata'
+      train_split: "train"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: javascript
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: 'bigcode/starcoderdata'
+      train_split: "train"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: cpp
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: 'bigcode/starcoderdata'
+      train_split: "train"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: dockerfile
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: 'bigcode/starcoderdata'
+      train_split: "train"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: tex
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: 'bigcode/starcoderdata'
+      train_split: "train"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: sql
+      build_test_set_from_train:
     - (): dataset_construction.DatasetConfig
       dataset_path: '/gpfsscratch/rech/qts/ucg53vj/code_contests'
       train_split: "train"
