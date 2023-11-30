@@ -36,10 +36,14 @@ class DatasetConstructor:
         """Filter and truncate a dataset, if needed."""
         print(f"Processing dataset {dataset_key} with {len(dataset)} samples")
         if preprocessing_function is not None:
-            dataset = dataset.map(preprocessing_function, num_proc=os.cpu_count())
+            print(f"Applying preprocessing function to {dataset_key}")
+            dataset = dataset.map(preprocessing_function, num_proc=os.cpu_count(), desc="Preprocessing function",
+                                  writer_batch_size=100)
 
         if filtering_function is not None:
-            dataset = dataset.filter(filtering_function, num_proc=os.cpu_count())
+            print(f"Applying filtering function to {dataset_key}")
+            dataset = dataset.filter(filtering_function, num_proc=os.cpu_count(), desc="Filtering function",
+                                     writer_batch_size=100)
 
         # Do it only if needed
         print(f"ID type for {dataset_key} is {dataset.features['id'].dtype}")
