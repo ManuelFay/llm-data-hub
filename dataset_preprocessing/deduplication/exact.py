@@ -46,6 +46,6 @@ def deduplicate_dataset(ds: Dataset,
 
     if blacklist is not None:
         # Deduplicate hashes
-        ds = ds.filter(lambda x: x["hash"] not in blacklist, num_proc=num_workers, desc="Removing duplicates - external")
+        ds = ds.filter(lambda x: x["hash"] not in blacklist, num_proc=num_workers, desc="Removing duplicates - external", remove_columns=["hash"])
 
     return ds, uniques

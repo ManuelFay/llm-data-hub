@@ -82,10 +82,10 @@ data_mix:
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/LEGI_opendata # /gpfsscratch/rech/qts/ucg53vj/dila_legifrance
       build_test_set_from_train: true
       needs_internal_deduplication: true
-    - (): dataset_construction.DatasetConfig
-      dataset_path: /gpfsscratch/rech/qts/ucg53vj/BALO_opendata
-      build_test_set_from_train: true
-      needs_internal_deduplication: true
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: /gpfsscratch/rech/qts/ucg53vj/BALO_opendata
+#      build_test_set_from_train: true
+#      needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/JADE_opendata
       build_test_set_from_train: true
