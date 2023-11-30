@@ -55,10 +55,10 @@ class DatasetConstructor:
 
         # Test solution
         def add_columns(examples):
-            examples["dataset_id"] = [f"{dataset_key}"] * len(examples)
+            examples["dataset_id"] = [f"{dataset_key}"] * len(examples["id"])
             return examples
 
-        dataset = dataset.map(add_columns, num_proc=os.cpu_count(), batched=True, batch_size=1000, keep_in_memory=True)
+        dataset = dataset.map(add_columns, num_proc=os.cpu_count(), batched=True, batch_size=1000, keep_in_memory=True, desc="Adding dataset_id column")
 
         print(f"Time taken to add column: {time.time() - time1}")
         return dataset
