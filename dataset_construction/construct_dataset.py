@@ -33,7 +33,7 @@ class DatasetConstructor:
             preprocessing_function: Optional[Callable] = None,
     ) -> Dataset:
         """Filter and truncate a dataset, if needed."""
-
+        print(f"Processing dataset {dataset_key} with {len(dataset)} samples")
         if preprocessing_function is not None:
             dataset = dataset.map(preprocessing_function, num_proc=os.cpu_count())
 
@@ -53,7 +53,7 @@ class DatasetConstructor:
             print(f"Loading dataset {dataset_config.dataset_path} from disk")
             dataset_train = datasets.load_from_disk(dataset_config.dataset_path)["train"]
         else:
-            print(f"Loading dataset {dataset_config.dataset_path} from HF Datasets Hub")
+            print(f"Loading dataset {dataset_config.dataset_path} from HF Datasets Hub with {os.cpu_count()} workers")
             dataset_train = load_dataset(
                 dataset_config.dataset_path,
                 name=dataset_config.dataset_name,
@@ -95,6 +95,7 @@ class DatasetConstructor:
             raise ValueError("Either build_test_set_from_train or test_split must be set")
         assert isinstance(dataset_test, Dataset)
         assert isinstance(dataset_train, Dataset)
+        print(f"Loaded {dataset_config.dataset_path} with {len(dataset_train)} train examples, {len(dataset_test)} test examples")
 
         if dataset_config.text_column != "text":
             dataset_train = dataset_train.rename_column(dataset_config.text_column, "text")
