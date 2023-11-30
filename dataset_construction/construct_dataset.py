@@ -54,9 +54,9 @@ class DatasetConstructor:
         # dataset = dataset.add_column("dataset_id", [f"{dataset_key}"] * len(dataset))
 
         # Test solution
-        def add_columns(example):
-            example.update({"dataset_id": f"{dataset_key}"})
-            return example
+        def add_columns(examples):
+            examples["dataset_id"] = [f"{dataset_key}"] * len(examples)
+            return examples
 
         dataset = dataset.map(add_columns, num_proc=os.cpu_count(), batched=True, batch_size=1000, keep_in_memory=True)
 
