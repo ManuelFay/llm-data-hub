@@ -71,9 +71,9 @@ data_mix:
       num_test_examples: 100
       needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: Nicolas-BZRD/BALO_opendata
+      dataset_path: Nicolas-BZRD/DEBATS_opendata
       build_test_set_from_train: true
-      num_train_examples: 10000
+      # num_train_examples: 10000
       num_test_examples: 100
       needs_internal_deduplication: true
 #    - (): dataset_construction.DatasetConfig

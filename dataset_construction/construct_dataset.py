@@ -58,7 +58,13 @@ class DatasetConstructor:
             examples["dataset_id"] = [f"{dataset_key}"] * len(examples["id"])
             return examples
 
-        dataset = dataset.map(add_columns, num_proc=os.cpu_count(), batched=True, batch_size=1000, keep_in_memory=True, desc="Adding dataset_id column")
+        dataset = dataset.map(add_columns,
+                              num_proc=os.cpu_count(),
+                              batched=True,
+                              batch_size=100,
+                              writer_batch_size=100,
+                              keep_in_memory=False,
+                              desc="Adding dataset_id column")
 
         print(f"Time taken to add column: {time.time() - time1}")
         return dataset
@@ -143,7 +149,7 @@ class DatasetConstructor:
             # print out stats before deduplication
             print(f"Before deduplication: {len(dataset_train)} train examples, {len(dataset_test)} test examples")
             dataset_test, uniques = deduplicate_dataset(dataset_test, num_workers=os.cpu_count())
-            dataset_train, _ = deduplicate_dataset(dataset_train, num_workers=os.cpu_count(), blacklist=uniques)
+            dataset_train, _ = deduplicate_dataset(dataset_train, num_workers=os.cpu_count()//2, blacklist=uniques)
 
             print(f"After deduplication: {len(dataset_train)} train examples, {len(dataset_test)} test examples")
             del uniques
@@ -310,10 +316,10 @@ if __name__ == "__main__":
     ds_constructor = DatasetConstructor(config["data_mix"], estimate_from_k=args.estimate_from_k)
 
     if args.prep_config_n >= 0:
-        print(f"Preparing dataset {ds_constructor.mix.datasets[args.prep_config_n].dataset_key} from config")
+        print(f"\nPreparing dataset {ds_constructor.mix.datasets[args.prep_config_n].dataset_key} from config")
         config_n = ds_constructor.mix.datasets[args.prep_config_n]
         ds_constructor.single_dataset_macro(config_n)
-        print("Done!")
+        print(f"Done {ds_constructor.mix.datasets[args.prep_config_n].dataset_key} !\n\n")
         exit()
     elif ds_constructor.mix.load_from_local_save_dir:
         final_ds = datasets.load_from_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}")

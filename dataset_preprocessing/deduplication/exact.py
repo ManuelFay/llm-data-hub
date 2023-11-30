@@ -38,14 +38,16 @@ def deduplicate_dataset(ds: Dataset,
     """Deduplicate a dataset."""
 
     # Run preprocessing
-    ds = ds.map(preprocess, num_proc=num_workers)
+    ds = ds.map(preprocess, num_proc=num_workers, writer_batch_size=100)
 
     uniques = set(ds.unique("hash"))
     # Deduplicate data and apply heuristics
-    ds = ds.filter(filter, fn_kwargs={"uniques": uniques}, num_proc=num_workers, desc="Removing duplicates - internal")
+    ds = ds.filter(filter, fn_kwargs={"uniques": uniques}, num_proc=num_workers, desc="Removing duplicates - internal",
+                   writer_batch_size=100)
 
     if blacklist is not None:
         # Deduplicate hashes
-        ds = ds.filter(lambda x: x["hash"] not in blacklist, num_proc=num_workers, desc="Removing duplicates - external", remove_columns=["hash"])
+        ds = ds.filter(lambda x: x["hash"] not in blacklist, num_proc=num_workers,
+                       desc="Removing duplicates - external", writer_batch_size=100)
 
     return ds, uniques
