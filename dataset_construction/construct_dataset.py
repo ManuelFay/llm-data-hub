@@ -218,6 +218,7 @@ class DatasetConstructor:
         else:
             ds: DatasetDict = self.build_single_dataset_dict(dataset_config)
             if self.mix.local_save_dir:
+                print(f"Saving dataset {dataset_config.dataset_path} to cache")
                 os.makedirs(os.path.join(self.mix.local_save_dir, "dataset_cache"), exist_ok=True)
                 ds.save_to_disk(os.path.join(self.mix.local_save_dir, "dataset_cache", dataset_config_hash),
                                 num_proc=os.cpu_count())
@@ -297,6 +298,7 @@ if __name__ == "__main__":
     parser.add_argument("--config", type=str, default="configs/mock_testing.yaml")
     parser.add_argument("--hub_id", type=str, default=None)
     parser.add_argument("--estimate_from_k", type=int, default=1000)
+    parser.add_argument("--prep_config_n", type=int, default=-1)
     args = parser.parse_args()
 
     # Init
@@ -307,7 +309,13 @@ if __name__ == "__main__":
 
     ds_constructor = DatasetConstructor(config["data_mix"], estimate_from_k=args.estimate_from_k)
 
-    if ds_constructor.mix.load_from_local_save_dir:
+    if args.prep_config_n >= 0:
+        print(f"Preparing dataset {ds_constructor.mix.datasets[args.prep_config_n].dataset_key} from config")
+        config_n = ds_constructor.mix.datasets[args.prep_config_n]
+        ds_constructor.single_dataset_macro(config_n)
+        print("Done!")
+        exit()
+    elif ds_constructor.mix.load_from_local_save_dir:
         final_ds = datasets.load_from_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}")
         separate_ds = None
         if os.path.exists(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}_separate"):
