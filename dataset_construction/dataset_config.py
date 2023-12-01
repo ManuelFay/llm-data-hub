@@ -39,6 +39,7 @@ class DatasetConfig:
                 if len(kwargs_str) > 0:
                     ds_name += "_" + kwargs_str
             ds_name = "".join([word.capitalize() for word in ds_name.split("_")])
+            ds_name += self.train_split if self.train_split != "train" else ""
             self.dataset_key = ds_name
 
 
