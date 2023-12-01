@@ -102,6 +102,16 @@ data_mix:
       preprocessing_function:
         (): dataset_collection.english.slimpajama.SlimPajamaMapper
     - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      build_test_set_from_train: true
+      num_test_examples: 0
+      load_from_disk: false
+      dataset_kwargs:
+        data_dir: train/chunk10
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+    - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/gutenberg_canaries
       train_split: "train"
       build_test_set_from_train: true
