@@ -240,6 +240,7 @@ class DatasetConstructor:
             ds = self.single_dataset_macro(dataset_config)
             dataset_list.append(ds)
 
+        print(f"Concatenating {len(dataset_list)} datasets")
         final_dataset = DatasetDict(
             {
                 "train": concatenate_datasets([ds["train"] for ds in dataset_list]),
@@ -247,6 +248,7 @@ class DatasetConstructor:
             }
         )
         if self.mix.shuffle:
+            print("Shuffling dataset")
             final_dataset = final_dataset.shuffle(seed=42)
 
         separate_dataset = None
