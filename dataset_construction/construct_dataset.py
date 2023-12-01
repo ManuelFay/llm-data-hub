@@ -337,6 +337,7 @@ if __name__ == "__main__":
     else:
         final_ds, separate_ds = ds_constructor.build_concatenated_dataset()
         if ds_constructor.mix.local_save_dir:
+            print(f"Saving dataset {ds_constructor.mix.name} to {ds_constructor.mix.local_save_dir}")
             final_ds.save_to_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}", num_proc=os.cpu_count())
             if separate_ds is not None:
                 separate_ds.save_to_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}_separate", num_proc=os.cpu_count())
