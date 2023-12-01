@@ -12,103 +12,163 @@ data_mix:
   datasets:
 # Split of SlimPajama
     - (): dataset_construction.DatasetConfig
-      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
-      train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
-      load_from_disk: false
-      dataset_kwargs:
-        data_dir: train/chunk1
+      dataset_path: /gpfsstore/rech/qts/ucg53vj/local-slim-lf
+      train_split: "train[0%:5%]"
+      test_split: "test[0%:5%]"
+      build_test_set_from_train: false
+      load_from_disk: true
       preprocessing_function:
         (): dataset_collection.english.slimpajama.SlimPajamaMapper
     - (): dataset_construction.DatasetConfig
-      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
-      train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
-      load_from_disk: false
-      dataset_kwargs:
-        data_dir: train/chunk2
+      dataset_path: /gpfsstore/rech/qts/ucg53vj/local-slim-lf
+      train_split: "train[5%:10%]"
+      test_split: "test[5%:10%]"
+      build_test_set_from_train: false
+      load_from_disk: true
       preprocessing_function:
         (): dataset_collection.english.slimpajama.SlimPajamaMapper
     - (): dataset_construction.DatasetConfig
-      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
-      train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
-      load_from_disk: false
-      dataset_kwargs:
-        data_dir: train/chunk3
+      dataset_path: /gpfsstore/rech/qts/ucg53vj/local-slim-lf
+      train_split: "train[10%:15%]"
+      test_split: "test[10%:15%]"
+      build_test_set_from_train: false
+      load_from_disk: true
       preprocessing_function:
         (): dataset_collection.english.slimpajama.SlimPajamaMapper
     - (): dataset_construction.DatasetConfig
-      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
-      train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
-      load_from_disk: false
-      dataset_kwargs:
-        data_dir: train/chunk4
+      dataset_path: /gpfsstore/rech/qts/ucg53vj/local-slim-lf
+      train_split: "train[15%:20%]"
+      test_split: "test[15%:20%]"
+      build_test_set_from_train: false
+      load_from_disk: true
       preprocessing_function:
         (): dataset_collection.english.slimpajama.SlimPajamaMapper
     - (): dataset_construction.DatasetConfig
-      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
-      train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
-      load_from_disk: false
-      dataset_kwargs:
-        data_dir: train/chunk5
+      dataset_path: /gpfsstore/rech/qts/ucg53vj/local-slim-lf
+      train_split: "train[20%:25%]"
+      test_split: "test[20%:25%]"
+      build_test_set_from_train: false
+      load_from_disk: true
       preprocessing_function:
         (): dataset_collection.english.slimpajama.SlimPajamaMapper
     - (): dataset_construction.DatasetConfig
-      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
-      train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
-      load_from_disk: false
-      dataset_kwargs:
-        data_dir: train/chunk6
+      dataset_path: /gpfsstore/rech/qts/ucg53vj/local-slim-lf
+      train_split: "train[25%:30%]"
+      test_split: "test[25%:30%]"
+      build_test_set_from_train: false
+      load_from_disk: true
       preprocessing_function:
         (): dataset_collection.english.slimpajama.SlimPajamaMapper
     - (): dataset_construction.DatasetConfig
-      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
-      train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
-      load_from_disk: false
-      dataset_kwargs:
-        data_dir: train/chunk7
+      dataset_path: /gpfsstore/rech/qts/ucg53vj/local-slim-lf
+      train_split: "train[30%:35%]"
+      test_split: "test[30%:35%]"
+      build_test_set_from_train: false
+      load_from_disk: true
       preprocessing_function:
         (): dataset_collection.english.slimpajama.SlimPajamaMapper
     - (): dataset_construction.DatasetConfig
-      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
-      train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
-      load_from_disk: false
-      dataset_kwargs:
-        data_dir: train/chunk8
+      dataset_path: /gpfsstore/rech/qts/ucg53vj/local-slim-lf
+      train_split: "train[35%:40%]"
+      test_split: "test[35%:40%]"
+      build_test_set_from_train: false
+      load_from_disk: true
       preprocessing_function:
         (): dataset_collection.english.slimpajama.SlimPajamaMapper
     - (): dataset_construction.DatasetConfig
-      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
-      train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
-      load_from_disk: false
-      dataset_kwargs:
-        data_dir: train/chunk9
+      dataset_path: /gpfsstore/rech/qts/ucg53vj/local-slim-lf
+      train_split: "train[40%:45%]"
+      test_split: "test[40%:45%]"
+      build_test_set_from_train: false
+      load_from_disk: true
       preprocessing_function:
         (): dataset_collection.english.slimpajama.SlimPajamaMapper
     - (): dataset_construction.DatasetConfig
-      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
-      train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
-      load_from_disk: false
-      dataset_kwargs:
-        data_dir: train/chunk10
+      dataset_path: /gpfsstore/rech/qts/ucg53vj/local-slim-lf
+      train_split: "train[45%:50%]"
+      test_split: "test[45%:50%]"
+      build_test_set_from_train: false
+      load_from_disk: true
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsstore/rech/qts/ucg53vj/local-slim-lf
+      train_split: "train[50%:55%]"
+      test_split: "test[50%:55%]"
+      build_test_set_from_train: false
+      load_from_disk: true
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsstore/rech/qts/ucg53vj/local-slim-lf
+      train_split: "train[55%:60%]"
+      test_split: "test[55%:60%]"
+      build_test_set_from_train: false
+      load_from_disk: true
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsstore/rech/qts/ucg53vj/local-slim-lf
+      train_split: "train[60%:65%]"
+      test_split: "test[60%:65%]"
+      build_test_set_from_train: false
+      load_from_disk: true
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsstore/rech/qts/ucg53vj/local-slim-lf
+      train_split: "train[65%:70%]"
+      test_split: "test[65%:70%]"
+      build_test_set_from_train: false
+      load_from_disk: true
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsstore/rech/qts/ucg53vj/local-slim-lf
+      train_split: "train[70%:75%]"
+      test_split: "test[70%:75%]"
+      build_test_set_from_train: false
+      load_from_disk: true
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsstore/rech/qts/ucg53vj/local-slim-lf
+      train_split: "train[75%:80%]"
+      test_split: "test[75%:80%]"
+      build_test_set_from_train: false
+      load_from_disk: true
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsstore/rech/qts/ucg53vj/local-slim-lf
+      train_split: "train[80%:85%]"
+      test_split: "test[80%:85%]"
+      build_test_set_from_train: false
+      load_from_disk: true
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsstore/rech/qts/ucg53vj/local-slim-lf
+      train_split: "train[85%:90%]"
+      test_split: "test[85%:90%]"
+      build_test_set_from_train: false
+      load_from_disk: true
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsstore/rech/qts/ucg53vj/local-slim-lf
+      train_split: "train[90%:95%]"
+      test_split: "test[90%:95%]"
+      build_test_set_from_train: false
+      load_from_disk: true
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsstore/rech/qts/ucg53vj/local-slim-lf
+      train_split: "train[95%:100%]"
+      test_split: "test[95%:100%]"
+      build_test_set_from_train: false
+      load_from_disk: true
       preprocessing_function:
         (): dataset_collection.english.slimpajama.SlimPajamaMapper
     - (): dataset_construction.DatasetConfig
