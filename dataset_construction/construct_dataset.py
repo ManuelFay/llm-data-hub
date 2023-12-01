@@ -37,12 +37,12 @@ class DatasetConstructor:
         print(f"Processing dataset {dataset_key} with {len(dataset)} samples")
         if preprocessing_function is not None:
             print(f"Applying preprocessing function to {dataset_key}")
-            dataset = dataset.map(preprocessing_function, num_proc=os.cpu_count(), desc="Preprocessing function",
+            dataset = dataset.map(preprocessing_function, num_proc=os.cpu_count()//2, desc="Preprocessing function",
                                   writer_batch_size=100)
 
         if filtering_function is not None:
             print(f"Applying filtering function to {dataset_key}")
-            dataset = dataset.filter(filtering_function, num_proc=os.cpu_count(), desc="Filtering function",
+            dataset = dataset.filter(filtering_function, num_proc=os.cpu_count()//2, desc="Filtering function",
                                      writer_batch_size=100)
 
         # Do it only if needed
@@ -63,7 +63,7 @@ class DatasetConstructor:
             return examples
 
         dataset = dataset.map(add_columns,
-                              num_proc=os.cpu_count(),
+                              num_proc=os.cpu_count() // 2,
                               batched=True,
                               batch_size=100,
                               writer_batch_size=100,
