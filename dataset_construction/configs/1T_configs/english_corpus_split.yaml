@@ -1,0 +1,111 @@
+data_mix:
+  (): dataset_construction.DataMix
+  name: "english_627B"
+  shuffle: false
+  load_from_local_save_dir: false
+  local_save_dir: /gpfsscratch/rech/qts/ucg53vj/croissant_data
+  compute_dataset_stats: true
+  keep_separated_datasets_in_dataset_dict: false
+  deduplicate_test_set: false
+  ngram_path_for_extra_deduplication: null
+  max_shard_size: "5GB"
+  datasets:
+# Split of SlimPajama
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      build_test_set_from_train: true
+      num_test_examples: 0
+      load_from_disk: false
+      dataset_kwargs:
+        data_dir: train/chunk1
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      build_test_set_from_train: true
+      num_test_examples: 0
+      load_from_disk: false
+      dataset_kwargs:
+        data_dir: train/chunk2
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      build_test_set_from_train: true
+      num_test_examples: 0
+      load_from_disk: false
+      dataset_kwargs:
+        data_dir: train/chunk3
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      build_test_set_from_train: true
+      num_test_examples: 0
+      load_from_disk: false
+      dataset_kwargs:
+        data_dir: train/chunk4
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      build_test_set_from_train: true
+      num_test_examples: 0
+      load_from_disk: false
+      dataset_kwargs:
+        data_dir: train/chunk5
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      build_test_set_from_train: true
+      num_test_examples: 0
+      load_from_disk: false
+      dataset_kwargs:
+        data_dir: train/chunk6
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      build_test_set_from_train: true
+      num_test_examples: 0
+      load_from_disk: false
+      dataset_kwargs:
+        data_dir: train/chunk7
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      build_test_set_from_train: true
+      num_test_examples: 0
+      load_from_disk: false
+      dataset_kwargs:
+        data_dir: train/chunk8
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      build_test_set_from_train: true
+      num_test_examples: 0
+      load_from_disk: false
+      dataset_kwargs:
+        data_dir: train/chunk9
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/gutenberg_canaries
+      train_split: "train"
+      build_test_set_from_train: true
+      num_test_examples: 0
+
+# tokenizer: "mistralai/Mistral-7B-v0.1"
+tokenizer: "/gpfsstore/rech/qts/ucg53vj/tok-fr-en-code"
