@@ -37,13 +37,19 @@ class DatasetConstructor:
         print(f"Processing dataset {dataset_key} with {len(dataset)} samples")
         if preprocessing_function is not None:
             print(f"Applying preprocessing function to {dataset_key}")
-            dataset = dataset.map(preprocessing_function, num_proc=os.cpu_count()//2, desc="Preprocessing function",
-                                  writer_batch_size=100)
+            dataset = dataset.map(preprocessing_function,
+                                  num_proc=os.cpu_count(),
+                                  desc="Preprocessing function",
+                                  # writer_batch_size=100
+                                  )
 
         if filtering_function is not None:
             print(f"Applying filtering function to {dataset_key}")
-            dataset = dataset.filter(filtering_function, num_proc=os.cpu_count()//2, desc="Filtering function",
-                                     writer_batch_size=100)
+            dataset = dataset.filter(filtering_function,
+                                     num_proc=os.cpu_count(),
+                                     desc="Filtering function",
+                                     # writer_batch_size=100
+                                     )
 
         # Do it only if needed
         print(f"ID type for {dataset_key} is {dataset.features['id'].dtype}")
@@ -63,10 +69,10 @@ class DatasetConstructor:
             return examples
 
         dataset = dataset.map(add_columns,
-                              num_proc=os.cpu_count() // 2,
+                              num_proc=os.cpu_count(),
                               batched=True,
                               batch_size=100,
-                              writer_batch_size=100,
+                              # writer_batch_size=100,
                               keep_in_memory=False,
                               desc="Adding dataset_id column")
 
@@ -153,7 +159,7 @@ class DatasetConstructor:
             # print out stats before deduplication
             print(f"Before deduplication: {len(dataset_train)} train examples, {len(dataset_test)} test examples")
             dataset_test, uniques = deduplicate_dataset(dataset_test, num_workers=os.cpu_count())
-            dataset_train, _ = deduplicate_dataset(dataset_train, num_workers=os.cpu_count()//2, blacklist=uniques)
+            dataset_train, _ = deduplicate_dataset(dataset_train, num_workers=os.cpu_count(), blacklist=uniques)
 
             print(f"After deduplication: {len(dataset_train)} train examples, {len(dataset_test)} test examples")
             del uniques
