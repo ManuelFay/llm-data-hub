@@ -18,7 +18,8 @@ data_mix:
       num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
-        data_dir: train/chunk1
+        # data_dir: train/chunk1
+        data_files: train/chunk1/*0.jsonl.zst
       preprocessing_function:
         (): dataset_collection.english.slimpajama.SlimPajamaMapper
     - (): dataset_construction.DatasetConfig
