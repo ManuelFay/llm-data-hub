@@ -8,7 +8,7 @@ data_mix:
   keep_separated_datasets_in_dataset_dict: false
   deduplicate_test_set: false
   ngram_path_for_extra_deduplication: null
-  max_shard_size: "2GB"
+  max_shard_size: "5GB"
   datasets:
 # Split of SlimPajama
     - (): dataset_construction.DatasetConfig

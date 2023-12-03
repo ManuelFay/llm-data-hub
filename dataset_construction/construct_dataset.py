@@ -253,6 +253,9 @@ class DatasetConstructor:
                 "test": concatenate_datasets([ds["test"] for ds in dataset_list]),
             }
         )
+        print(final_dataset)
+        print(final_dataset["train"])
+
         if self.mix.shuffle:
             print("Shuffling dataset")
             final_dataset = final_dataset.shuffle(seed=42)
