@@ -242,6 +242,16 @@ class DatasetConstructor:
         print(final_dataset)
         print(final_dataset["train"])
 
+        print("Horrible hack to bug fix for english dataset bug")
+        final_dataset = DatasetDict(
+            {
+                "train": concatenate_datasets([final_dataset["train"], final_dataset["test"]]),
+                "test": final_dataset["test"],
+            }
+        )
+        print(final_dataset)
+        print(final_dataset["train"])
+
         if self.mix.shuffle:
             print("Shuffling dataset")
             final_dataset = final_dataset.shuffle(seed=42)
