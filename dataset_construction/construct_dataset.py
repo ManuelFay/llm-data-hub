@@ -344,9 +344,13 @@ if __name__ == "__main__":
         final_ds, separate_ds = ds_constructor.build_concatenated_dataset()
         if ds_constructor.mix.local_save_dir:
             print(f"Saving dataset {ds_constructor.mix.name} to {ds_constructor.mix.local_save_dir}")
-            final_ds.save_to_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}", num_proc=os.cpu_count())
+            final_ds.save_to_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}",
+                                  num_proc=os.cpu_count(),
+                                  max_shard_size=ds_constructor.mix.max_shard_size)
             if separate_ds is not None:
-                separate_ds.save_to_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}_separate", num_proc=os.cpu_count())
+                separate_ds.save_to_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}_separate",
+                                         num_proc=os.cpu_count(),
+                                         max_shard_size=ds_constructor.mix.max_shard_size)
 
     # Compute stats
     if ds_constructor.mix.compute_dataset_stats:
