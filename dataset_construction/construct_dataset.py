@@ -10,13 +10,12 @@ import configue
 import datasets
 import pandas as pd
 import tqdm
-import hashlib
 from transformers import PreTrainedTokenizerFast, AutoTokenizer
 from datasets import Dataset, DatasetDict, concatenate_datasets, load_dataset
 from huggingface_hub import HfApi
 
 from dataset_construction.dataset_config import DataMix, DatasetConfig
-from dataset_construction.utils import test_set_conformity
+from dataset_construction.utils import test_set_conformity, get_config_hash
 from dataset_preprocessing.deduplication import deduplicate_dataset
 import time
 
@@ -127,7 +126,9 @@ class DatasetConstructor:
             if dataset_config.num_test_examples:
                 dataset_test = dataset_test.select(range(min(dataset_config.num_test_examples, len(dataset_test))))
         else:
-            raise ValueError("Either build_test_set_from_train or test_split must be set")
+            print("Either build_test_set_from_train or test_split must be set for a real test set. Copying one from the train set without excluding !")
+            num_test_set = test_set_conformity(dataset_train, None)
+            dataset_test = dataset_train.train_test_split(test_size=num_test_set)["test"]
         assert isinstance(dataset_test, Dataset)
         assert isinstance(dataset_train, Dataset)
         print(f"Loaded {dataset_config.dataset_path} with {len(dataset_train)} train examples, {len(dataset_test)} test examples")
@@ -212,22 +213,7 @@ class DatasetConstructor:
 
     def single_dataset_macro(self, dataset_config: DatasetConfig) -> DatasetDict:
         print(f"Loading and filtering dataset {dataset_config.dataset_path}")
-        mapper_fn = dataset_config.preprocessing_function if hasattr(dataset_config, "preprocessing_function") else None
-        filter_fn = dataset_config.filtering_function if hasattr(dataset_config, "filtering_function") else None
-
-        # hash the bytes of the function to check if it has changed.
-        # Note: not exact because only intermediate source code is checked so changed magin numbers are not affected
-        mapper_fn_hash = dataset_config.preprocessing_function.mapper_fn.__code__.co_code if mapper_fn else None
-        filter_fn_hash = dataset_config.filtering_function.filter_fn.__code__.co_code if filter_fn else None
-        # exclude preprocessing_function and mapping_function from the hash computation
-        dataset_config_hash = hashlib.md5(
-            str({k: v for k, v in dataset_config.__dict__.items() if "object at" not in str(v)}).encode(
-                "utf-8")).hexdigest()
-        if mapper_fn_hash:
-            dataset_config_hash += hashlib.md5(str(mapper_fn_hash).encode("utf-8")).hexdigest()
-        if filter_fn_hash:
-            dataset_config_hash += hashlib.md5(str(filter_fn_hash).encode("utf-8")).hexdigest()
-
+        dataset_config_hash = get_config_hash(dataset_config)
         if os.path.exists(os.path.join(self.mix.local_save_dir, "dataset_cache", dataset_config_hash)):
             print(f"Loading dataset {dataset_config.dataset_path} from cache")
             ds = datasets.load_from_disk(os.path.join(self.mix.local_save_dir, "dataset_cache", dataset_config_hash))
@@ -350,7 +336,8 @@ if __name__ == "__main__":
             final_ds.save_to_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}",
                                   num_proc=os.cpu_count(),
                                   max_shard_size=ds_constructor.mix.max_shard_size)
-            if separate_ds is not None:
+            if separate_ds is not None and ds_constructor.mix.keep_separated_datasets_in_dataset_dict:
+                print("Saving separate dataset !")
                 separate_ds.save_to_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}_separate",
                                          num_proc=os.cpu_count(),
                                          max_shard_size=ds_constructor.mix.max_shard_size)

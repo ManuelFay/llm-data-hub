@@ -28,6 +28,8 @@ class DatasetConfig:
     # load_in_streaming_mode: Optional[bool] = False # Not implemented yet
 
     def __post_init__(self):
+        # if (isinstance(self.num_test_examples, int) or isinstance(self.num_test_examples, float)) and self.num_test_examples == 0:
+        #    raise AttributeError("Set build_test_set_from_train to False to keep all samples in train set")
         if self.dataset_kwargs is None:
             self.dataset_kwargs = {"data_dir": None}
         if self.dataset_key is None:
