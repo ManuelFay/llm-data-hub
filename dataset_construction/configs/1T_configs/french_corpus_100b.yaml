@@ -1,6 +1,6 @@
 data_mix:
   (): dataset_construction.DataMix
-  name: "french_30b"
+  name: "french_100b"
   shuffle: false
   compute_dataset_stats: true
   local_save_dir: /gpfsscratch/rech/qts/ucg53vj/croissant_data
