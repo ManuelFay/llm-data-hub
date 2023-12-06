@@ -14,8 +14,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk1/*0.jsonl.zst
@@ -24,8 +22,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk1/*1.jsonl.zst
@@ -34,8 +30,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk1/*2.jsonl.zst
@@ -44,8 +38,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk1/*3.jsonl.zst
@@ -54,8 +46,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk1/*4.jsonl.zst
@@ -64,8 +54,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk1/*5.jsonl.zst
@@ -74,8 +62,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk1/*6.jsonl.zst
@@ -84,8 +70,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk1/*7.jsonl.zst
@@ -94,8 +78,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk1/*8.jsonl.zst
@@ -104,8 +86,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk1/*9.jsonl.zst
@@ -114,8 +94,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk2/*0.jsonl.zst
@@ -124,8 +102,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk2/*1.jsonl.zst
@@ -134,8 +110,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk2/*2.jsonl.zst
@@ -144,8 +118,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk2/*3.jsonl.zst
@@ -154,8 +126,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk2/*4.jsonl.zst
@@ -164,8 +134,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk2/*5.jsonl.zst
@@ -174,8 +142,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk2/*6.jsonl.zst
@@ -184,8 +150,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk2/*7.jsonl.zst
@@ -194,8 +158,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk2/*8.jsonl.zst
@@ -204,8 +166,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk2/*9.jsonl.zst
@@ -214,8 +174,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk3/*0.jsonl.zst
@@ -224,8 +182,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk3/*1.jsonl.zst
@@ -234,8 +190,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk3/*2.jsonl.zst
@@ -244,8 +198,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk3/*3.jsonl.zst
@@ -254,8 +206,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk3/*4.jsonl.zst
@@ -264,8 +214,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk3/*5.jsonl.zst
@@ -274,8 +222,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk3/*6.jsonl.zst
@@ -284,8 +230,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk3/*7.jsonl.zst
@@ -294,8 +238,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk3/*8.jsonl.zst
@@ -304,8 +246,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk3/*9.jsonl.zst
@@ -314,8 +254,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk4/*0.jsonl.zst
@@ -324,8 +262,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk4/*1.jsonl.zst
@@ -334,8 +270,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk4/*2.jsonl.zst
@@ -344,8 +278,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk4/*3.jsonl.zst
@@ -354,8 +286,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk4/*4.jsonl.zst
@@ -364,8 +294,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk4/*5.jsonl.zst
@@ -374,8 +302,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk4/*6.jsonl.zst
@@ -384,8 +310,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk4/*7.jsonl.zst
@@ -394,8 +318,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk4/*8.jsonl.zst
@@ -404,8 +326,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk4/*9.jsonl.zst
@@ -414,8 +334,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk5/*0.jsonl.zst
@@ -424,8 +342,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk5/*1.jsonl.zst
@@ -434,8 +350,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk5/*2.jsonl.zst
@@ -444,8 +358,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk5/*3.jsonl.zst
@@ -454,8 +366,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk5/*4.jsonl.zst
@@ -464,8 +374,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk5/*5.jsonl.zst
@@ -474,8 +382,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk5/*6.jsonl.zst
@@ -484,8 +390,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk5/*7.jsonl.zst
@@ -494,8 +398,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk5/*8.jsonl.zst
@@ -504,8 +406,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk5/*9.jsonl.zst
@@ -514,8 +414,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk6/*0.jsonl.zst
@@ -524,8 +422,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk6/*1.jsonl.zst
@@ -534,8 +430,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk6/*2.jsonl.zst
@@ -544,8 +438,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk6/*3.jsonl.zst
@@ -554,8 +446,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk6/*4.jsonl.zst
@@ -564,8 +454,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk6/*5.jsonl.zst
@@ -574,8 +462,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk6/*6.jsonl.zst
@@ -584,8 +470,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk6/*7.jsonl.zst
@@ -594,8 +478,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk6/*8.jsonl.zst
@@ -604,8 +486,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk6/*9.jsonl.zst
@@ -614,8 +494,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk7/*0.jsonl.zst
@@ -624,8 +502,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk7/*1.jsonl.zst
@@ -634,8 +510,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk7/*2.jsonl.zst
@@ -644,8 +518,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk7/*3.jsonl.zst
@@ -654,8 +526,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk7/*4.jsonl.zst
@@ -664,8 +534,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk7/*5.jsonl.zst
@@ -674,8 +542,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk7/*6.jsonl.zst
@@ -684,8 +550,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk7/*7.jsonl.zst
@@ -694,8 +558,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk7/*8.jsonl.zst
@@ -704,8 +566,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk7/*9.jsonl.zst
@@ -714,8 +574,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk8/*0.jsonl.zst
@@ -724,8 +582,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk8/*1.jsonl.zst
@@ -734,8 +590,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk8/*2.jsonl.zst
@@ -744,8 +598,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk8/*3.jsonl.zst
@@ -754,8 +606,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk8/*4.jsonl.zst
@@ -764,8 +614,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk8/*5.jsonl.zst
@@ -774,8 +622,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk8/*6.jsonl.zst
@@ -784,8 +630,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk8/*7.jsonl.zst
@@ -794,8 +638,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk8/*8.jsonl.zst
@@ -804,8 +646,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk8/*9.jsonl.zst
@@ -814,8 +654,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk9/*0.jsonl.zst
@@ -824,8 +662,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk9/*1.jsonl.zst
@@ -834,8 +670,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk9/*2.jsonl.zst
@@ -844,8 +678,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk9/*3.jsonl.zst
@@ -854,8 +686,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk9/*4.jsonl.zst
@@ -864,8 +694,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk9/*5.jsonl.zst
@@ -874,8 +702,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk9/*6.jsonl.zst
@@ -884,8 +710,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk9/*7.jsonl.zst
@@ -894,8 +718,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk9/*8.jsonl.zst
@@ -904,8 +726,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk9/*9.jsonl.zst
@@ -914,8 +734,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk10/*0.jsonl.zst
@@ -924,8 +742,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk10/*1.jsonl.zst
@@ -934,8 +750,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk10/*2.jsonl.zst
@@ -944,8 +758,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk10/*3.jsonl.zst
@@ -954,8 +766,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk10/*4.jsonl.zst
@@ -964,8 +774,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk10/*5.jsonl.zst
@@ -974,8 +782,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk10/*6.jsonl.zst
@@ -984,8 +790,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk10/*7.jsonl.zst
@@ -994,8 +798,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk10/*8.jsonl.zst
@@ -1004,8 +806,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
       load_from_disk: false
       dataset_kwargs:
         data_files: train/chunk10/*9.jsonl.zst
@@ -1014,8 +814,6 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/gutenberg_canaries
       train_split: "train"
-      build_test_set_from_train: true
-      num_test_examples: 0
 
 # tokenizer: "mistralai/Mistral-7B-v0.1"
 tokenizer: "/gpfsstore/rech/qts/ucg53vj/tok-fr-en-code"
