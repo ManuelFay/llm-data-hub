@@ -1,6 +1,8 @@
 from typing import Optional
 import hashlib
 
+from dataset_construction.dataset_config import DatasetConfig
+
 
 def test_set_conformity(dataset, num_test_samples: Optional[int]) -> int:
     """Make sure the test set is not too big."""
@@ -9,7 +11,7 @@ def test_set_conformity(dataset, num_test_samples: Optional[int]) -> int:
     return min(max(100, len(dataset) // 100), 10000)
 
 
-def get_config_hash(dataset_config):
+def get_config_hash(dataset_config: DatasetConfig):
     mapper_fn = dataset_config.preprocessing_function if hasattr(dataset_config, "preprocessing_function") else None
     filter_fn = dataset_config.filtering_function if hasattr(dataset_config, "filtering_function") else None
 
@@ -26,4 +28,6 @@ def get_config_hash(dataset_config):
     if filter_fn_hash:
         dataset_config_hash += hashlib.md5(str(filter_fn_hash).encode("utf-8")).hexdigest()
 
-    return dataset_config_hash
+    dataset_config_hash = hashlib.md5(str(dataset_config_hash).encode("utf-8")).hexdigest()
+
+    return dataset_config.dataset_key + "_" + dataset_config_hash
