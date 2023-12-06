@@ -11,7 +11,7 @@ def test_set_conformity(dataset, num_test_samples: Optional[int]) -> int:
     return min(max(100, len(dataset) // 100), 10000)
 
 
-def get_config_hash(dataset_config: DatasetConfig):
+def get_config_hash(dataset_config: DatasetConfig, return_v0_hash: bool = False):
     mapper_fn = dataset_config.preprocessing_function if hasattr(dataset_config, "preprocessing_function") else None
     filter_fn = dataset_config.filtering_function if hasattr(dataset_config, "filtering_function") else None
 
@@ -28,6 +28,8 @@ def get_config_hash(dataset_config: DatasetConfig):
     if filter_fn_hash:
         dataset_config_hash += hashlib.md5(str(filter_fn_hash).encode("utf-8")).hexdigest()
 
-    dataset_config_hash = hashlib.md5(str(dataset_config_hash).encode("utf-8")).hexdigest()
+    if return_v0_hash:
+        return dataset_config_hash
 
+    dataset_config_hash = hashlib.md5(str(dataset_config_hash).encode("utf-8")).hexdigest()
     return dataset_config.dataset_key + "_" + dataset_config_hash

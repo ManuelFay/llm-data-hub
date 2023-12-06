@@ -214,9 +214,13 @@ class DatasetConstructor:
     def single_dataset_macro(self, dataset_config: DatasetConfig) -> DatasetDict:
         print(f"Loading and filtering dataset {dataset_config.dataset_path}")
         dataset_config_hash = get_config_hash(dataset_config)
+        possible_v0_hash = get_config_hash(dataset_config, return_v0_hash=True)
         if os.path.exists(os.path.join(self.mix.local_save_dir, "dataset_cache", dataset_config_hash)):
             print(f"Loading dataset {dataset_config.dataset_path} from cache")
             ds = datasets.load_from_disk(os.path.join(self.mix.local_save_dir, "dataset_cache", dataset_config_hash))
+        elif os.path.exists(os.path.join(self.mix.local_save_dir, "dataset_cache", possible_v0_hash)):
+            print(f"Loading dataset {dataset_config.dataset_path} from cache")
+            ds = datasets.load_from_disk(os.path.join(self.mix.local_save_dir, "dataset_cache", possible_v0_hash))
         else:
             ds: DatasetDict = self.build_single_dataset_dict(dataset_config)
             if self.mix.local_save_dir:
