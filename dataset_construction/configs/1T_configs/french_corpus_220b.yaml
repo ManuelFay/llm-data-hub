@@ -1,11 +1,11 @@
 data_mix:
   (): dataset_construction.DataMix
-  name: "french_100b"
+  name: "french_220b"
   shuffle: false
   compute_dataset_stats: true
   local_save_dir: /gpfsscratch/rech/qts/ucg53vj/croissant_data
   load_from_local_save_dir: false
-  keep_separated_datasets_in_dataset_dict: true
+  keep_separated_datasets_in_dataset_dict: false
   deduplicate_test_set: false
   ngram_path_for_extra_deduplication: null
   max_shard_size: "5GB"
