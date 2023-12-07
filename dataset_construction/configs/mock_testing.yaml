@@ -76,6 +76,14 @@ data_mix:
       # num_train_examples: 10000
       num_test_examples: 100
       needs_internal_deduplication: true
+      filtering_function:
+        (): dataset_preprocessing.perplexity.perplexity_filter.PerplexityFilter
+        model:
+          (): dataset_preprocessing.perplexity.model.KenlmModel
+          model_dataset: "wikipedia"
+          language: "fr"
+        perplexity_bounds: (10, 1000)
+
 #    - (): dataset_construction.DatasetConfig
 #      dataset_path: 'teven/code_contests'
 #      train_split: "train[:5%]"

@@ -109,6 +109,13 @@ data_mix:
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/illuin_layout_dataset_text_only
       build_test_set_from_train: true
       needs_internal_deduplication: true
+      filtering_function:
+        (): dataset_preprocessing.perplexity.perplexity_filter.PerplexityFilter
+        model:
+          (): dataset_preprocessing.perplexity.model.KenlmModel
+          model_dataset: "wikipedia"
+          language: "fr"
+        perplexity_bounds: (10, 1000)
  # Wiki
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/wikisource_fr
