@@ -7,6 +7,7 @@ class PerplexityFilter(Filter):
         self.kenlm_model = model
         self.perplexity_bounds = perplexity_bounds
 
+
     def get_perplexity_single(self, sentence):
         return self.kenlm_model.get_perplexity(sentence)
 

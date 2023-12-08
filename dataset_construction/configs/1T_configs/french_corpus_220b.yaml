@@ -115,13 +115,13 @@ data_mix:
           (): dataset_preprocessing.perplexity.model.KenlmModel
           model_dataset: "wikipedia"
           language: "fr"
-        perplexity_bounds: (10, 1000)
+        perplexity_bounds: !!python/tuple [10,1000]
  # Wiki
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/wikisource_fr
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: /gpfsscratch/rech/qts/ucg53vj/wikipedia_fr
+      dataset_path: # TODO: update with wikimedia latest: /gpfsscratch/rech/qts/ucg53vj/wikipedia_fr
       load_from_disk: true
       build_test_set_from_train: true
       num_test_examples: 1000
