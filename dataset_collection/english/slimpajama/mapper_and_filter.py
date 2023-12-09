@@ -12,5 +12,5 @@ class SlimPajamaMapper(Mapper):
 
 class SlimPajamaFilter(Filter):
     def filter_fn(self, example) -> bool:
-        """Remove binary option trading samples"""
+        # todo - filter for books3
         raise NotImplementedError
