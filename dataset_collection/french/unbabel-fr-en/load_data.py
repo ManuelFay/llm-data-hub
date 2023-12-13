@@ -5,7 +5,7 @@ import argparse
 
 
 def create_dataset(data_dir):
-    def align_data(data_dir):
+    def align_data():
         for path in os.listdir(data_dir):
             if path.startswith("cometkiwi_metadata_"):
                 ending = re.match("cometkiwi_metadata_(.*)", path).group(1)
