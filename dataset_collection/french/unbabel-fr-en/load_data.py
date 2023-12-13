@@ -7,8 +7,8 @@ import argparse
 def create_dataset(data_dir):
     def align_data(data_dir):
         for path in os.listdir(data_dir):
-            if path.startswith("cometkiwi_metada_"):
-                ending = re.match("cometkiwi_metada_(.*)", path).group(1)
+            if path.startswith("cometkiwi_metadata_"):
+                ending = re.match("cometkiwi_metadata_(.*)", path).group(1)
 
                 fr_path = os.path.join(data_dir, f"cometkiwi_data_{ending}.en-fr.fr")
                 en_path = os.path.join(data_dir, f"cometkiwi_data_{ending}.en-fr.en")
@@ -24,12 +24,7 @@ def create_dataset(data_dir):
                         yield {"fr": line_a.strip(), "en": line_b.strip(), "source": line_meta.strip()}
 
     dataset = datasets.Dataset.from_generator(
-        align_data,
-        output_signature={
-            "fr": datasets.Value("string"),
-            "en": datasets.Value("string"),
-            "source": datasets.Value("string"),
-        },
+        align_data
     )
     return dataset
 
