@@ -22,8 +22,8 @@ data_mix:
 #      build_test_set_from_train: true
 #      num_test_examples: 1000
     - (): dataset_construction.DatasetConfig
-      dataset_path: /gpfsscratch/rech/qts/ucg53vj/wmt-en-fr
-      test_split: "test"
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/unbabel-fr-en
+      build_test_set_from_train: false
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/English_French_Webpages_Scraped_Translated # Slow cause bad format
       train_split: "train"

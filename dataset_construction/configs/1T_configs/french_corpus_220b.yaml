@@ -117,13 +117,15 @@ data_mix:
         perplexity_bounds: !!python/tuple [10, 500]
  # Wiki
     - (): dataset_construction.DatasetConfig
-      dataset_path: /gpfsscratch/rech/qts/ucg53vj/wikisource_fr # TODO: update
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/wikisource_fr # TODO: update with database dump ?
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: gpfsscratch/rech/qts/ucg53vj/wikipedia_fr # TODO: update with wikimedia latest: /gpfsscratch/rech/qts/ucg53vj/wikipedia_fr
-      load_from_disk: true
+      dataset_path: gpfsscratch/rech/qts/ucg53vj/wikipedia # wikimedia/wikipedia
+      dataset_kwargs:
+        data_dir: 20231101.fr
       build_test_set_from_train: true
       num_test_examples: 1000
+      id_column: url
  # Internet dumps
     - (): dataset_construction.DatasetConfig
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/CulturaX
