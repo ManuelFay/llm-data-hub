@@ -83,7 +83,9 @@ class DatasetConstructor:
         if dataset_config.load_from_disk is True:
             print(f"Loading dataset {dataset_config.dataset_path} from disk")
             time1 = time.time()
-            dataset_train = datasets.load_from_disk(dataset_config.dataset_path)["train"]
+            dataset_train = datasets.load_from_disk(dataset_config.dataset_path)
+            if isinstance(dataset_train, DatasetDict):
+                dataset_train = dataset_train[dataset_config.train_split]
         else:
             print(f"Loading dataset {dataset_config.dataset_path} from HF Datasets Hub with {os.cpu_count()} workers")
             time1 = time.time()
