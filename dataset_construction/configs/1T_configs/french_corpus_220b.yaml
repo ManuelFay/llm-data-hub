@@ -120,7 +120,7 @@ data_mix:
       dataset_path: /gpfsscratch/rech/qts/ucg53vj/wikisource_fr # TODO: update with database dump ?
       build_test_set_from_train: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: gpfsscratch/rech/qts/ucg53vj/wikipedia # wikimedia/wikipedia
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/wikipedia # wikimedia/wikipedia
       dataset_kwargs:
         data_dir: 20231101.fr
       build_test_set_from_train: true
