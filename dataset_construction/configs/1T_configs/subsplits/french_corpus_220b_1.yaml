@@ -1,0 +1,131 @@
+data_mix:
+  (): dataset_construction.DataMix
+  name: "french_220b_1"
+  shuffle: false
+  compute_dataset_stats: true
+  local_save_dir: /gpfsscratch/rech/qts/ucg53vj/croissant_data
+  load_from_local_save_dir: false
+  keep_separated_datasets_in_dataset_dict: false
+  deduplicate_test_set: false
+  ngram_path_for_extra_deduplication: null
+  max_shard_size: "5GB"
+  datasets:
+# Speech datasets
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/french_librispeech_text_only
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/french_podcasts # continue scrapping
+      build_test_set_from_train: true
+      num_test_examples: 100
+      filtering_function:
+        (): dataset_collection.french.french_transcribed_podcast.PodcastFilter
+      preprocessing_function:
+        (): dataset_collection.french.french_transcribed_podcast.PodcastMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/french_open_subtitles
+      num_test_examples: 100
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/french_poetry
+      num_test_examples: 100
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/ProjectGutenberg_fr # needs to be filtered - beginning and end of books
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig # needs to be filtered and expanded - perplexity filtering
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/bnf_clean
+      train_split: "2023"
+      build_test_set_from_train: true
+# Dila data
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/LEGI_opendata # /gpfsscratch/rech/qts/ucg53vj/dila_legifrance
+      build_test_set_from_train: true
+      needs_internal_deduplication: true
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: /gpfsscratch/rech/qts/ucg53vj/BALO_opendata
+#      build_test_set_from_train: true
+#      needs_internal_deduplication: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/JADE_opendata
+      build_test_set_from_train: true
+      needs_internal_deduplication: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/DOLE_opendata
+      build_test_set_from_train: true
+      needs_internal_deduplication: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SARDE_opendata
+      build_test_set_from_train: true
+      needs_internal_deduplication: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/QR_opendata
+      build_test_set_from_train: true
+      needs_internal_deduplication: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/JORF_opendata
+      build_test_set_from_train: true
+      needs_internal_deduplication: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/INCA_opendata
+      build_test_set_from_train: true
+      needs_internal_deduplication: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/ACCO_opendata
+      build_test_set_from_train: true
+      needs_internal_deduplication: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/KALI_opendata
+      build_test_set_from_train: true
+      needs_internal_deduplication: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/DEBATS_opendata
+      build_test_set_from_train: true
+      needs_internal_deduplication: false
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/CNIL_opendata
+      build_test_set_from_train: true
+      needs_internal_deduplication: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/CAPP_opendata
+      build_test_set_from_train: true
+      needs_internal_deduplication: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/CASS_opendata
+      build_test_set_from_train: true
+      needs_internal_deduplication: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/CONSTIT_opendata
+      build_test_set_from_train: true
+      needs_internal_deduplication: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/swiss_legislation
+      build_test_set_from_train: true
+      needs_internal_deduplication: true
+      # needs a preprocessor to have an id_column
+# PDF dataset
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/illuin_layout_dataset_text_only
+      build_test_set_from_train: true
+      needs_internal_deduplication: true
+      filtering_function:
+        (): dataset_preprocessing.perplexity.perplexity_filter.PerplexityFilter
+        model:
+          (): dataset_preprocessing.perplexity.model.KenlmModel
+          model_dataset: "wikipedia"
+          language: "fr"
+        perplexity_bounds: !!python/tuple [10, 500]
+ # Wiki
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/wikisource_fr # TODO: update with database dump ?
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/wikipedia # wikimedia/wikipedia
+      dataset_kwargs:
+        data_dir: 20231101.fr
+      build_test_set_from_train: true
+      num_test_examples: 1000
+
+
+# tokenizer: "mistralai/Mistral-7B-v0.1"
+tokenizer: "/gpfsstore/rech/qts/ucg53vj/tok-fr-en-code"
