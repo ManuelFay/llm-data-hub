@@ -2,9 +2,9 @@ data_mix:
   (): dataset_construction.DataMix
   name: "pretraining_testing"
   local_save_dir: data/
-  load_from_local_save_dir: true
+  load_from_local_save_dir: false
   shuffle: false
-  compute_dataset_stats: true
+  compute_dataset_stats: false
   keep_separated_datasets_in_dataset_dict: true
   deduplicate_test_set: false
   ngram_path_for_extra_deduplication: null
@@ -20,11 +20,11 @@ data_mix:
 #      dataset_path: manu/europarl-en-fr
 #      build_test_set_from_train: true
 #      num_test_examples: 1000
-    - (): dataset_construction.DatasetConfig
-      dataset_path: manu/wmt-en-fr
-      test_split: "test"
-      num_train_examples:  1000
-      num_test_examples: 100
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: manu/wmt-en-fr
+#      test_split: "test"
+#      num_train_examples:  1000
+#      num_test_examples: 100
 # Speech datasets
     - (): dataset_construction.DatasetConfig
       dataset_path: manu/french_librispeech_text_only
@@ -67,23 +67,33 @@ data_mix:
     - (): dataset_construction.DatasetConfig
       dataset_path: manu/dila_legifrance
       build_test_set_from_train: true
-      num_train_examples:  1000
+      num_train_examples:  10000
       num_test_examples: 100
+      needs_internal_deduplication: true
     - (): dataset_construction.DatasetConfig
-      dataset_path: Nicolas-BZRD/BALO_opendata
+      dataset_path: Nicolas-BZRD/DEBATS_opendata
       build_test_set_from_train: true
-      num_train_examples: 1000
+      # num_train_examples: 10000
       num_test_examples: 100
-    - (): dataset_construction.DatasetConfig
-      dataset_path: 'teven/code_contests'
-      train_split: "train[:5%]"
-      build_test_set_from_train: true
-      # build_test_set_from_train: false
-      # test_split: "valid"
+      needs_internal_deduplication: true
       filtering_function:
-        (): dataset_collection.code.deepmind_code_contest.CodeContestFilter
-      preprocessing_function:
-        (): dataset_collection.code.deepmind_code_contest.CodeContestMapper
+        (): dataset_preprocessing.perplexity.perplexity_filter.PerplexityFilter
+        model:
+          (): dataset_preprocessing.perplexity.model.KenlmModel
+          model_dataset: "wikipedia"
+          language: "fr"
+        perplexity_bounds: (10, 1000)
+
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: 'teven/code_contests'
+#      train_split: "train[:5%]"
+#      build_test_set_from_train: true
+#      # build_test_set_from_train: false
+#      # test_split: "valid"
+#      filtering_function:
+#        (): dataset_collection.code.deepmind_code_contest.CodeContestFilter
+#      preprocessing_function:
+#        (): dataset_collection.code.deepmind_code_contest.CodeContestMapper
 #    - (): dataset_construction.DatasetConfig
 #      dataset_path: Nicolas-BZRD/BALO_opendata
 #      build_test_set_from_train: true
@@ -91,11 +101,12 @@ data_mix:
 #      num_test_examples: 100
       # needs a preprocessor to have an id_column
 # PDF dataset
-    - (): dataset_construction.DatasetConfig
-      dataset_path: manu/illuin_layout_dataset_text_only
-      build_test_set_from_train: true
-      num_train_examples:  1000
-      num_test_examples: 100
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: manu/illuin_layout_dataset_text_only
+#      build_test_set_from_train: true
+#      num_train_examples:  1000
+#      num_test_examples: 100
+#      needs_internal_deduplication: true
 # Wiki
 #    - (): dataset_construction.DatasetConfig
 #      dataset_path: manu/wikisource_fr

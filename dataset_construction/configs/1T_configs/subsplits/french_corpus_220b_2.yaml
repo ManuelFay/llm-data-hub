@@ -1,0 +1,66 @@
+data_mix:
+  (): dataset_construction.DataMix
+  name: "french_220b_2"
+  shuffle: false
+  compute_dataset_stats: true
+  local_save_dir: /gpfsscratch/rech/qts/ucg53vj/croissant_data
+  load_from_local_save_dir: false
+  keep_separated_datasets_in_dataset_dict: false
+  deduplicate_test_set: false
+  ngram_path_for_extra_deduplication: null
+  max_shard_size: "5GB"
+  datasets:
+ # Internet dumps
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/CulturaX
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: fr/*0.parquet
+      filtering_function:
+        (): dataset_collection.french.culturaX.CulturaXFilter
+      preprocessing_function:
+        (): dataset_collection.french.culturaX.CulturaXMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/CulturaX
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: fr/*1.parquet
+      filtering_function:
+        (): dataset_collection.french.culturaX.CulturaXFilter
+      preprocessing_function:
+        (): dataset_collection.french.culturaX.CulturaXMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/CulturaX
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: fr/*2.parquet
+      filtering_function:
+        (): dataset_collection.french.culturaX.CulturaXFilter
+      preprocessing_function:
+        (): dataset_collection.french.culturaX.CulturaXMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/CulturaX
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: fr/*3.parquet
+      filtering_function:
+        (): dataset_collection.french.culturaX.CulturaXFilter
+      preprocessing_function:
+        (): dataset_collection.french.culturaX.CulturaXMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/CulturaX
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: fr/*4.parquet
+      filtering_function:
+        (): dataset_collection.french.culturaX.CulturaXFilter
+      preprocessing_function:
+        (): dataset_collection.french.culturaX.CulturaXMapper
+
+# tokenizer: "mistralai/Mistral-7B-v0.1"
+tokenizer: "/gpfsstore/rech/qts/ucg53vj/tok-fr-en-code"

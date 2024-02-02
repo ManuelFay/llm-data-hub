@@ -1,0 +1,147 @@
+data_mix:
+  (): dataset_construction.DataMix
+  name: "code_140b"
+  shuffle: false
+  local_save_dir: /gpfsscratch/rech/qts/ucg53vj/croissant_data
+  load_from_local_save_dir: false
+  compute_dataset_stats: true
+  keep_separated_datasets_in_dataset_dict: true
+  deduplicate_test_set: false
+  ngram_path_for_extra_deduplication: null
+  max_shard_size: "5GB"
+  datasets:
+# Code
+    - (): dataset_construction.DatasetConfig
+      dataset_path: '/gpfsscratch/rech/qts/ucg53vj/starcoderdata'
+      train_split: "train"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: python
+      build_test_set_from_train: true
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: '/gpfsscratch/rech/qts/ucg53vj/starcoderdata'
+#      train_split: "train"
+#      text_column: "content"
+#      dataset_kwargs:
+#        data_dir: markdown
+      # build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: '/gpfsscratch/rech/qts/ucg53vj/starcoderdata'
+      train_split: "train"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: jupyter-scripts-dedup-filtered
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: '/gpfsscratch/rech/qts/ucg53vj/starcoderdata'
+      train_split: "train"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: jupyter-structured-clean-dedup
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: '/gpfsscratch/rech/qts/ucg53vj/starcoderdata'
+      train_split: "train"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: json
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: '/gpfsscratch/rech/qts/ucg53vj/starcoderdata'
+      train_split: "train"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: java
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: '/gpfsscratch/rech/qts/ucg53vj/starcoderdata'
+      train_split: "train"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: javascript
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: '/gpfsscratch/rech/qts/ucg53vj/starcoderdata'
+      train_split: "train"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: cpp
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: '/gpfsscratch/rech/qts/ucg53vj/starcoderdata'
+      train_split: "train"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: dockerfile
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: '/gpfsscratch/rech/qts/ucg53vj/starcoderdata'
+      train_split: "train"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: tex
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: '/gpfsscratch/rech/qts/ucg53vj/starcoderdata'
+      train_split: "train"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: sql
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: '/gpfsscratch/rech/qts/ucg53vj/starcoderdata'
+      train_split: "train"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: c
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: '/gpfsscratch/rech/qts/ucg53vj/starcoderdata'
+      train_split: "train"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: shell
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: '/gpfsscratch/rech/qts/ucg53vj/starcoderdata'
+      train_split: "train"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: idris
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: '/gpfsscratch/rech/qts/ucg53vj/starcoderdata'
+      train_split: "train"
+      text_column: "content"
+      dataset_kwargs:
+        data_dir: cuda
+      build_test_set_from_train: true
+    - (): dataset_construction.DatasetConfig
+      dataset_path: '/gpfsscratch/rech/qts/ucg53vj/code_contests'
+      train_split: "train"
+      # build_test_set_from_train: true
+      build_test_set_from_train: false
+      test_split: "valid"
+      # needs to be debugged
+      filtering_function:
+        (): dataset_collection.code.deepmind_code_contest.CodeContestFilter
+      preprocessing_function:
+        (): dataset_collection.code.deepmind_code_contest.CodeContestMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: '/gpfsscratch/rech/qts/ucg53vj/pypi_clean'
+      train_split: "train"
+      build_test_set_from_train: true
+      text_column: code
+      id_column: path
+    - (): dataset_construction.DatasetConfig
+      dataset_path: '/gpfsscratch/rech/qts/ucg53vj/github-jupyter-code-to-text'
+      # https://huggingface.co/datasets/codeparrot/github-jupyter-code-to-text
+      train_split: "train"
+      build_test_set_from_train: true
+      text_column: content
+      id_column: path
+    # we could add synthetic textbook datasets or code with explanations !
+
+
+# tokenizer: "mistralai/Mistral-7B-v0.1"
+tokenizer: "/gpfsstore/rech/qts/ucg53vj/tok-fr-en-code"

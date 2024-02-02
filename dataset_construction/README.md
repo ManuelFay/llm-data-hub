@@ -160,4 +160,19 @@ First verify the download paths of the HF datasets ! Then run:
 ```bash
 sbatch --job-name=fr_proc -p prepost -A hxz@cpu  --ntasks-per-node=1 --nodes=1 --time=20:00:00  --output=logs/fr_proc.out     --error=logs/fr_proc.err  --wrap="python dataset_construction/construct_dataset.py --config dataset_construction/configs/30b_configs/french_corpus.yaml --estimate_from_k 10000"
 sbatch --job-name=code_proc -p prepost -A hxz@cpu  --ntasks-per-node=1 --nodes=1 --time=20:00:00  --output=logs/code_proc.out     --error=logs/code_proc.err  --wrap="python dataset_construction/construct_dataset.py --config dataset_construction/configs/30b_configs/code_corpus.yaml   --estimate_from_k 10000"
+sbatch --job-name=en_proc -p prepost -A hxz@cpu  --ntasks-per-node=1 --nodes=1 --time=20:00:00  --output=logs/en_proc.out     --error=logs/en_proc.err  --wrap="python dataset_construction/construct_dataset.py --config dataset_construction/configs/30b_configs/english_corpus.yaml  --estimate_from_k 10000"
+```
+
+Without internet:
+
+```bash
+sbatch --job-name=fr_proc -p cpu_p1 -A hxz@cpu  --ntasks-per-node=1 --nodes=1 --cpus-per-task=80 --time=20:00:00  --output=logs/fr_proc.out     --error=logs/fr_proc.err  --wrap="python dataset_construction/construct_dataset.py --config dataset_construction/configs/1T_configs/french_corpus_220b.yaml --estimate_from_k 10000"
+sbatch --job-name=code_proc -p cpu_p1 -A hxz@cpu  --ntasks-per-node=1 --nodes=1 --cpus-per-task=80 --time=20:00:00  --output=logs/code_proc.out     --error=logs/code_proc.err  --wrap="python dataset_construction/construct_dataset.py --config dataset_construction/configs/1T_configs/code_corpus_140b.yaml   --estimate_from_k 10000"
+sbatch --job-name=en_proc -p cpu_p1 -A hxz@cpu  --ntasks-per-node=1 --nodes=1 --cpus-per-task=80 --time=20:00:00  --output=logs/en_proc.out     --error=logs/en_proc.err  --wrap="python dataset_construction/construct_dataset.py --config dataset_construction/configs/1T_configs/english_corpus_660b.yaml  --estimate_from_k 10000"
+sbatch --job-name=al_proc -p cpu_p1 -A hxz@cpu  --ntasks-per-node=1 --nodes=1 --cpus-per-task=40 --hint=nomultithread --time=20:00:00  --output=logs/al_proc.out     --error=logs/al_proc.err  --wrap="python dataset_construction/construct_dataset.py --config dataset_construction/configs/1T_configs/aligned_corpus.yaml  --estimate_from_k 10000"
+
+```
+
+```bash
+sbatch --job-name=20_fr -p cpu_p1 -A hxz@cpu  --ntasks-per-node=1 --nodes=1 --cpus-per-task=40 --hint=nomultithread --time=20:00:00  --output=logs/fr_proc.out     --error=logs/fr_proc.err  --wrap="python dataset_construction/construct_dataset.py --config dataset_construction/configs/1T_configs/french_corpus.yaml --estimate_from_k 10000  --prep_config_n 20"
 ```

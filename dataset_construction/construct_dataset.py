@@ -15,7 +15,9 @@ from datasets import Dataset, DatasetDict, concatenate_datasets, load_dataset
 from huggingface_hub import HfApi
 
 from dataset_construction.dataset_config import DataMix, DatasetConfig
-from dataset_construction.utils import test_set_conformity
+from dataset_construction.utils import test_set_conformity, get_config_hash
+from dataset_preprocessing.deduplication import deduplicate_dataset
+import time
 
 
 class DatasetConstructor:
@@ -31,29 +33,70 @@ class DatasetConstructor:
             preprocessing_function: Optional[Callable] = None,
     ) -> Dataset:
         """Filter and truncate a dataset, if needed."""
-
+        print(f"Processing dataset {dataset_key} with {len(dataset)} samples")
         if preprocessing_function is not None:
-            dataset = dataset.map(preprocessing_function, num_proc=os.cpu_count())
+            print(f"Applying preprocessing function to {dataset_key}")
+            dataset = dataset.map(preprocessing_function,
+                                  num_proc=os.cpu_count(),
+                                  desc="Preprocessing function",
+                                  # writer_batch_size=100
+                                  )
 
         if filtering_function is not None:
-            dataset = dataset.filter(filtering_function, num_proc=os.cpu_count())
+            print(f"Applying filtering function to {dataset_key}")
+            dataset = dataset.filter(filtering_function,
+                                     num_proc=os.cpu_count(),
+                                     desc="Filtering function",
+                                     # writer_batch_size=100
+                                     )
 
         # Do it only if needed
+        print(f"ID type for {dataset_key} is {dataset.features['id'].dtype}")
         if dataset.features["id"].dtype != "string":
+            print(f"Converting ID type for {dataset_key} to string")
             dataset = dataset.cast_column("id", datasets.Value(dtype="string", id=None))
         # dataset = dataset.cast_column("text", datasets.Value(dtype="string", id=None))
-        dataset = dataset.add_column("dataset_id", [f"{dataset_key}"] * len(dataset))
+        print(f"Adding dataset_id column for {dataset_key}")
+        time1 = time.time()
+
+        # Extremely slow
+        # dataset = dataset.add_column("dataset_id", [f"{dataset_key}"] * len(dataset))
+
+        # Test solution
+        def add_columns(examples):
+            examples["dataset_id"] = [f"{dataset_key}"] * len(examples["id"])
+            return examples
+
+        dataset = dataset.map(add_columns,
+                              num_proc=os.cpu_count(),
+                              batched=True,
+                              batch_size=100,
+                              # writer_batch_size=100,
+                              keep_in_memory=False,
+                              desc="Adding dataset_id column")
+
+        print(f"Time taken to add column: {time.time() - time1}")
         return dataset
 
     def build_single_dataset_dict(self, dataset_config: DatasetConfig) -> DatasetDict:
         """Load a single dataset from HF Datasets Hub, and apply the filtering function if provided."""
-        dataset_train = load_dataset(
-            dataset_config.dataset_path,
-            name=dataset_config.dataset_name,
-            split=dataset_config.train_split,
-            num_proc=os.cpu_count(),
-            **dataset_config.dataset_kwargs
-        )
+        if dataset_config.load_from_disk is True:
+            print(f"Loading dataset {dataset_config.dataset_path} from disk")
+            time1 = time.time()
+            dataset_train = datasets.load_from_disk(dataset_config.dataset_path)
+            if isinstance(dataset_train, DatasetDict):
+                dataset_train = dataset_train[dataset_config.train_split]
+        else:
+            print(f"Loading dataset {dataset_config.dataset_path} from HF Datasets Hub with {os.cpu_count()} workers")
+            time1 = time.time()
+            dataset_train = load_dataset(
+                dataset_config.dataset_path,
+                name=dataset_config.dataset_name,
+                split=dataset_config.train_split,
+                num_proc=os.cpu_count(),
+                **dataset_config.dataset_kwargs
+            )
+        print(f"Time taken to load dataset: {time.time() - time1}")
         assert isinstance(dataset_train, Dataset)
 
         if dataset_config.build_test_set_from_train:
@@ -70,19 +113,27 @@ class DatasetConstructor:
                 f"Loading test set for {dataset_config.dataset_path} with {dataset_config.num_test_examples if dataset_config.num_test_examples else 'all'} samples")
             if dataset_config.num_train_examples:
                 dataset_train = dataset_train.select(range(dataset_config.num_train_examples))
-            dataset_test = load_dataset(
-                dataset_config.dataset_path,
-                name=dataset_config.dataset_name,
-                split=dataset_config.test_split,
-                num_proc=os.cpu_count(),
-                **dataset_config.dataset_kwargs
-            )
+
+            if dataset_config.load_from_disk is True:
+                print(f"Loading test set for {dataset_config.dataset_path} from disk")
+                dataset_test = datasets.load_from_disk(dataset_config.dataset_path)["test"]
+            else:
+                dataset_test = load_dataset(
+                    dataset_config.dataset_path,
+                    name=dataset_config.dataset_name,
+                    split=dataset_config.test_split,
+                    num_proc=os.cpu_count(),
+                    **dataset_config.dataset_kwargs
+                )
             if dataset_config.num_test_examples:
                 dataset_test = dataset_test.select(range(min(dataset_config.num_test_examples, len(dataset_test))))
         else:
-            raise ValueError("Either build_test_set_from_train or test_split must be set")
+            print("Either build_test_set_from_train or test_split must be set for a real test set. Copying one from the train set without excluding !")
+            num_test_set = test_set_conformity(dataset_train, None)
+            dataset_test = dataset_train.train_test_split(test_size=num_test_set)["test"]
         assert isinstance(dataset_test, Dataset)
         assert isinstance(dataset_train, Dataset)
+        print(f"Loaded {dataset_config.dataset_path} with {len(dataset_train)} train examples, {len(dataset_test)} test examples")
 
         if dataset_config.text_column != "text":
             dataset_train = dataset_train.rename_column(dataset_config.text_column, "text")
@@ -103,6 +154,19 @@ class DatasetConstructor:
             dataset_config.filtering_function,
             dataset_config.preprocessing_function,
         )
+        print(f"Processed {dataset_config.dataset_path} with {len(dataset_train)} train examples, {len(dataset_test)} test examples")
+
+        if dataset_config.needs_internal_deduplication:
+            print(f"Performing internal deduplication: {dataset_config.dataset_path}")
+
+            # print out stats before deduplication
+            print(f"Before deduplication: {len(dataset_train)} train examples, {len(dataset_test)} test examples")
+            dataset_test, uniques = deduplicate_dataset(dataset_test, num_workers=os.cpu_count())
+            dataset_train, _ = deduplicate_dataset(dataset_train, num_workers=os.cpu_count(), blacklist=uniques)
+
+            print(f"After deduplication: {len(dataset_train)} train examples, {len(dataset_test)} test examples")
+            del uniques
+
         dataset = DatasetDict({"train": dataset_train, "test": dataset_test})
 
         # Remove columns that are not needed
@@ -149,21 +213,43 @@ class DatasetConstructor:
             })
         return stats
 
+    def single_dataset_macro(self, dataset_config: DatasetConfig) -> DatasetDict:
+        print(f"Loading and filtering dataset {dataset_config.dataset_path}")
+        dataset_config_hash = get_config_hash(dataset_config)
+        possible_v0_hash = get_config_hash(dataset_config, return_v0_hash=True)
+        if os.path.exists(os.path.join(self.mix.local_save_dir, "dataset_cache", dataset_config_hash)):
+            print(f"Loading dataset {dataset_config.dataset_path} from cache")
+            ds = datasets.load_from_disk(os.path.join(self.mix.local_save_dir, "dataset_cache", dataset_config_hash))
+        elif os.path.exists(os.path.join(self.mix.local_save_dir, "dataset_cache", possible_v0_hash)):
+            print(f"Loading dataset {dataset_config.dataset_path} from cache")
+            ds = datasets.load_from_disk(os.path.join(self.mix.local_save_dir, "dataset_cache", possible_v0_hash))
+        else:
+            ds: DatasetDict = self.build_single_dataset_dict(dataset_config)
+            if self.mix.local_save_dir:
+                print(f"Saving dataset {dataset_config.dataset_path} to cache")
+                os.makedirs(os.path.join(self.mix.local_save_dir, "dataset_cache"), exist_ok=True)
+                ds.save_to_disk(os.path.join(self.mix.local_save_dir, "dataset_cache", dataset_config_hash),
+                                num_proc=os.cpu_count())
+        return ds
+
     def build_concatenated_dataset(self) -> Tuple[DatasetDict, Optional[DatasetDict]]:
         dataset_list = []
         for dataset_config in tqdm.tqdm(self.mix.datasets, desc="Loading datasets"):
-            print(f"Loading and filtering dataset {dataset_config.dataset_path}")
-            # TODO: would be nice to cache the results of this function for speed (with git commit)
-            ds: DatasetDict = self.build_single_dataset_dict(dataset_config)
+            ds = self.single_dataset_macro(dataset_config)
             dataset_list.append(ds)
 
+        print(f"Concatenating {len(dataset_list)} datasets")
         final_dataset = DatasetDict(
             {
                 "train": concatenate_datasets([ds["train"] for ds in dataset_list]),
                 "test": concatenate_datasets([ds["test"] for ds in dataset_list]),
             }
         )
+        print(final_dataset)
+        print(final_dataset["train"])
+
         if self.mix.shuffle:
+            print("Shuffling dataset")
             final_dataset = final_dataset.shuffle(seed=42)
 
         separate_dataset = None
@@ -222,9 +308,10 @@ class DatasetConstructor:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", type=str, default="configs/pretraining_testing.yaml")
+    parser.add_argument("--config", type=str, default="configs/mock_testing.yaml")
     parser.add_argument("--hub_id", type=str, default=None)
     parser.add_argument("--estimate_from_k", type=int, default=1000)
+    parser.add_argument("--prep_config_n", type=int, default=-1)
     args = parser.parse_args()
 
     # Init
@@ -235,7 +322,13 @@ if __name__ == "__main__":
 
     ds_constructor = DatasetConstructor(config["data_mix"], estimate_from_k=args.estimate_from_k)
 
-    if ds_constructor.mix.load_from_local_save_dir:
+    if args.prep_config_n >= 0:
+        print(f"\nPreparing dataset {ds_constructor.mix.datasets[args.prep_config_n].dataset_key} from config")
+        config_n = ds_constructor.mix.datasets[args.prep_config_n]
+        ds_constructor.single_dataset_macro(config_n)
+        print(f"Done {ds_constructor.mix.datasets[args.prep_config_n].dataset_key} !\n\n")
+        exit()
+    elif ds_constructor.mix.load_from_local_save_dir:
         final_ds = datasets.load_from_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}")
         separate_ds = None
         if os.path.exists(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}_separate"):
@@ -245,9 +338,15 @@ if __name__ == "__main__":
     else:
         final_ds, separate_ds = ds_constructor.build_concatenated_dataset()
         if ds_constructor.mix.local_save_dir:
-            final_ds.save_to_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}")
-            if separate_ds is not None:
-                separate_ds.save_to_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}_separate")
+            print(f"Saving dataset {ds_constructor.mix.name} to {ds_constructor.mix.local_save_dir}")
+            final_ds.save_to_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}",
+                                  num_proc=os.cpu_count(),
+                                  max_shard_size=ds_constructor.mix.max_shard_size)
+            if separate_ds is not None and ds_constructor.mix.keep_separated_datasets_in_dataset_dict:
+                print("Saving separate dataset !")
+                separate_ds.save_to_disk(f"{ds_constructor.mix.local_save_dir}/{ds_constructor.mix.name}_separate",
+                                         num_proc=os.cpu_count(),
+                                         max_shard_size=ds_constructor.mix.max_shard_size)
 
     # Compute stats
     if ds_constructor.mix.compute_dataset_stats:

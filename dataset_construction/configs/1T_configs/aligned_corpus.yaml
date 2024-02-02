@@ -1,0 +1,57 @@
+data_mix:
+  (): dataset_construction.DataMix
+  name: "aligned"
+  shuffle: false
+  compute_dataset_stats: true
+  local_save_dir: /gpfsscratch/rech/qts/ucg53vj/croissant_data
+  load_from_local_save_dir: false
+  keep_separated_datasets_in_dataset_dict: false
+  deduplicate_test_set: false
+  ngram_path_for_extra_deduplication: null
+  max_shard_size: "5GB"
+  datasets:
+# Translation datasets
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: manu/opus100-en-fr
+#      test_split: "test"
+#      build_test_set_from_train: false
+#      num_train_examples:  1000
+#      num_test_examples: 1000
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: manu/europarl-en-fr
+#      build_test_set_from_train: true
+#      num_test_examples: 1000
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/unbabel-fr-en   # croissantllm/unbabel-fr-en
+      build_test_set_from_train: false
+      load_from_disk: true
+      preprocessing_function:
+        (): dataset_collection.multilingual.unbabel-fr-en.UnbabelFrEnMapper
+#    - (): dataset_construction.DatasetConfig
+#      dataset_path: /gpfsscratch/rech/qts/ucg53vj/English_French_Webpages_Scraped_Translated # Slow cause bad format
+#      train_split: "train"
+#      build_test_set_from_train: true
+#      filtering_function:
+#        (): dataset_collection.french.web_scraped_translated.WebPageFilter
+#      preprocessing_function:
+#        (): dataset_collection.french.web_scraped_translated.WebPageMapper
+    # global voices can be added but maybe in wmt test set
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/Original_Songs_Lyrics_with_French_Translation
+      build_test_set_from_train: true
+      needs_internal_deduplication: true
+      filtering_function:
+        (): dataset_collection.french.french_translated_lyrics.LyricsFilter
+      preprocessing_function:
+        (): dataset_collection.french.french_translated_lyrics.LyricsMapper
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/theses_fr_2013_2023
+      build_test_set_from_train: true
+      filtering_function:
+        (): dataset_collection.french.theses.ThesisFilter
+      preprocessing_function:
+        (): dataset_collection.french.theses.ThesisMapper
+
+
+# tokenizer: "mistralai/Mistral-7B-v0.1"
+tokenizer: "/gpfsstore/rech/qts/ucg53vj/tok-fr-en-code"

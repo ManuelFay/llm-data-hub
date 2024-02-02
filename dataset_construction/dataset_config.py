@@ -23,9 +23,13 @@ class DatasetConfig:
     tags: Optional[List[str]] = None
     text_column: str = "text"
     id_column: str = "id"
+    needs_internal_deduplication: bool = False
+    load_from_disk: bool = False
     # load_in_streaming_mode: Optional[bool] = False # Not implemented yet
 
     def __post_init__(self):
+        # if (isinstance(self.num_test_examples, int) or isinstance(self.num_test_examples, float)) and self.num_test_examples == 0:
+        #    raise AttributeError("Set build_test_set_from_train to False to keep all samples in train set")
         if self.dataset_kwargs is None:
             self.dataset_kwargs = {"data_dir": None}
         if self.dataset_key is None:
@@ -33,10 +37,11 @@ class DatasetConfig:
             if self.dataset_name is not None:
                 ds_name += "_" + self.dataset_name.split("/")[-1].replace("-", "_")
             if self.dataset_kwargs is not None:
-                kwargs_str = "_".join([x.replace("-", "_") for x in self.dataset_kwargs.values() if isinstance(x, str)])
+                kwargs_str = "_".join([x.replace("-", "_").replace("/", "_").replace("*", "W") for x in self.dataset_kwargs.values() if isinstance(x, str)])
                 if len(kwargs_str) > 0:
                     ds_name += "_" + kwargs_str
             ds_name = "".join([word.capitalize() for word in ds_name.split("_")])
+            ds_name += self.train_split if self.train_split != "train" else ""
             self.dataset_key = ds_name
 
 

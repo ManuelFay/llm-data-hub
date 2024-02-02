@@ -12,3 +12,6 @@ data/
 lm_cache/
 .pytest_cache/
 .DS_Store
+*.ipynb
+*.ipynb_checkpoints
+stats/

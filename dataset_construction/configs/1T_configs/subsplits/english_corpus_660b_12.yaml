@@ -1,0 +1,215 @@
+data_mix:
+  (): dataset_construction.DataMix
+  name: "english_660B_12"
+  shuffle: false
+  load_from_local_save_dir: false
+  local_save_dir: /gpfsscratch/rech/qts/ucg53vj/croissant_data
+  compute_dataset_stats: true
+  keep_separated_datasets_in_dataset_dict: false
+  deduplicate_test_set: false
+  ngram_path_for_extra_deduplication: null
+  max_shard_size: "5GB"
+  datasets:
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: train/chunk2/*0.jsonl.zst
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+      filtering_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaFilter
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: train/chunk2/*1.jsonl.zst
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+      filtering_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaFilter
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: train/chunk2/*2.jsonl.zst
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+      filtering_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaFilter
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: train/chunk2/*3.jsonl.zst
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+      filtering_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaFilter
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: train/chunk2/*4.jsonl.zst
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+      filtering_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaFilter
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: train/chunk2/*5.jsonl.zst
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+      filtering_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaFilter
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: train/chunk2/*6.jsonl.zst
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+      filtering_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaFilter
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: train/chunk2/*7.jsonl.zst
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+      filtering_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaFilter
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: train/chunk2/*8.jsonl.zst
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+      filtering_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaFilter
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: train/chunk2/*9.jsonl.zst
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+      filtering_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaFilter
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: train/chunk3/*0.jsonl.zst
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+      filtering_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaFilter
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: train/chunk3/*1.jsonl.zst
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+      filtering_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaFilter
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: train/chunk3/*2.jsonl.zst
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+      filtering_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaFilter
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: train/chunk3/*3.jsonl.zst
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+      filtering_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaFilter
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: train/chunk3/*4.jsonl.zst
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+      filtering_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaFilter
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: train/chunk3/*5.jsonl.zst
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+      filtering_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaFilter
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: train/chunk3/*6.jsonl.zst
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+      filtering_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaFilter
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: train/chunk3/*7.jsonl.zst
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+      filtering_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaFilter
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: train/chunk3/*8.jsonl.zst
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+      filtering_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaFilter
+    - (): dataset_construction.DatasetConfig
+      dataset_path: /gpfsscratch/rech/qts/ucg53vj/SlimPajama-627B
+      train_split: "train"
+      load_from_disk: false
+      dataset_kwargs:
+        data_files: train/chunk3/*9.jsonl.zst
+      preprocessing_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaMapper
+      filtering_function:
+        (): dataset_collection.english.slimpajama.SlimPajamaFilter
+
+# tokenizer: "mistralai/Mistral-7B-v0.1"
+tokenizer: "/gpfsstore/rech/qts/ucg53vj/tok-fr-en-code"

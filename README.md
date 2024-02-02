@@ -1,7 +1,13 @@
 # LLM Data Hub
 
-This repository regroups code related to data gathering, data processing, and data analysis for the LLM training project.
+This repository regroups code related to data gathering, data processing, and data analysis for the CroissantLLM training project.
+https://arxiv.org/abs/2402.00786
 
+Organization: https://huggingface.co/croissantllm
+
+## Abstract
+
+We introduce CroissantLLM, a 1.3B language model pretrained on a set of 3T English and French tokens, to bring to the research and industrial community a high-performance, fully open-sourced bilingual model that runs swiftly on consumer-grade local hardware. To that end, we pioneer the approach of training an intrinsically bilingual model with a 1:1 English-to-French pretraining data ratio, a custom tokenizer, and bilingual finetuning datasets. We release the training dataset, notably containing a French split with manually curated, high-quality, and varied data sources. To assess performance outside of English, we craft a novel benchmark, FrenchBench, consisting of an array of classification and generation tasks, covering various orthogonal aspects of model performance in the French Language. Additionally, rooted in transparency and to foster further Large Language Model research, we release codebases, and dozens of checkpoints across various model sizes, training data distributions, and training steps, as well as fine-tuned Chat models, and strong translation models. We evaluate our model through the FMTI framework, and validate 81 % of the transparency criteria, far beyond the scores of even most open initiatives. This work enriches the NLP landscape, breaking away from previous English-centric work in order to strengthen our understanding of multilinguality in language models.
 
 ## Installation
 
@@ -10,61 +16,17 @@ Requirements are not all necessary, to install all requirements, run the followi
 make init
 ```
 
-## Data Gathering
+## More documentation is coming soon
 
-For the moment, data is stored either on the HuggingFace Hub as a public dataset, 
-or as a Git LFS file (uploaded to a private HuggingFace dataset repository). Storage is subject to change,
-given the storage solutions available through the project partners.
+## Citation
 
-New datasets should be added by creating a new folder in the `datasets` folder, and adding a `[folder_name].py` file responsible for downloading the data and processing it into a `Dataset` object.
-This follows HuggingFace conventions for datasets, and allows for easy integration with the HuggingFace ecosystem.
-The data format, post loading, should be standard across all datasets. 
-
-Metadata should include:
-- The dataset name
-- The dataset description
-- The dataset citation (if applicable)
-- The dataset license (if applicable)
-- The dataset homepage (if applicable)
-- The dataset size
-- The dataset languages
-
-Ideally, the dataset should be streamable for easy processing and debugging, but this is not a requirement and 
-having a smaller dummy dataset for debugging purposes is acceptable.
-
-A usage example should be included in the folder.
-
-### Warnings
-
-Larger datasets such as OSCAR or Wikipedia can be used in streaming mode.
-In streaming mode, modifications to the [dataset].py file will not be reflected in the dataset, as the dataset is downloaded from the HuggingFace Hub at each run.
-
-To run locally, the dataset should be downloaded and stored locally, and the `streaming` flag should be set to `False` in load_dataset() function.
-A beam runner should be specified (Spark, Dataflow, etc.), or the "direct" runner should be used for smaller datasets.
-
-Note that operations can still be done on a streamed dataset https://huggingface.co/docs/datasets/stream in order 
-to format data to be coherent with the rest of the datasets.
-
-## Data Processing
-
-Data processing is done through the `Dataset` class, which is a wrapper around a HuggingFace dataset.
-Custom functions are implemented to perform the following tasks:
-- [ ] Tokenization
-- [ ] Quality Filtering (OCR)
-- [ ] Content Filtering (e.g. removing HTML tags, PII, etc.)
-- [ ] Language Tagging
-- [ ] Dealing with parallel data (across languages)
-- [ ] Deduplication
-- [ ] Dataset Aggregation
-- [ ] Splitting into train, validation, and test sets
-
-## Data Analysis
-
-Detailed statistics about the data can be computed through the data analysis module.
-This stores the data in a `pandas` dataframe, and allows for easy plotting and analysis.
-
-## Tests
-
-```bash
-make test
+```
+@misc{faysse2024croissantllm,
+      title={CroissantLLM: A Truly Bilingual French-English Language Model}, 
+      author={Manuel Faysse and Patrick Fernandes and Nuno Guerreiro and António Loison and Duarte Alves and Caio Corro and Nicolas Boizard and João Alves and Ricardo Rei and Pedro Martins and Antoni Bigata Casademunt and François Yvon and André Martins and Gautier Viaud and Céline Hudelot and Pierre Colombo},
+      year={2024},
+      eprint={2402.00786},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
 ```

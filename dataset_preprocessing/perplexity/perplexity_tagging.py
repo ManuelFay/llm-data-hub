@@ -32,5 +32,6 @@ class PerplexityTagger:
         return dataset
 
     def filter_by_perplexity(self, dataset):
+        kwargs = {"num_proc": 4} if not isinstance(dataset, datasets.IterableDataset) else {}
         return dataset.filter(
-            lambda example: self.perplexity_bounds[0] <= example["perplexity"] <= self.perplexity_bounds[1])
+            lambda example: self.perplexity_bounds[0] <= example["perplexity"] <= self.perplexity_bounds[1],**kwargs)
